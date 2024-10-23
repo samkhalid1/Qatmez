@@ -70,8 +70,8 @@
       <h2>رصيدك الحالي:</h2>
       <p id="points">0 COW</p>
       <p id="inviteCount">عدد الأشخاص الذين استخدموا رمز الدعوة: 0</p>
-      <button class="button" onclick="generateInviteCode()">احصل على رمز الدعوة الخاص بك</button>
-      <p id="inviteCodeDisplay"></p>
+      <div id="inviteCodeDisplay"></div>
+      <button id="generateInviteButton" class="button" onclick="generateInviteCode()">احصل على رمز الدعوة الخاص بك</button>
     </div>
   </div>
 
@@ -83,15 +83,12 @@
     let points = parseInt(localStorage.getItem('points')) || 0;
     let inviteCount = parseInt(localStorage.getItem('inviteCount')) || 0;
     let inviteCodeEntered = localStorage.getItem('inviteCodeEntered') === 'true';
+    let userInviteCode = localStorage.getItem('userInviteCode') || null;
 
-    // تحقق من إذا كان المستخدم الأول
-    let isFirstUser = !localStorage.getItem('firstUser');
-    if (isFirstUser) {
-      localStorage.setItem('firstUser', 'true');
-      inviteCodeEntered = true; // المستخدم الأول لا يحتاج إلى إدخال رمز الدعوة
-      localStorage.setItem('inviteCodeEntered', 'true');
-      showMainContent();
-    } else if (inviteCodeEntered) {
+    const masterInviteCode = "sam11"; // الرمز المخصص الخاص بك
+
+    // تحقق من حالة إدخال رمز الدعوة
+    if (inviteCodeEntered) {
       showMainContent();
     } else {
       document.getElementById('invite-section').style.display = 'block';
@@ -101,15 +98,15 @@
       const code = document.getElementById('inviteCodeInput').value;
       const storedCodes = JSON.parse(localStorage.getItem('inviteCodes')) || {};
 
-      // تحقق من رمز الدعوة
-      if (storedCodes[code]) {
+      if (code === masterInviteCode || storedCodes[code]) {
         inviteCodeEntered = true;
         points += 500;
-        storedCodes[code].count++;
-        localStorage.setItem('inviteCodes', JSON.stringify(storedCodes));
-        localStorage.setItem('points', points); // حفظ النقاط في localStorage
-        localStorage.setItem('inviteCodeEntered', 'true'); // حفظ حالة إدخال رمز الدعوة
-        updatePoints();
+        localStorage.setItem('points', points); // حفظ النقاط
+        if (storedCodes[code]) {
+          storedCodes[code].count++;
+          localStorage.setItem('inviteCodes', JSON.stringify(storedCodes));
+        }
+        localStorage.setItem('inviteCodeEntered', 'true'); // حفظ حالة الدعوة
         document.getElementById('invite-section').style.display = 'none';
         showMainContent();
       } else {
@@ -128,6 +125,12 @@
     function showMainContent() {
       document.getElementById('points-section').style.display = 'block';
       updatePoints();
+
+      if (userInviteCode) {
+        // إذا كان لديه رمز دعوة، عرضه
+        document.getElementById('inviteCodeDisplay').innerText = `رمز الدعوة الخاص بك: ${userInviteCode}`;
+        document.getElementById('generateInviteButton').style.display = 'none'; // إخفاء الزر
+      }
     }
 
     function updatePoints() {
@@ -136,11 +139,15 @@
     }
 
     function generateInviteCode() {
-      const inviteCode = Math.random().toString(36).substr(2, 6).toUpperCase();
-      const storedCodes = JSON.parse(localStorage.getItem('inviteCodes')) || {};
-      storedCodes[inviteCode] = { count: 0 };
-      localStorage.setItem('inviteCodes', JSON.stringify(storedCodes));
-      document.getElementById('inviteCodeDisplay').innerText = `رمز الدعوة الخاص بك: ${inviteCode}`;
+      if (!userInviteCode) {
+        userInviteCode = Math.random().toString(36).substr(2, 6).toUpperCase();
+        const storedCodes = JSON.parse(localStorage.getItem('inviteCodes')) || {};
+        storedCodes[userInviteCode] = { count: 0 };
+        localStorage.setItem('inviteCodes', JSON.stringify(storedCodes));
+        localStorage.setItem('userInviteCode', userInviteCode); // حفظ الرمز الخاص بالمستخدم
+        document.getElementById('inviteCodeDisplay').innerText = `رمز الدعوة الخاص بك: ${userInviteCode}`;
+        document.getElementById('generateInviteButton').style.display = 'none'; // إخفاء الزر بعد توليد الرمز
+      }
     }
 
     // عند تحميل الصفحة، تحديث النقاط وعدد الدعوات
