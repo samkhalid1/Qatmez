@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>موقع تعدين عملة COW</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #1c1c1c;
+      color: #fff;
+      text-align: center;
+    }
+
+    h1 {
+      color: #f0a500;
+      margin-top: 50px;
+    }
+
+    .content {
+      margin-top: 20px;
+    }
+
+    .invite-section {
+      display: none;
+    }
+
+    .points-section {
+      display: none;
+    }
+
+    .button {
+      background-color: #f0a500;
+      color: white;
+      border: none;
+      padding: 15px;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+
+    .popup {
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      padding: 20px;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 10px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>تعدين عملة COW</h1>
+
+  <div class="content">
+    <div id="invite-section" class="invite-section">
+      <h2>أدخل رمز الدعوة</h2>
+      <input type="text" id="inviteCodeInput" placeholder="رمز الدعوة" />
+      <button class="button" onclick="submitInviteCode()">إرسال</button>
+    </div>
+
+    <div id="points-section" class="points-section">
+      <h2>رصيدك الحالي:</h2>
+      <p id="points">0 COW</p>
+      <p id="inviteCount">عدد الأشخاص الذين استخدموا رمز الدعوة: 0</p>
+      <button class="button" onclick="generateInviteCode()">احصل على رمز الدعوة الخاص بك</button>
+      <p id="inviteCodeDisplay"></p>
+    </div>
+  </div>
+
+  <div id="popup" class="popup">
+    <p>رمز الدعوة غير صحيح. حاول مرة أخرى.</p>
+  </div>
+
+  <script>
+    let points = parseInt(localStorage.getItem('points')) || 0;
+    let inviteCount = parseInt(localStorage.getItem('inviteCount')) || 0;
+    let inviteCodeEntered = false;
+
+    // تحقق من إذا كان المستخدم الأول
+    let isFirstUser = !localStorage.getItem('firstUser');
+    if (isFirstUser) {
+      localStorage.setItem('firstUser', 'true');
+      showMainContent();
+    } else {
+      document.getElementById('invite-section').style.display = 'block';
+    }
+
+    function submitInviteCode() {
+      const code = document.getElementById('inviteCodeInput').value;
+      const storedCodes = JSON.parse(localStorage.getItem('inviteCodes')) || {};
+
+      // تحقق من رمز الدعوة
+      if (storedCodes[code]) {
+        inviteCodeEntered = true;
+        points += 500;
+        storedCodes[code].count++;
+        localStorage.setItem('inviteCodes', JSON.stringify(storedCodes));
+        localStorage.setItem('points', points); // حفظ النقاط في localStorage
+        updatePoints();
+        document.getElementById('invite-section').style.display = 'none';
+        showMainContent();
+      } else {
+        showPopup();
+      }
+    }
+
+    function showPopup() {
+      const popup = document.getElementById('popup');
+      popup.style.display = 'block';
+      setTimeout(() => {
+        popup.style.display = 'none';
+      }, 2000);
+    }
+
+    function showMainContent() {
+      document.getElementById('points-section').style.display = 'block';
+      updatePoints();
+    }
+
+    function updatePoints() {
+      document.getElementById('points').innerText = `${points} COW`;
+      document.getElementById('inviteCount').innerText = `عدد الأشخاص الذين استخدموا رمز الدعوة: ${inviteCount}`;
+    }
+
+    function generateInviteCode() {
+      const inviteCode = Math.random().toString(36).substr(2, 6).toUpperCase();
+      const storedCodes = JSON.parse(localStorage.getItem('inviteCodes')) || {};
+      storedCodes[inviteCode] = { count: 0 };
+      localStorage.setItem('inviteCodes', JSON.stringify(storedCodes));
+      document.getElementById('inviteCodeDisplay').innerText = `رمز الدعوة الخاص بك: ${inviteCode}`;
+    }
+
+    // عند تحميل الصفحة، تحديث النقاط وعدد الدعوات
+    document.addEventListener('DOMContentLoaded', () => {
+      updatePoints();
+    });
+  </script>
+
+</body>
+</html>
