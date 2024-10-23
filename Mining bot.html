@@ -82,12 +82,16 @@
   <script>
     let points = parseInt(localStorage.getItem('points')) || 0;
     let inviteCount = parseInt(localStorage.getItem('inviteCount')) || 0;
-    let inviteCodeEntered = false;
+    let inviteCodeEntered = localStorage.getItem('inviteCodeEntered') === 'true';
 
     // تحقق من إذا كان المستخدم الأول
     let isFirstUser = !localStorage.getItem('firstUser');
     if (isFirstUser) {
       localStorage.setItem('firstUser', 'true');
+      inviteCodeEntered = true; // المستخدم الأول لا يحتاج إلى إدخال رمز الدعوة
+      localStorage.setItem('inviteCodeEntered', 'true');
+      showMainContent();
+    } else if (inviteCodeEntered) {
       showMainContent();
     } else {
       document.getElementById('invite-section').style.display = 'block';
@@ -104,6 +108,7 @@
         storedCodes[code].count++;
         localStorage.setItem('inviteCodes', JSON.stringify(storedCodes));
         localStorage.setItem('points', points); // حفظ النقاط في localStorage
+        localStorage.setItem('inviteCodeEntered', 'true'); // حفظ حالة إدخال رمز الدعوة
         updatePoints();
         document.getElementById('invite-section').style.display = 'none';
         showMainContent();
