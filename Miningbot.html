@@ -1,170 +1,162 @@
-<!DOCTYPE html>
+
+</body>
+</html><!DOCTYPE html>
 <html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إرسال رسالة وصور وفيديو إلى القنوات</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-            color: #4A90E2;
-        }
-        form {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            max-width: 600px;
-            margin: auto;
-        }
-        label {
-            display: block;
-            margin: 10px 0 5px;
-        }
-        textarea, select, input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            background: #4A90E2;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-        }
-        button:hover {
-            background: #357ABD;
-        }
-        #successMessage {
-            display: none;
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #dff0d8;
-            color: #3c763d;
-            border: 1px solid #d6e9c6;
-            border-radius: 5px;
-            text-align: center;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>موقع تعدين عملة COW</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #1c1c1c;
+      color: #fff;
+      text-align: center;
+    }
+
+    h1 {
+      color: #f0a500;
+      margin-top: 50px;
+    }
+
+    .content {
+      margin-top: 20px;
+    }
+
+    .invite-section {
+      display: none;
+    }
+
+    .points-section {
+      display: none;
+    }
+
+    .button {
+      background-color: #f0a500;
+      color: white;
+      border: none;
+      padding: 15px;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+
+    .popup {
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      padding: 20px;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 10px;
+      display: none;
+    }
+  </style>
 </head>
 <body>
-    <h1>مراسلون قناة #اخبار_الصراع </h1>
 
-    <form id="telegramForm">
-        <label for="message">النص:</label>
-        <textarea id="message" name="message" rows="4" cols="50" required></textarea>
+  <h1>تعدين عملة COW</h1>
 
-        <label for="images">اختر صور (اختياري، يمكنك اختيار عدة صور):</label>
-        <input type="file" id="images" name="images" accept="image/*" multiple>
+  <div class="content">
+    <div id="invite-section" class="invite-section">
+      <h2>أدخل رمز الدعوة</h2>
+      <input type="text" id="inviteCodeInput" placeholder="رمز الدعوة" />
+      <button class="button" onclick="submitInviteCode()">إرسال</button>
+    </div>
 
-        <label for="video">اختر فيديو (اختياري):</label>
-        <input type="file" id="video" name="video" accept="video/*">
+    <div id="points-section" class="points-section">
+      <h2>رصيدك الحالي:</h2>
+      <p id="points">0 COW</p>
+      <p id="inviteCount">عدد الأشخاص الذين استخدموا رمز الدعوة: 0</p>
+      <div id="inviteCodeDisplay"></div>
+      <button id="generateInviteButton" class="button" onclick="generateInviteCode()">احصل على رمز الدعوة الخاص بك</button>
+    </div>
+  </div>
 
-        <button type="submit">إرسال</button>
-    </form>
+  <div id="popup" class="popup">
+    <p>رمز الدعوة غير صحيح. حاول مرة أخرى.</p>
+  </div>
 
-    <div id="successMessage">تم نشر المنشور بنجاح !</div>
+  <script>
+    let points = parseInt(localStorage.getItem('points')) || 0;
+    let inviteCount = parseInt(localStorage.getItem('inviteCount')) || 0;
+    let inviteCodeEntered = localStorage.getItem('inviteCodeEntered') === 'true';
+    let userInviteCode = localStorage.getItem('userInviteCode') || null;
 
-    <script>
-        const botToken = '7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE';
-        const channelIds = ['-1001769491843', '-1002200625664'];
+    const masterInviteCode = "sam11"; // الرمز المخصص الخاص بك
 
-        document.getElementById('telegramForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // منع إعادة تحميل الصفحة
+    // تحقق من حالة إدخال رمز الدعوة
+    if (inviteCodeEntered) {
+      showMainContent();
+    } else {
+      document.getElementById('invite-section').style.display = 'block';
+    }
 
-            const message = document.getElementById('message').value;
-            const images = document.getElementById('images').files;
-            const videoFile = document.getElementById('video').files[0];
+    function submitInviteCode() {
+      const code = document.getElementById('inviteCodeInput').value;
+      const storedCodes = JSON.parse(localStorage.getItem('inviteCodes')) || {};
 
-            // النص الذي سيتم إضافته أسفل المنشور
-            const footerText = `
-ــــــــــــــــــــــــــــ
-للاشتراك بقناة #أخبار_الصراع تيليجرام.
-t.me/NewsConflictUpdates`;
-
-            // إضافة النص إلى الرسالة
-            const finalMessage = message + footerText;
-
-            // إرسال الرسالة بناءً على نوع الإرسال لكل قناة
-            let promises = [];
-            channelIds.forEach(channelId => {
-                // إرسال النص
-                promises.push(sendTextMessage(channelId, finalMessage));
-
-                // إرسال الصور
-                if (images.length > 0) {
-                    for (let i = 0; i < images.length; i++) {
-                        promises.push(sendImage(channelId, images[i]));
-                    }
-                }
-
-                // إرسال الفيديو
-                if (videoFile) {
-                    promises.push(sendVideo(channelId, videoFile));
-                }
-            });
-
-            // إظهار رسالة التأكيد عند الانتهاء من الإرسال
-            Promise.all(promises).then(() => {
-                document.getElementById('successMessage').style.display = 'block';
-                setTimeout(() => {
-                    document.getElementById('successMessage').style.display = 'none';
-                }, 3000); // تختفي بعد 3 ثواني
-            });
-        });
-
-        function sendTextMessage(chatId, message) {
-            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-            const params = {
-                chat_id: chatId,
-                text: message
-            };
-
-            return fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(params)
-            });
+      if (code === masterInviteCode || storedCodes[code]) {
+        inviteCodeEntered = true;
+        points += 500;
+        localStorage.setItem('points', points); // حفظ النقاط
+        if (storedCodes[code]) {
+          storedCodes[code].count++;
+          localStorage.setItem('inviteCodes', JSON.stringify(storedCodes));
         }
+        localStorage.setItem('inviteCodeEntered', 'true'); // حفظ حالة الدعوة
+        document.getElementById('invite-section').style.display = 'none';
+        showMainContent();
+      } else {
+        showPopup();
+      }
+    }
 
-        function sendImage(chatId, imageFile) {
-            const url = `https://api.telegram.org/bot${botToken}/sendPhoto`;
-            const formData = new FormData();
-            formData.append('chat_id', chatId);
-            formData.append('photo', imageFile);
+    function showPopup() {
+      const popup = document.getElementById('popup');
+      popup.style.display = 'block';
+      setTimeout(() => {
+        popup.style.display = 'none';
+      }, 2000);
+    }
 
-            return fetch(url, {
-                method: 'POST',
-                body: formData
-            });
-        }
+    function showMainContent() {
+      document.getElementById('points-section').style.display = 'block';
+      updatePoints();
 
-        function sendVideo(chatId, videoFile) {
-            const url = `https://api.telegram.org/bot${botToken}/sendVideo`;
-            const formData = new FormData();
-            formData.append('chat_id', chatId);
-            formData.append('video', videoFile);
-            formData.append('caption', videoFile ? "فيديو مرفق" : "");
+      if (userInviteCode) {
+        // إذا كان لديه رمز دعوة، عرضه
+        document.getElementById('inviteCodeDisplay').innerText = `رمز الدعوة الخاص بك: ${userInviteCode}`;
+        document.getElementById('generateInviteButton').style.display = 'none'; // إخفاء الزر
+      }
+    }
 
-            return fetch(url, {
-                method: 'POST',
-                body: formData
-            });
-        }
-    </script>
+    function updatePoints() {
+      document.getElementById('points').innerText = `${points} COW`;
+      document.getElementById('inviteCount').innerText = `عدد الأشخاص الذين استخدموا رمز الدعوة: ${inviteCount}`;
+    }
+
+    function generateInviteCode() {
+      if (!userInviteCode) {
+        userInviteCode = Math.random().toString(36).substr(2, 6).toUpperCase();
+        const storedCodes = JSON.parse(localStorage.getItem('inviteCodes')) || {};
+        storedCodes[userInviteCode] = { count: 0 };
+        localStorage.setItem('inviteCodes', JSON.stringify(storedCodes));
+        localStorage.setItem('userInviteCode', userInviteCode); // حفظ الرمز الخاص بالمستخدم
+        document.getElementById('inviteCodeDisplay').innerText = `رمز الدعوة الخاص بك: ${userInviteCode}`;
+        document.getElementById('generateInviteButton').style.display = 'none'; // إخفاء الزر بعد توليد الرمز
+      }
+    }
+
+    // عند تحميل الصفحة، تحديث النقاط وعدد الدعوات
+    document.addEventListener('DOMContentLoaded', () => {
+      updatePoints();
+    });
+  </script>
+
 </body>
 </html>
