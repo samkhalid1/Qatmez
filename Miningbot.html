@@ -1,6 +1,4 @@
-
-</body>
-</html><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
@@ -88,6 +86,7 @@
     let userInviteCode = localStorage.getItem('userInviteCode') || null;
 
     const masterInviteCode = "sam11"; // الرمز المخصص الخاص بك
+    let inviteCodes = JSON.parse(localStorage.getItem('inviteCodes')) || { "sam11": { count: 0 } };
 
     // تحقق من حالة إدخال رمز الدعوة
     if (inviteCodeEntered) {
@@ -98,16 +97,13 @@
 
     function submitInviteCode() {
       const code = document.getElementById('inviteCodeInput').value;
-      const storedCodes = JSON.parse(localStorage.getItem('inviteCodes')) || {};
 
-      if (code === masterInviteCode || storedCodes[code]) {
+      if (inviteCodes[code]) {
         inviteCodeEntered = true;
         points += 500;
         localStorage.setItem('points', points); // حفظ النقاط
-        if (storedCodes[code]) {
-          storedCodes[code].count++;
-          localStorage.setItem('inviteCodes', JSON.stringify(storedCodes));
-        }
+        inviteCodes[code].count++;
+        localStorage.setItem('inviteCodes', JSON.stringify(inviteCodes));
         localStorage.setItem('inviteCodeEntered', 'true'); // حفظ حالة الدعوة
         document.getElementById('invite-section').style.display = 'none';
         showMainContent();
@@ -143,9 +139,8 @@
     function generateInviteCode() {
       if (!userInviteCode) {
         userInviteCode = Math.random().toString(36).substr(2, 6).toUpperCase();
-        const storedCodes = JSON.parse(localStorage.getItem('inviteCodes')) || {};
-        storedCodes[userInviteCode] = { count: 0 };
-        localStorage.setItem('inviteCodes', JSON.stringify(storedCodes));
+        inviteCodes[userInviteCode] = { count: 0 };
+        localStorage.setItem('inviteCodes', JSON.stringify(inviteCodes));
         localStorage.setItem('userInviteCode', userInviteCode); // حفظ الرمز الخاص بالمستخدم
         document.getElementById('inviteCodeDisplay').innerText = `رمز الدعوة الخاص بك: ${userInviteCode}`;
         document.getElementById('generateInviteButton').style.display = 'none'; // إخفاء الزر بعد توليد الرمز
