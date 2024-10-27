@@ -82,12 +82,12 @@
     <button id="aboutButton" onclick="openModal()">حول</button>
 
     <!-- الأزرار مع الروابط الصحيحة للنصوص -->
-    <button class="sendButton" onclick="sendTextFromLink('https://t.me/Alhozimey/489')">إرسال النص الأول</button>
-    <button class="sendButton" onclick="sendTextFromLink('https://t.me/Alhozimey/490')">إرسال النص الثاني</button>
-    <button class="sendButton" onclick="sendTextFromLink('https://t.me/Alhozimey/491')">إرسال النص الثالث</button>
-    <button class="sendButton" onclick="sendTextFromLink('https://t.me/Alhozimey/492')">إرسال النص الرابع</button>
-    <button class="sendButton" onclick="sendTextFromLink('https://t.me/Alhozimey/493')">إرسال النص الخامس</button>
-    <button class="sendButton" onclick="sendTextFromLink('https://t.me/Alhozimey/494')">إرسال النص السادس</button>
+    <button class="sendButton" onclick="sendTextFromLink(489)">إرسال النص الأول</button>
+    <button class="sendButton" onclick="sendTextFromLink(490)">إرسال النص الثاني</button>
+    <button class="sendButton" onclick="sendTextFromLink(491)">إرسال النص الثالث</button>
+    <button class="sendButton" onclick="sendTextFromLink(492)">إرسال النص الرابع</button>
+    <button class="sendButton" onclick="sendTextFromLink(493)">إرسال النص الخامس</button>
+    <button class="sendButton" onclick="sendTextFromLink(494)">إرسال النص السادس</button>
 
     <div id="modal">
         <div id="modalContent">
@@ -133,7 +133,7 @@
             document.getElementById("successModal").style.display = "none";
         }
 
-        async function sendTextFromLink(link) {
+        async function sendTextFromLink(messageId) {
             const botToken = "7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE";
             const chatId = userId;
 
@@ -142,31 +142,46 @@
                 return;
             }
 
+            const getMessageUrl = `https://api.telegram.org/bot${botToken}/getUpdates`;
+
             try {
-                // جلب محتوى النص من الرابط
-                const response = await fetch(link);
-                const text = await response.text();
+                const response = await fetch(getMessageUrl);
+                const data = await response.json();
 
-                const sendTextUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+                if (data.ok) {
+                    const messages = data.result;
+                    const message = messages.find(msg => msg.message?.message_id === messageId);
+                    
+                    if (message) {
+                        const text = message.message.text;
 
-                fetch(sendTextUrl, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        chat_id: chatId,
-                        text: text,
-                        parse_mode: "HTML"
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.ok) {
-                        document.getElementById("successModal").style.display = "flex";
+                        const sendTextUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+                        fetch(sendTextUrl, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                chat_id: chatId,
+                                text: text,
+                                parse_mode: "HTML"
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.ok) {
+                                document.getElementById("successModal").style.display = "flex";
+                            } else {
+                                console.error("Error response:", data);
+                                alert("حدث خطأ أثناء إرسال النص: " + data.description);
+                            }
+                        });
                     } else {
-                        console.error("Error response:", data);
-                        alert("حدث خطأ أثناء إرسال النص: " + data.description);
+                        alert("لم يتم العثور على الرسالة المطلوبة.");
                     }
-                });
+                } else {
+                    console.error("Error response:", data);
+                    alert("حدث خطأ أثناء جلب الرسائل: " + data.description);
+                }
             } catch (error) {
                 console.error("Error:", error);
                 alert("حدث خطأ أثناء جلب النص");
