@@ -1,157 +1,55 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>موقع تعدين عملة COW</title>
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #1c1c1c;
-      color: #fff;
-      text-align: center;
-    }
-
-    h1 {
-      color: #f0a500;
-      margin-top: 50px;
-    }
-
-    .content {
-      margin-top: 20px;
-    }
-
-    .invite-section {
-      display: none;
-    }
-
-    .points-section {
-      display: none;
-    }
-
-    .button {
-      background-color: #f0a500;
-      color: white;
-      border: none;
-      padding: 15px;
-      font-size: 18px;
-      cursor: pointer;
-      border-radius: 5px;
-      margin-top: 20px;
-    }
-
-    .popup {
-      background-color: rgba(0, 0, 0, 0.8);
-      color: #fff;
-      padding: 20px;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      border-radius: 10px;
-      display: none;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحة الاستقبال</title>
 </head>
 <body>
+    <h1>مرحبًا بك في صفحة الاستقبال!</h1>
+    <p id="user-info">جارٍ تحميل بيانات المستخدم...</p>
 
-  <h1>تعدين عملة COW</h1>
+    <script>
+        // الحصول على بيانات المستخدم من رابط الصفحة
+        const urlParams = new URLSearchParams(window.location.search);
+        const userData = {
+            id: urlParams.get('id'),
+            first_name: urlParams.get('first_name'),
+            last_name: urlParams.get('last_name'),
+            username: urlParams.get('username'),
+            photo_url: urlParams.get('photo_url'),
+            auth_date: urlParams.get('auth_date'),
+            hash: urlParams.get('hash')
+        };
 
-  <div class="content">
-    <div id="invite-section" class="invite-section">
-      <h2>أدخل رمز الدعوة</h2>
-      <input type="text" id="inviteCodeInput" placeholder="رمز الدعوة" />
-      <button class="button" onclick="submitInviteCode()">إرسال</button>
-    </div>
+        // عرض بيانات المستخدم
+        document.getElementById('user-info').innerText = 
+            `معرف المستخدم: ${userData.id}\n` +
+            `الاسم الأول: ${userData.first_name}\n` +
+            `اسم المستخدم: ${userData.username}`;
 
-    <div id="points-section" class="points-section">
-      <h2>رصيدك الحالي:</h2>
-      <p id="points">0 COW</p>
-      <p id="inviteCount">عدد الأشخاص الذين استخدموا رمز الدعوة: 0</p>
-      <div id="inviteCodeDisplay"></div>
-      <button id="generateInviteButton" class="button" onclick="generateInviteCode()">احصل على رمز الدعوة الخاص بك</button>
-    </div>
-  </div>
+        // إعداد توكين البوت ومعرف المستخدم لإرسال رسالة
+        const BOT_TOKEN = "7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE";
+        const CHAT_ID = userData.id; // معرف المستخدم
 
-  <div id="popup" class="popup">
-    <p>رمز الدعوة غير صحيح. حاول مرة أخرى.</p>
-  </div>
-
-  <script>
-    let points = parseInt(localStorage.getItem('points')) || 0;
-    let inviteCount = parseInt(localStorage.getItem('inviteCount')) || 0;
-    let inviteCodeEntered = localStorage.getItem('inviteCodeEntered') === 'true';
-    let userInviteCode = localStorage.getItem('userInviteCode') || null;
-
-    const masterInviteCode = "sam11"; // الرمز المخصص الخاص بك
-    let inviteCodes = JSON.parse(localStorage.getItem('inviteCodes')) || { "sam11": { count: 0 } };
-
-    // تحقق من حالة إدخال رمز الدعوة
-    if (inviteCodeEntered) {
-      showMainContent();
-    } else {
-      document.getElementById('invite-section').style.display = 'block';
-    }
-
-    function submitInviteCode() {
-      const code = document.getElementById('inviteCodeInput').value;
-
-      if (inviteCodes[code]) {
-        inviteCodeEntered = true;
-        points += 500;
-        localStorage.setItem('points', points); // حفظ النقاط
-        inviteCodes[code].count++;
-        localStorage.setItem('inviteCodes', JSON.stringify(inviteCodes));
-        localStorage.setItem('inviteCodeEntered', 'true'); // حفظ حالة الدعوة
-        document.getElementById('invite-section').style.display = 'none';
-        showMainContent();
-      } else {
-        showPopup();
-      }
-    }
-
-    function showPopup() {
-      const popup = document.getElementById('popup');
-      popup.style.display = 'block';
-      setTimeout(() => {
-        popup.style.display = 'none';
-      }, 2000);
-    }
-
-    function showMainContent() {
-      document.getElementById('points-section').style.display = 'block';
-      updatePoints();
-
-      if (userInviteCode) {
-        // إذا كان لديه رمز دعوة، عرضه
-        document.getElementById('inviteCodeDisplay').innerText = `رمز الدعوة الخاص بك: ${userInviteCode}`;
-        document.getElementById('generateInviteButton').style.display = 'none'; // إخفاء الزر
-      }
-    }
-
-    function updatePoints() {
-      document.getElementById('points').innerText = `${points} COW`;
-      document.getElementById('inviteCount').innerText = `عدد الأشخاص الذين استخدموا رمز الدعوة: ${inviteCount}`;
-    }
-
-    function generateInviteCode() {
-      if (!userInviteCode) {
-        userInviteCode = Math.random().toString(36).substr(2, 6).toUpperCase();
-        inviteCodes[userInviteCode] = { count: 0 };
-        localStorage.setItem('inviteCodes', JSON.stringify(inviteCodes));
-        localStorage.setItem('userInviteCode', userInviteCode); // حفظ الرمز الخاص بالمستخدم
-        document.getElementById('inviteCodeDisplay').innerText = `رمز الدعوة الخاص بك: ${userInviteCode}`;
-        document.getElementById('generateInviteButton').style.display = 'none'; // إخفاء الزر بعد توليد الرمز
-      }
-    }
-
-    // عند تحميل الصفحة، تحديث النقاط وعدد الدعوات
-    document.addEventListener('DOMContentLoaded', () => {
-      updatePoints();
-    });
-  </script>
-
+        // إرسال رسالة ترحيبية إلى المستخدم عبر البوت
+        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                chat_id: CHAT_ID,
+                text: `مرحبًا ${userData.first_name}، لقد تم تسجيل دخولك بنجاح!`
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("تم إرسال الرسالة بنجاح:", data);
+            alert("تم إرسال الرسالة إلى البوت بنجاح!");
+        })
+        .catch(error => {
+            console.error("حدث خطأ أثناء إرسال الرسالة:", error);
+            alert("حدث خطأ أثناء إرسال الرسالة.");
+        });
+    </script>
 </body>
 </html>
