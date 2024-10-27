@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحة الأزرار</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #b0bec5; /* لون رمادي */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #004d40; /* لون نص داكن */
+            text-align: center;
+        }
+
+        .container {
+            background-color: #ffffff; /* خلفية بيضاء للأزرار */
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .container:hover {
+            transform: scale(1.05); /* تأثير تكبير عند التحويم */
+        }
+
+        h1 {
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 20px; /* مسافة تحت العنوان */
+            background: linear-gradient(90deg, #ff4081, #3f51b5, #64ffda); /* تدرج لوني متنوع */
+            background-size: 300% 100%; /* زيادة حجم الخلفية */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: slideAnimation 5s ease infinite; /* تأثير الحركة */
+        }
+
+        @keyframes slideAnimation {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        .btn {
+            background-color: #4caf50; /* اللون الأخضر */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 20px;
+            font-size: 20px;
+            margin: 10px 0; /* مسافة بين الأزرار */
+            width: 200px; /* عرض ثابت للأزرار */
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #45a049; /* ظل أغمق عند التحويم */
+            transform: scale(1.05);
+        }
+
+        .btn:active {
+            transform: scale(0.95); /* تصغير عند النقر */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>بوت الموسوعة السنية</h1>
+        <button class="btn" id="quranButton">قران</button>
+        <button class="btn" id="sunnahButton">سنة</button>
+        <button class="btn" id="infoButton">معلومات</button>
+    </div>
+    <script>
+        document.getElementById('quranButton').addEventListener('click', function() {
+            window.location.href = 'https://samkhalid1.github.io/Qatmez/Miningbot.html'; // استبدل بـ URL الصفحة الخاصة بالقرآن
+        });
+
+        document.getElementById('sunnahButton').addEventListener('click', function() {
+            window.location.href = 'https://samkhalid1.github.io/Qatmez/year.html'; // استبدل بـ URL الصفحة الخاصة بالسنة
+        });
+
+        document.getElementById('infoButton').addEventListener('click', function() {
+            window.location.href = 'https://samkhalid1.github.io/Qatmez/comment.html'; // استبدل بـ URL الصفحة الخاصة بالمعلومات
+        });
+    </script>
+</body>
+</html>
