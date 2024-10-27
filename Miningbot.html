@@ -35,11 +35,11 @@
             padding: 12px 24px;
             font-size: 16px;
             cursor: pointer;
-            background-color: #28a745; /* لون الخلفية */
-            color: #fff; /* لون النص */
-            border: none; /* لا توجد حدود */
-            border-radius: 5px; /* زوايا دائرية */
-            margin: 5px; /* هامش */
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
         }
 
         /* تنسيق المربع المنبثق */
@@ -79,17 +79,15 @@
 </head>
 <body>
 
-    <!-- زر "حول" لفتح المربع المنبثق -->
     <button id="aboutButton" onclick="openModal()">حول</button>
 
-    <!-- زر إرسال الملف -->
-    <button class="sendButton" onclick="sendAudio('https://t.me/Quran_audios9/3')">إرسال الملف الأول</button>
-    <button class="sendButton" onclick="sendAudio('https://t.me/Quran_audios9/2')">إرسال الملف الثاني</button>
-    <button class="sendButton" onclick="sendAudio('https://t.me/Quran_audios9/45')">إرسال الملف 2الثاني</button>
-    <button class="sendButton" onclick="sendAudio('https://t.me/KuranMp3/3221')">إرسال الملف الثالث</button>
-    <button class="sendButton" onclick="sendAudio('https://t.me/Quran_audios9/3')">إرسال العملفاا الثالث</button>
+    <!-- الأزرار مع الروابط الصحيحة -->
+    <button class="sendButton" onclick="sendAudio('https://t.me/Quran_audios9/2')">إرسال الملف الأول</button>
+    <button class="sendButton" onclick="sendAudio('https://t.me/Quran_audios9/3')">إرسال الملف الثاني</button>
+    <button class="sendButton" onclick="sendAudio('https://t.me/Quran_audios9/45')">إرسال الملف الثالث</button>
+    <button class="sendButton" onclick="sendAudio('https://t.me/Quran_audios9/49')">إرسال الملف الرابع</button>
+    <button class="sendButton" onclick="sendAudio('https://t.me/KuranMp3/3221')">إرسال الملف الخامس</button>
 
-    <!-- المربع المنبثق -->
     <div id="modal">
         <div id="modalContent">
             <h2>معلومات المستخدم</h2>
@@ -101,7 +99,6 @@
         </div>
     </div>
 
-    <!-- مربع الرسالة عند نجاح الإرسال -->
     <div id="successModal">
         <div id="successContent">
             <p>تم إرسال الملف بنجاح</p>
@@ -119,49 +116,49 @@
         const firstName = Telegram.WebApp.initDataUnsafe.user?.first_name;
         const username = Telegram.WebApp.initDataUnsafe.user?.username;
 
-        // عرض بيانات المستخدم في المربع المنبثق
         document.getElementById("userId").innerText = `معرف المستخدم: ${userId || 'غير متاح'}`;
         document.getElementById("firstName").innerText = `الاسم الأول: ${firstName || 'غير متاح'}`;
         document.getElementById("username").innerText = `اسم المستخدم: ${username || 'غير متاح'}`;
 
-        // فتح المربع المنبثق
         function openModal() {
             document.getElementById("modal").style.display = "flex";
         }
 
-        // إغلاق المربع المنبثق
         function closeModal() {
             document.getElementById("modal").style.display = "none";
         }
 
-        // إغلاق مربع الرسالة عند النجاح
         function closeSuccessModal() {
             document.getElementById("successModal").style.display = "none";
         }
 
-        // إرسال الملف عند الضغط على زر "إرسال"
         function sendAudio(fileUrl) {
             const botToken = "7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE";
             const chatId = userId;
 
-            // استخدام واجهة Telegram API لإرسال الملف كمستند
-            const sendDocumentUrl = `https://api.telegram.org/bot${botToken}/sendDocument`;
+            if (!chatId) {
+                alert("لا يمكن الحصول على معرف المستخدم.");
+                return;
+            }
 
-            fetch(sendDocumentUrl, {
+            const sendAudioUrl = `https://api.telegram.org/bot${botToken}/sendAudio`;
+
+            fetch(sendAudioUrl, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     chat_id: chatId,
-                    document: fileUrl,
+                    audio: fileUrl,
                     caption: "إليك المقطع الصوتي المطلوب"
                 })
             })
-            .then(response => {
-                if (response.ok) {
-                    // إظهار الرسالة عند النجاح
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
                     document.getElementById("successModal").style.display = "flex";
                 } else {
-                    alert("حدث خطأ أثناء إرسال الملف");
+                    console.error("Error response:", data);
+                    alert("حدث خطأ أثناء إرسال الملف: " + data.description);
                 }
             })
             .catch(error => {
