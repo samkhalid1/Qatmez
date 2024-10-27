@@ -31,15 +31,15 @@
             border-radius: 5px;
         }
 
-        #sendButton, #sendAnotherButton {
+        .sendButton {
             padding: 12px 24px;
             font-size: 16px;
             cursor: pointer;
-            background-color: #28a745;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            margin: 5px;
+            background-color: #28a745; /* لون الخلفية */
+            color: #fff; /* لون النص */
+            border: none; /* لا توجد حدود */
+            border-radius: 5px; /* زوايا دائرية */
+            margin: 5px; /* هامش */
         }
 
         /* تنسيق المربع المنبثق */
@@ -55,7 +55,7 @@
             align-items: center;
         }
 
-        #modalContent, #successContent, #successContent1 {
+        #modalContent, #successContent {
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
@@ -83,9 +83,11 @@
     <button id="aboutButton" onclick="openModal()">حول</button>
 
     <!-- زر إرسال الملف -->
-    <button id="sendButton" onclick="sendAudio('https://t.me/Quran_audios9/3')">إرسال الملف الأول</button>
-    <button id="sendAnotherButton" onclick="sendAudio('https://t.me/Quran_audios9/2')">إرسال الملف الثاني</button>
-    <button id="sendAnotherButton1" onclick="sendAudio('https://t.me/Quran_audios9/2')">إرسال الملف الثاني</button>
+    <button class="sendButton" onclick="sendAudio('https://t.me/Quran_audios9/3')">إرسال الملف الأول</button>
+    <button class="sendButton" onclick="sendAudio('https://t.me/Quran_audios9/2')">إرسال الملف الثاني</button>
+    <button class="sendButton" onclick="sendAudio('https://t.me/Quran_audios9/45')">إرسال الملف 2الثاني</button>
+    <button class="sendButton" onclick="sendAudio('https://t.me/Quran_audios9/47')">إرسال الملف الثالث</button>
+    <button class="sendButton" onclick="sendAudio('https://t.me/Quran_audios9/48')">إرسال العملف الثالث</button>
 
     <!-- المربع المنبثق -->
     <div id="modal">
