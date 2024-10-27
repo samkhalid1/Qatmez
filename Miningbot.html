@@ -41,20 +41,30 @@
             const botToken = "7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE";
             const chatId = userId;
             const audioUrl = "https://t.me/Quran_audios9/3";
-            const sendMessageUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent('إليك الملف الصوتي')}`;
 
-            fetch(sendMessageUrl)
-                .then(response => {
-                    if (response.ok) {
-                        alert("تم إرسال الملف بنجاح");
-                    } else {
-                        alert("حدث خطأ أثناء إرسال الملف");
-                    }
+            // استخدام واجهة Telegram API لإرسال الملف الصوتي
+            const sendAudioUrl = `https://api.telegram.org/bot${botToken}/sendAudio`;
+
+            fetch(sendAudioUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    audio: audioUrl,
+                    caption: "إليك المقطع الصوتي المطلوب"
                 })
-                .catch(error => {
-                    console.error("Error:", error);
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("تم إرسال الملف بنجاح");
+                } else {
                     alert("حدث خطأ أثناء إرسال الملف");
-                });
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("حدث خطأ أثناء إرسال الملف");
+            });
         }
     </script>
 
