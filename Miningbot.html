@@ -13,7 +13,6 @@
             height: 100vh;
             font-family: Arial, sans-serif;
             direction: rtl;
-            position: relative;
             margin: 0;
             background-color: #f3f3f3;
         }
@@ -40,6 +39,14 @@
             border: none;
             border-radius: 5px;
             margin: 5px;
+        }
+
+        /* جعل قائمة السور قابلة للتمرير */
+        #surahList {
+            max-height: 70vh; /* تحديد أقصى ارتفاع */
+            overflow-y: auto; /* السماح بالتمرير */
+            width: 100%;
+            text-align: center;
         }
 
         /* تنسيق المربع المنبثق */
@@ -81,7 +88,9 @@
 
     <button id="aboutButton" onclick="openModal()">حول</button>
 
-    <!-- الأزرار مع الروابط الصحيحة -->
+    <!-- قائمة السور داخل عنصر قابل للتمرير -->
+    <div id="surahList">
+        <html><body>
 <button class="sendButton" onclick="sendAudio('الرابط')">سورة الفاتحة</button>
 <button class="sendButton" onclick="sendAudio('الرابط')">سورة البقرة</button>
 <button class="sendButton" onclick="sendAudio('الرابط')">سورة آل عمران</button>
@@ -196,6 +205,8 @@
 <button class="sendButton" onclick="sendAudio('الرابط')">سورة الإخلاص</button>
 <button class="sendButton" onclick="sendAudio('الرابط')">سورة الفلق</button>
 <button class="sendButton" onclick="sendAudio('الرابط')">سورة الناس</button>
+</body></html>
+    </div>
 
     <div id="modal">
         <div id="modalContent">
@@ -242,7 +253,7 @@
         }
 
         function sendAudio(fileUrl) {
-            const botToken = "7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE";
+            const botToken = "TOKEN";
             const chatId = userId;
 
             if (!chatId) {
