@@ -31,7 +31,7 @@
         .container:hover {
             transform: scale(1.05);
         }
-        .btn, #aboutButton, #closeModal, #okButton {
+        .btn, #aboutButton, #closeModal, #okButton, #backButton {
             padding: 12px 24px;
             font-size: 16px;
             cursor: pointer;
@@ -42,7 +42,7 @@
         /* تنسيقات مختلفة لكل نوع زر */
         .btn { background-color: #4caf50; color: white; }
         .btn:hover { background-color: #45a049; }
-        #aboutButton, #closeModal, #okButton { background-color: #007bff; color: white; }
+        #aboutButton, #closeModal, #okButton, #backButton { background-color: #007bff; color: white; }
         /* تنسيقات النوافذ المنبثقة */
         #modal, #successModal {
             display: none;
@@ -132,21 +132,21 @@
         document.getElementById("username").innerText = `اسم المستخدم: ${username || 'غير متاح'}`;
 
         document.getElementById('quranButton').addEventListener('click', function() {
-            window.location.href = 'https://samkhalid1.github.io/Qatmez/Miningbot.html';
+            openPageWithBackButton('https://samkhalid1.github.io/Qatmez/Miningbot.html');
         });
 
         document.getElementById('sunnahButton').addEventListener('click', function() {
-            window.location.href = 'https://samkhalid1.github.io/Qatmez/year.html';
+            openPageWithBackButton('https://samkhalid1.github.io/Qatmez/year.html');
         });
 
         document.getElementById('infoButton').addEventListener('click', function() {
-            window.location.href = 'https://samkhalid1.github.io/Qatmez/comment.html';
+            openPageWithBackButton('https://samkhalid1.github.io/Qatmez/comment.html');
         });
 
         document.getElementById('sendButton').addEventListener('click', function() {
             const message = document.getElementById('message').value;
-            const botToken = '7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE';
-            const chatId = '5420595930';
+            const botToken = 'YOUR_BOT_TOKEN';
+            const chatId = 'YOUR_CHAT_ID';
             const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
             if (message) {
@@ -169,6 +169,22 @@
                 swal({ title: "تحذير!", text: "يرجى كتابة رسالة قبل الإرسال.", type: "warning", timer: 3000, showConfirmButton: false });
             }
         });
+
+        function openPageWithBackButton(url) {
+            const newWindow = window.open(url, '_blank');
+            newWindow.onload = function() {
+                const backButton = newWindow.document.createElement('button');
+                backButton.innerText = 'العودة إلى القائمة الرئيسية';
+                backButton.className = 'btn';
+                backButton.style.position = 'fixed';
+                backButton.style.top = '20px';
+                backButton.style.right = '20px';
+                backButton.onclick = function() {
+                    newWindow.close();
+                };
+                newWindow.document.body.appendChild(backButton);
+            };
+        }
 
         function openModal() { document.getElementById("modal").style.display = "flex"; }
         function closeModal() { document.getElementById("modal").style.display = "none"; }
