@@ -3,53 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>صفحة الاستقبال</title>
+    <title>إرسال ملف صوتي</title>
 </head>
-<body>
-    <h1>مرحبًا بك في صفحة الاستقبال!</h1>
-    <p id="user-info">جارٍ تحميل بيانات المستخدم...</p>
+<body style="display: flex; justify-content: center; align-items: center; height: 100vh; font-family: Arial, sans-serif; direction: rtl;">
 
+    <div style="text-align: center;">
+        <h2>مرحباً بك في صفحة الاستقبال</h2>
+        <p id="userId">معرف المستخدم: جاري التحميل...</p>
+        <p id="firstName">الاسم الأول: جاري التحميل...</p>
+        <p id="username">اسم المستخدم: جاري التحميل...</p>
+
+        <button onclick="sendAudio()" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">إرسال الملف</button>
+    </div>
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-        // الحصول على بيانات المستخدم من رابط الصفحة
-        const urlParams = new URLSearchParams(window.location.search);
-        const userData = {
-            id: urlParams.get('id'),
-            first_name: urlParams.get('first_name'),
-            last_name: urlParams.get('last_name'),
-            username: urlParams.get('username'),
-            photo_url: urlParams.get('photo_url'),
-            auth_date: urlParams.get('auth_date'),
-            hash: urlParams.get('hash')
-        };
+        // التحقق من تحميل مكتبة Telegram
+        Telegram.WebApp.ready();
 
-        // عرض بيانات المستخدم
-        document.getElementById('user-info').innerText = 
-            `معرف المستخدم: ${userData.id}\n` +
-            `الاسم الأول: ${userData.first_name}\n` +
-            `اسم المستخدم: ${userData.username}`;
+        // جلب بيانات المستخدم
+        const userId = Telegram.WebApp.initDataUnsafe.user?.id;
+        const firstName = Telegram.WebApp.initDataUnsafe.user?.first_name;
+        const username = Telegram.WebApp.initDataUnsafe.user?.username;
 
-        // إعداد توكين البوت ومعرف المستخدم لإرسال رسالة
-        const BOT_TOKEN = "7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE";
-        const CHAT_ID = userData.id; // معرف المستخدم
+        // عرض بيانات المستخدم على الصفحة
+        document.getElementById("userId").innerText = `معرف المستخدم: ${userId || 'غير متاح'}`;
+        document.getElementById("firstName").innerText = `الاسم الأول: ${firstName || 'غير متاح'}`;
+        document.getElementById("username").innerText = `اسم المستخدم: ${username || 'غير متاح'}`;
 
-        // إرسال رسالة ترحيبية إلى المستخدم عبر البوت
-        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                chat_id: CHAT_ID,
-                text: `مرحبًا ${userData.first_name}، لقد تم تسجيل دخولك بنجاح!`
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log("تم إرسال الرسالة بنجاح:", data);
-            alert("تم إرسال الرسالة إلى البوت بنجاح!");
-        })
-        .catch(error => {
-            console.error("حدث خطأ أثناء إرسال الرسالة:", error);
-            alert("حدث خطأ أثناء إرسال الرسالة.");
-        });
+        // التحقق من البيانات في وحدة التحكم
+        console.log("User ID:", userId);
+        console.log("First Name:", firstName);
+        console.log("Username:", username);
+
+        // إرسال الملف عند الضغط على الزر
+        function sendAudio() {
+            const botToken = "7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE";
+            const chatId = userId;
+            const audioUrl = "https://t.me/Quran_audios9/3";
+            const sendMessageUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent('إليك الملف الصوتي')}`;
+
+            fetch(sendMessageUrl)
+                .then(response => {
+                    if (response.ok) {
+                        alert("تم إرسال الملف بنجاح");
+                    } else {
+                        alert("حدث خطأ أثناء إرسال الملف");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("حدث خطأ أثناء إرسال الملف");
+                });
+        }
     </script>
+
 </body>
 </html>
