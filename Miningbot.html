@@ -31,7 +31,7 @@
             border-radius: 5px;
         }
 
-        #sendButton {
+        #sendButton, #sendAnotherButton {
             padding: 12px 24px;
             font-size: 16px;
             cursor: pointer;
@@ -39,6 +39,7 @@
             color: #fff;
             border: none;
             border-radius: 5px;
+            margin: 5px;
         }
 
         /* تنسيق المربع المنبثق */
@@ -82,7 +83,8 @@
     <button id="aboutButton" onclick="openModal()">حول</button>
 
     <!-- زر إرسال الملف -->
-    <button id="sendButton" onclick="sendAudio()">إرسال الملف</button>
+    <button id="sendButton" onclick="sendAudio('https://t.me/Quran_audios9/3')">إرسال الملف الأول</button>
+    <button id="sendAnotherButton" onclick="sendAudio('https://t.me/Quran_audios9/2')">إرسال الملف الثاني</button>
 
     <!-- المربع المنبثق -->
     <div id="modal">
@@ -91,6 +93,7 @@
             <p id="userId">معرف المستخدم: جاري التحميل...</p>
             <p id="firstName">الاسم الأول: جاري التحميل...</p>
             <p id="username">اسم المستخدم: جاري التحميل...</p>
+            <h2>النسخة التجربية للبوت</h2>
             <button id="closeModal" onclick="closeModal()">إغلاق</button>
         </div>
     </div>
@@ -99,7 +102,6 @@
     <div id="successModal">
         <div id="successContent">
             <p>تم إرسال الملف بنجاح</p>
-            <p>تُعرض الصفحة في: ".io"</p>
             <button id="okButton" onclick="closeSuccessModal()">موافق</button>
         </div>
     </div>
@@ -135,10 +137,9 @@
         }
 
         // إرسال الملف عند الضغط على زر "إرسال"
-        function sendAudio() {
+        function sendAudio(fileUrl) {
             const botToken = "7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE";
             const chatId = userId;
-            const fileUrl = "https://t.me/Quran_audios9/3"; // رابط الملف الصوتي
 
             // استخدام واجهة Telegram API لإرسال الملف كمستند
             const sendDocumentUrl = `https://api.telegram.org/bot${botToken}/sendDocument`;
