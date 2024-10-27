@@ -81,13 +81,13 @@
 
     <button id="aboutButton" onclick="openModal()">حول</button>
 
-    <!-- الأزرار مع الروابط الصحيحة للنصوص -->
-    <button class="sendButton" onclick="sendTextFromLink(https://t.me/Alhozimey/489)">إرسال النص الأول</button>
-    <button class="sendButton" onclick="sendTextFromLink(490)">إرسالتا النص الثاني</button>
-    <button class="sendButton" onclick="sendTextFromLink(491)">إرسال النص الثالث</button>
-    <button class="sendButton" onclick="sendTextFromLink(492)">إرسال النص الرابع</button>
-    <button class="sendButton" onclick="sendTextFromLink(493)">إرسال النص الخامس</button>
-    <button class="sendButton" onclick="sendTextFromLink(494)">إرسال النص السادس</button>
+    <!-- الأزرار مع النصوص -->
+    <button class="sendButton" onclick="sendText('هذا هو النص الأول')">إرسال النص الأول</button>
+    <button class="sendButton" onclick="sendText('هذا هو النص الثاني')">إرسال النص الثاني</button>
+    <button class="sendButton" onclick="sendText('هذا هو النص الثالث')">إرسال النص الثالث</button>
+    <button class="sendButton" onclick="sendText('هذا هو النص الرابع')">إرسال النص الرابع</button>
+    <button class="sendButton" onclick="sendText('هذا هو النص الخامس')">إرسال النص الخامس</button>
+    <button class="sendButton" onclick="sendText('هذا هو النص السادس')">إرسال النص السادس</button>
 
     <div id="modal">
         <div id="modalContent">
@@ -133,7 +133,7 @@
             document.getElementById("successModal").style.display = "none";
         }
 
-        async function sendTextFromLink(messageId) {
+        function sendText(text) {
             const botToken = "7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE";
             const chatId = userId;
 
@@ -142,50 +142,30 @@
                 return;
             }
 
-            const getMessageUrl = `https://api.telegram.org/bot${botToken}/getUpdates`;
+            const sendTextUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
-            try {
-                const response = await fetch(getMessageUrl);
-                const data = await response.json();
-
+            fetch(sendTextUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: text,
+                    parse_mode: "HTML"
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
                 if (data.ok) {
-                    const messages = data.result;
-                    const message = messages.find(msg => msg.message?.message_id === messageId);
-                    
-                    if (message) {
-                        const text = message.message.text;
-
-                        const sendTextUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
-
-                        fetch(sendTextUrl, {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                                chat_id: chatId,
-                                text: text,
-                                parse_mode: "HTML"
-                            })
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.ok) {
-                                document.getElementById("successModal").style.display = "flex";
-                            } else {
-                                console.error("Error response:", data);
-                                alert("حدث خطأ أثناء إرسال النص: " + data.description);
-                            }
-                        });
-                    } else {
-                        alert("لم يتم العثور على الرسالة المطلوبة.");
-                    }
+                    document.getElementById("successModal").style.display = "flex";
                 } else {
                     console.error("Error response:", data);
-                    alert("حدث خطأ أثناء جلب الرسائل: " + data.description);
+                    alert("حدث خطأ أثناء إرسال النص: " + data.description);
                 }
-            } catch (error) {
+            })
+            .catch(error => {
                 console.error("Error:", error);
-                alert("حدث خطأ أثناء جلب النص");
-            }
+                alert("حدث خطأ أثناء إرسال النص");
+            });
         }
     </script>
 
