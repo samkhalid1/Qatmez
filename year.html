@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إرسال نصوص</title>
+    <title>إرسال صوت</title>
     <style>
         body {
             display: flex;
@@ -18,20 +18,7 @@
             background-color: #f3f3f3;
         }
 
-        #aboutButton {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 8px 16px;
-            font-size: 14px;
-            cursor: pointer;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-        }
-
-        .sendButton {
+        .sendButton, .recordButton {
             padding: 12px 24px;
             font-size: 16px;
             cursor: pointer;
@@ -42,7 +29,18 @@
             margin: 5px;
         }
 
-        /* تنسيق المربع المنبثق */
+        #recordButton {
+            background-color: #ff9800;
+        }
+
+        #stopButton {
+            background-color: #f44336;
+        }
+
+        #playButton {
+            background-color: #2196f3;
+        }
+
         #modal, #successModal {
             display: none;
             position: fixed;
@@ -82,12 +80,14 @@
     <button id="aboutButton" onclick="openModal()">حول</button>
 
     <!-- الأزرار مع النصوص -->
-    <button class="sendButton" onclick="sendText('هذا هو نتالنص الأول')">إرسال النص الأول</button>
+    <button class="sendButton" onclick="sendText('هذا هو النص الأول')">إرسال النص الأول</button>
     <button class="sendButton" onclick="sendText('هذا هو النص الثاني')">إرسال النص الثاني</button>
-    <button class="sendButton" onclick="sendText('هذا هو النص الثالث')">إرسال النص الثالث</button>
-    <button class="sendButton" onclick="sendText('هذا هو النص الرابع')">إرسال النص الرابع</button>
-    <button class="sendButton" onclick="sendText('هذا هو النص الخامس')">إرسال النص الخامس</button>
-    <button class="sendButton" onclick="sendText('هذا هو النص السادس')">إرسال النص السادس</button>
+
+    <!-- أزرار التسجيل الصوتي -->
+    <button id="recordButton" class="recordButton" onclick="startRecording()">تسجيل الصوت</button>
+    <button id="stopButton" class="recordButton" onclick="stopRecording()" disabled>إيقاف التسجيل</button>
+    <button id="playButton" class="recordButton" onclick="playRecording()" disabled>تشغيل الصوت</button>
+    <button id="sendAudioButton" class="sendButton" onclick="sendAudio()" disabled>إرسال الصوت</button>
 
     <div id="modal">
         <div id="modalContent">
@@ -102,7 +102,7 @@
 
     <div id="successModal">
         <div id="successContent">
-            <p>تم إرسال النص بنجاح</p>
+            <p>تم إرسال الصوت بنجاح</p>
             <button id="okButton" onclick="closeSuccessModal()">موافق</button>
         </div>
     </div>
@@ -121,6 +121,12 @@
         document.getElementById("firstName").innerText = `الاسم الأول: ${firstName || 'غير متاح'}`;
         document.getElementById("username").innerText = `اسم المستخدم: ${username || 'غير متاح'}`;
 
+        let mediaRecorder;
+        let audioChunks = [];
+        let audioBlob;
+        let audioUrl;
+        let audio;
+
         function openModal() {
             document.getElementById("modal").style.display = "flex";
         }
@@ -131,6 +137,72 @@
 
         function closeSuccessModal() {
             document.getElementById("successModal").style.display = "none";
+        }
+
+        function startRecording() {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(stream => {
+                    mediaRecorder = new MediaRecorder(stream);
+                    mediaRecorder.ondataavailable = event => {
+                        audioChunks.push(event.data);
+                    };
+                    mediaRecorder.onstop = () => {
+                        audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                        audioUrl = URL.createObjectURL(audioBlob);
+                        audio = new Audio(audioUrl);
+                        document.getElementById("playButton").disabled = false;
+                        document.getElementById("sendAudioButton").disabled = false;
+                    };
+                    mediaRecorder.start();
+                    document.getElementById("stopButton").disabled = false;
+                    document.getElementById("recordButton").disabled = true;
+                })
+                .catch(error => {
+                    console.error("Error accessing microphone: ", error);
+                });
+        }
+
+        function stopRecording() {
+            mediaRecorder.stop();
+            document.getElementById("stopButton").disabled = true;
+        }
+
+        function playRecording() {
+            audio.play();
+        }
+
+        function sendAudio() {
+            const botToken = "7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE";
+            const chatId = userId;
+
+            if (!chatId) {
+                alert("لا يمكن الحصول على معرف المستخدم.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('chat_id', chatId);
+            formData.append('audio', audioBlob);
+
+            const sendAudioUrl = `https://api.telegram.org/bot${botToken}/sendAudio`;
+
+            fetch(sendAudioUrl, {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    document.getElementById("successModal").style.display = "flex";
+                } else {
+                    console.error("Error response:", data);
+                    alert("حدث خطأ أثناء إرسال الصوت: " + data.description);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("حدث خطأ أثناء إرسال الصوت");
+            });
         }
 
         function sendText(text) {
