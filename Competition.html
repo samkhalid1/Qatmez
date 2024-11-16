@@ -26,7 +26,7 @@
             width: 300px;
             position: relative;
             animation: pulse 2s infinite alternate;
-            overflow: visible; /* السماح بظهور الجزء الخارجي من الصورة */
+            overflow: visible;
         }
 
         @keyframes pulse {
@@ -41,14 +41,14 @@
         .countdown-container img {
             width: 120px;
             height: 120px;
-            border-radius: 50%; /* التأكد من أن الصورة دائرية */
+            border-radius: 50%;
             object-fit: cover;
             border: 4px solid #fff;
             position: absolute;
-            top: -60px; /* رفع الصورة لأعلى لتظهر خارج المربع */
+            top: -60px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 2; /* اجعل الصورة فوق التأثيرات الأخرى */
+            z-index: 2;
         }
 
         h1 {
@@ -116,7 +116,6 @@
             box-shadow: none;
         }
 
-        /* خاصية لعدم ظهور أي تأثيرات للضغط */
         .footer-button::-moz-focus-inner {
             border: 0;
             padding: 0;
@@ -129,8 +128,8 @@
 </head>
 <body>
     <div class="countdown-container">
-        <img src="https://www2.0zz0.com/2024/11/16/09/589172831.jpg" alt="صورة">
-        <h1>العد التنازلي للمسابقة</h1>
+        <img src="https://d.top4top.io/p_3242mdwmx0.jpg" alt="صورة">
+        <h1>العد التنازلي</h1>
         <div class="countdown">
             <div class="time-box">
                 <span id="days">04</span>
@@ -149,34 +148,46 @@
                 <p>ثواني</p>
             </div>
         </div>
-        <a href="https://t.me/Alhozimeybot" target="_blank" class="footer-button">اذهب الى البوت</a>
+        <a href="https://t.me/Alhozimeybot" target="_blank" class="footer-button">اذهب إلى البوت</a>
     </div>
-    <script>
-        // تعيين العد التنازلي
-        let timeRemaining = (4 * 24 * 60 * 60) + (23 * 60 * 60) + (59 * 60) + 59; // 4 أيام و23 ساعة و59 دقيقة و59 ثانية
 
-        const updateCountdown = () => {
-            if (timeRemaining >= 0) {
-                const days = Math.floor(timeRemaining / (24 * 60 * 60));
-                const hours = Math.floor((timeRemaining % (24 * 60 * 60)) / (60 * 60));
-                const minutes = Math.floor((timeRemaining % (60 * 60)) / 60);
-                const seconds = Math.floor(timeRemaining % 60);
+    <script>
+        // تعيين التاريخ الذي يبدأ منه العد التنازلي
+        const countdownDuration = (4 * 24 * 60 * 60) + (23 * 60 * 60) + (59 * 60) + 59; // 4 أيام و23 ساعة و59 دقيقة و59 ثانية
+
+        // التحقق إذا كان لدينا وقت مخزن في localStorage
+        let startTime = localStorage.getItem('countdownStartTime');
+        
+        // إذا لم يكن هناك وقت مخزن، قم بتخزين الوقت الحالي كبداية
+        if (!startTime) {
+            startTime = Date.now();
+            localStorage.setItem('countdownStartTime', startTime);
+        }
+
+        // حساب الوقت المتبقي بناءً على بداية العد
+        const calculateRemainingTime = () => {
+            const elapsedTime = Math.floor((Date.now() - startTime) / 1000); // حساب الوقت المنقضي بالثواني
+            const remainingTime = countdownDuration - elapsedTime; // الوقت المتبقي
+
+            if (remainingTime >= 0) {
+                const days = Math.floor(remainingTime / (24 * 60 * 60));
+                const hours = Math.floor((remainingTime % (24 * 60 * 60)) / (60 * 60));
+                const minutes = Math.floor((remainingTime % (60 * 60)) / 60);
+                const seconds = Math.floor(remainingTime % 60);
 
                 document.getElementById("days").textContent = String(days).padStart(2, '0');
                 document.getElementById("hours").textContent = String(hours).padStart(2, '0');
                 document.getElementById("minutes").textContent = String(minutes).padStart(2, '0');
                 document.getElementById("seconds").textContent = String(seconds).padStart(2, '0');
-
-                timeRemaining--; // تقليل الوقت المتبقي بالثانية
             } else {
-                document.querySelector(".countdown").innerHTML = "<h2>المسابقة انتهت</h2>";
+                document.querySelector(".countdown").innerHTML = "<h2>انتهى الوقت!</h2>";
                 clearInterval(countdownInterval);
             }
         };
 
         // تحديث العد التنازلي كل ثانية
-        updateCountdown(); // تشغيل التحديث فورًا
-        const countdownInterval = setInterval(updateCountdown, 1000); // تحديث كل ثانية
+        calculateRemainingTime(); // تشغيل التحديث فورًا
+        const countdownInterval = setInterval(calculateRemainingTime, 1000); // تحديث كل ثانية
     </script>
 </body>
 </html>
