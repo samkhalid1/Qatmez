@@ -3,33 +3,290 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نشر القصص مباشرة</title>
+    <title>إرسال ملف صوتي</title>
     <style>
-        body { text-align: center; font-family: Arial; padding: 20px; }
-        button { background-color: #0088FF; color: white; padding: 15px; border: none; cursor: pointer; }
-        img { max-width: 300px; height: auto; }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            margin: 0;
+            background-color: #f3f3f3;
+        }
+
+        #aboutButton {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .sendButton {
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+        }
+
+        /* جعل قائمة السور قابلة للتمرير */
+        #surahList {
+            max-height: 70vh; /* تحديد أقصى ارتفاع */
+            overflow-y: auto; /* السماح بالتمرير */
+            width: 100%;
+            text-align: center;
+        }
+
+        /* تنسيق المربع المنبثق */
+        #modal, #successModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        #modalContent, #successContent {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #closeModal, #okButton {
+            margin-top: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
 
-    <h1>قصتك جاهزة</h1>
+    <button id="aboutButton" onclick="openModal()">حول</button>
 
-    <!-- الصورة المطلوبة -->
-    <img src="https://f.top4top.io/p_32664144s0.jpg" alt="قصتك">
-    <p>النص: كن صادقًا مع نفسك دائمًا.</p>
+    <!-- قائمة السور داخل عنصر قابل للتمرير -->
+    <div id="surahList">
+        <html><body>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الفاتحة</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة البقرة</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة آل عمران</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة النساء</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة المائدة</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الأنعام</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الأعراف</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الأنفال</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة التوبة</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة يونس</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة هود</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة يوسف</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الرعد</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة إبراهيم</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الحجر</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة النحل</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الإسراء</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الكهف</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة مريم</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة طه</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الأنبياء</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الحج</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة المؤمنون</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة النور</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الفرقان</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الشعراء</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة النمل</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة القصص</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة العنكبوت</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الروم</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة لقمان</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة السجدة</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الأحزاب</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة سبأ</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة فاطر</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة يس</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الصافات</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة ص</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الزمر</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة غافر</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة فصلت</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الشورى</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الزخرف</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الدخان</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الجاثية</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الأحقاف</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة محمد</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الفتح</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الحجرات</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة ق</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الذاريات</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الطور</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة النجم</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة القمر</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الرحمن</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الواقعة</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الحديد</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة المجادلة</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الحشر</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الممتحنة</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الصف</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الجمعة</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة المنافقون</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة التغابن</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الطلاق</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة التحريم</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الملك</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة القلم</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الحاقة</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة المعارج</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة نوح</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الجن</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة المزمل</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة المدثر</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة القيامة</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الإنسان</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة المرسلات</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة النبأ</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة النازعات</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة عبس</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة التكوير</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الإنفطار</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة المطففين</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الإنشقاق</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة البروج</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الطارق</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الأعلى</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الغاشية</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الفجر</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة البلد</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الشمس</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الليل</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الضحى</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الشرح</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة التين</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة العلق</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة القدر</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة البينة</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الزلزلة</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة العاديات</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة القارعة</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة التكاثر</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة العصر</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الهمزة</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الفيل</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة قريش</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الماعون</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الكوثر</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الكافرون</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة النصر</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة المسد</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الإخلاص</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الفلق</button>
+<button class="sendButton" onclick="sendAudio('الرابط')">سورة الناس</button>
+</body></html>
+    </div>
 
-    <!-- الزر لإعادة التوجيه مباشرة إلى تيليجرام -->
-    <button onclick="redirectToTelegram()">نشر القصة</button>
+    <div id="modal">
+        <div id="modalContent">
+            <h2>معلومات المستخدم</h2>
+            <p id="userId">معرف المستخدم: جاري التحميل...</p>
+            <p id="firstName">الاسم الأول: جاري التحميل...</p>
+            <p id="username">اسم المستخدم: جاري التحميل...</p>
+            <h2>النسخة التجربية للبوت</h2>
+            <button id="closeModal" onclick="closeModal()">إغلاق</button>
+        </div>
+    </div>
 
+    <div id="successModal">
+        <div id="successContent">
+            <p>تم إرسال الملف بنجاح</p>
+            <button id="okButton" onclick="closeSuccessModal()">موافق</button>
+        </div>
+    </div>
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-        function redirectToTelegram() {
-            // إعادة التوجيه مباشرة إلى واجهة القصص مع البيانات
-            Telegram.WebApp.sendData(JSON.stringify({
-                text: "قصتك: كن صادقًا مع نفسك دائمًا.",
-                photo_url: "https://f.top4top.io/p_32664144s0.jpg"
-            }));
+        // التحقق من تحميل مكتبة Telegram
+        Telegram.WebApp.ready();
+
+        // جلب بيانات المستخدم
+        const userId = Telegram.WebApp.initDataUnsafe.user?.id;
+        const firstName = Telegram.WebApp.initDataUnsafe.user?.first_name;
+        const username = Telegram.WebApp.initDataUnsafe.user?.username;
+
+        document.getElementById("userId").innerText = معرف المستخدم: ${userId || 'غير متاح'};
+        document.getElementById("firstName").innerText = الاسم الأول: ${firstName || 'غير متاح'};
+        document.getElementById("username").innerText = اسم المستخدم: ${username || 'غير متاح'};
+
+        function openModal() {
+            document.getElementById("modal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+        }
+
+        function closeSuccessModal() {
+            document.getElementById("successModal").style.display = "none";
+        }
+
+        function sendAudio(fileUrl) {
+            const botToken = "TOKEN";
+            const chatId = userId;
+
+            if (!chatId) {
+                alert("لا يمكن الحصول على معرف المستخدم.");
+                return;
+            }
+
+            const sendAudioUrl = https://api.telegram.org/bot${botToken}/sendAudio;
+
+            fetch(sendAudioUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    audio: fileUrl,
+                    caption: "إليك المقطع الصوتي المطلوب"
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    document.getElementById("successModal").style.display = "flex";
+                } else {
+                    console.error("Error response:", data);
+                    alert("حدث خطأ أثناء إرسال الملف: " + data.description);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("حدث خطأ أثناء إرسال الملف");
+            });
         }
     </script>
 
 </body>
-</html>
+    </html>
