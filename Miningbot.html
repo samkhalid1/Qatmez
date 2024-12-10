@@ -3,48 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نشر القصة</title>
+    <title>نشر القصص مباشرة</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-        }
-        img {
-            width: 100%;
-            max-width: 300px;
-        }
-        button {
-            font-weight: bold;
-            font-size: 20px;
-            padding: 15px;
-            background-color: #0088FF;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            opacity: 0.9;
-        }
+        body { text-align: center; font-family: Arial; padding: 20px; }
+        button { background-color: #0088FF; color: white; padding: 15px; border: none; cursor: pointer; }
+        img { max-width: 300px; height: auto; }
     </style>
 </head>
 <body>
 
-    <h1>قصتك جاهزة للنشر</h1>
+    <h1>قصتك جاهزة</h1>
 
     <!-- الصورة المطلوبة -->
-    <img src="https://f.top4top.io/p_32664144s0.jpg" alt="صورة القصة">
-
-    <!-- النص المطلوب -->
+    <img src="https://f.top4top.io/p_32664144s0.jpg" alt="قصتك">
     <p>النص: كن صادقًا مع نفسك دائمًا.</p>
 
-    <!-- الزر لتنفيذ الوظيفة -->
-    <button onclick="publishStory()">نشر القصة</button>
+    <!-- الزر لإعادة التوجيه مباشرة إلى تيليجرام -->
+    <button onclick="redirectToTelegram()">نشر القصة</button>
 
     <script>
-        function publishStory() {
+        function redirectToTelegram() {
+            // إعادة التوجيه مباشرة إلى واجهة القصص مع البيانات
             Telegram.WebApp.sendData(JSON.stringify({
-                text: "هذه هي القصة: كن صادقًا مع نفسك دائمًا.",
+                text: "قصتك: كن صادقًا مع نفسك دائمًا.",
                 photo_url: "https://f.top4top.io/p_32664144s0.jpg"
             }));
         }
