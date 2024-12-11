@@ -3,63 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مشاهدة الإعلانات مع AdsGram</title>
+    <title>مشاهدة الإعلانات - منصة AdsGram</title>
 
     <!-- تضمين SDK الخاص بـ AdsGram -->
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 50px;
-        }
-        button {
-            padding: 15px;
-            font-size: 20px;
-            cursor: pointer;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            margin-top: 20px;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        p {
-            font-weight: bold;
-        }
-    </style>
 </head>
 <body>
 
-    <h1>شاهد الإعلان واربح نقاط!</h1>
+    <h2>شاهد الإعلان واربح النقاط</h2>
 
-    <!-- عرض عدد النقاط -->
-    <p>عدد النقاط: <span id="points">0</span></p>
+    <!-- الزر الخاص بعرض الإعلانات -->
+    <button onclick="showAd()">شاهد الإعلان</button>
 
-    <!-- الزر لعرض الإعلانات -->
-    <button onclick="showAd()">شاهد إعلان</button>
+    <!-- عرض عدد النقاط المكتسبة -->
+    <p>النقاط المكتسبة: <span id="points">0</span></p>
 
     <script>
-        let userPoints = 0;
-
-        // تهيئة الـ SDK باستخدام الـ BlockId المطلوب
+        // تهيئة الـ AdsGram مع الـ Block ID المطلوب
         const AdController = window.Adsgram.init({ blockId: "6109" });
+
+        let userPoints = 0;
 
         async function showAd() {
             try {
-                // عرض الإعلان الحقيقي
+                // عرض الإعلان بالكامل
                 await AdController.show();
 
-                // مكافأة 10 نقاط بعد مشاهدة الإعلان بالكامل
+                // إضافة 10 نقاط بعد مشاهدة الإعلان بالكامل
                 userPoints += 10;
                 document.getElementById('points').innerText = userPoints;
 
-                alert("شكرًا لمشاهدة الإعلان!");
+                alert("تم مشاهدة الإعلان بالكامل، تم إضافة نقاط!");
+
+                // إعادة توجيه Reward URL في حال الرغبة في إضافة مكافآت إضافية
+                window.location.href = "https://samkhalid1.github.io/Qatmez/Page.html";
 
             } catch (error) {
-                console.error("تم تخطي الإعلان.");
+                console.error("خطأ في عرض الإعلان:", error);
                 alert("تم تخطي الإعلان.");
             }
         }
