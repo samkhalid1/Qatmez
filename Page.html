@@ -3,21 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>عرض الإعلانات - منصة AdsGram</title>
+    <title>إعداد Reward Ad مع AdsGram</title>
 
-    <!-- تضمين مكتبة SDK الخاصة بـ AdsGram -->
+    <!-- تضمين مكتبة AdsGram -->
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 </head>
 
 <body>
 
-    <h2>شاهد الإعلان واربح النقاط</h2>
+    <h2>شاهد الإعلان واربح النقاط!</h2>
 
-    <!-- زر عرض إعلان Reward -->
+    <!-- زر عرض الإعلان Reward -->
     <button onclick="showRewardAd()">شاهد الإعلان</button>
-
-    <!-- زر عرض إعلان Interstitial -->
-    <button onclick="showInterstitialAd()">إعلان Interstitial</button>
 
     <!-- عرض عدد النقاط المكتسبة -->
     <p>النقاط المكتسبة: <span id="points">0</span></p>
@@ -26,30 +23,33 @@
         const AdController = window.Adsgram.init({ blockId: "6109" });
         let userPoints = 0;
 
-        // عرض إعلان Rewarded وإضافة نقاط للمستخدم
         async function showRewardAd() {
             try {
+                // عرض الإعلان Reward
                 await AdController.show();
 
-                userPoints += 10;
-                document.getElementById('points').innerText = userPoints;
+                // معرف المستخدم من Telegram
+                const userId = await window.Telegram?.User?.id || 'Unknown';
+
+                // إعداد رابط Reward URL مع معرف المستخدم
+                const rewardUrl = `https://samkhalid1.github.io/reward?userid=${userId}`;
+
+                console.log(`Sending reward request to: ${rewardUrl}`);
+
+                // إرسال الطلب إلى Reward URL
+                fetch(rewardUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Response from reward URL:", data);
+                        userPoints += 10;
+                        document.getElementById('points').innerText = userPoints;
+                    });
 
                 alert('تم مشاهدة الإعلان بالكامل، تمت إضافة نقاط!');
 
             } catch (error) {
-                console.error('خطأ في عرض الإعلان:', error);
-                alert('تم تخطي الإعلان.');
-            }
-        }
-
-        // عرض إعلان Interstitial (يمكن تخطيه)
-        async function showInterstitialAd() {
-            try {
-                await AdController.show();
-
-                console.log('تم تخطي الإعلان أو تمت مشاهدته بالكامل');
-            } catch (error) {
                 console.error('خطأ أثناء عرض الإعلان:', error);
+                alert('تم تخطي الإعلان.');
             }
         }
     </script>
