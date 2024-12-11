@@ -3,176 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوت الموسوعة السنية</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+    <title>مشاهدة الإعلانات مع AdsGram</title>
+
+    <!-- تضمين SDK الخاص بـ AdsGram -->
+    <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
+
     <style>
-        /* تنسيق العام للصفحة */
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #b0bec5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            color: #004d40;
+            font-family: Arial, sans-serif;
             text-align: center;
-            direction: rtl;
+            padding: 50px;
         }
-        .container {
-            background-color: #ffffff;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
-            width: 300px;
-            margin: 10px;
-        }
-        .container:hover {
-            transform: scale(1.05);
-        }
-        .btn, #aboutButton, #closeModal, #okButton {
-            padding: 12px 24px;
-            font-size: 16px;
+        button {
+            padding: 15px;
+            font-size: 20px;
             cursor: pointer;
-            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
             border: none;
-            margin: 10px 0;
+            margin-top: 20px;
         }
-        /* تنسيقات مختلفة لكل نوع زر */
-        .btn { background-color: #4caf50; color: white; }
-        .btn:hover { background-color: #45a049; }
-        #aboutButton, #closeModal, #okButton { background-color: #007bff; color: white; }
-        /* تنسيقات النوافذ المنبثقة */
-        #modal, #successModal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
+        button:hover {
+            background-color: #0056b3;
         }
-        #modalContent, #successContent {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            width: 80%;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        /* تدرج لوني لعنوان */
-        h1 {
-            font-size: 24px;
-            background: linear-gradient(90deg, #ff4081, #3f51b5, #64ffda);
-            background-size: 300% 100%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: slideAnimation 5s ease infinite;
-        }
-        @keyframes slideAnimation {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
-        }
-        /* إخفاء الرسالة وزر الإرسال افتراضياً */
-        #messageContainer {
-            display: none;
+        p {
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <!-- الأقسام -->
-    <div class="container">
-        <h1>بوت الموسوعة السنية</h1>
-        <button class="btn" id="quranButton">قرآن</button>
-        <button class="btn" id="sunnahButton">سنة</button>
-        <button class="btn" id="infoButton">معلومات</button>
-        <button id="aboutButton" onclick="openModal()">حول</button>
-    </div>
 
-    <!-- الرسالة وزر الإرسال -->
-    <div id="messageContainer">
-        <textarea id="message" placeholder="اكتب رسالتك هنا..." style="display:block;margin:auto;width:80%;height:100px;margin-top:20px;"></textarea>
-        <button class="btn" id="sendButton">إرسال</button>
-    </div>
+    <h1>شاهد الإعلان واربح نقاط!</h1>
 
-    <!-- نافذة حول -->
-    <div id="modal">
-        <div id="modalContent">
-            <h2>معلومات المستخدم</h2>
-            <p id="userId">معرف المستخدم: جاري التحميل...</p>
-            <p id="firstName">الاسم الأول: جاري التحميل...</p>
-            <p id="username">اسم المستخدم: جاري التحميل...</p>
-            <button id="closeModal" onclick="closeModal()">إغلاق</button>
-        </div>
-    </div>
+    <!-- عرض عدد النقاط -->
+    <p>عدد النقاط: <span id="points">0</span></p>
 
-    <!-- نافذة النجاح -->
-    <div id="successModal">
-        <div id="successContent">
-            <p>تم إرسال الملف بنجاح</p>
-            <button id="okButton" onclick="closeSuccessModal()">موافق</button>
-        </div>
-    </div>
+    <!-- الزر لعرض الإعلانات -->
+    <button onclick="showAd()">شاهد إعلان</button>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-        Telegram.WebApp.ready();
+        let userPoints = 0;
 
-        const userId = Telegram.WebApp.initDataUnsafe.user?.id;
-        const firstName = Telegram.WebApp.initDataUnsafe.user?.first_name;
-        const username = Telegram.WebApp.initDataUnsafe.user?.username;
+        // تهيئة الـ SDK باستخدام الـ BlockId المطلوب
+        const AdController = window.Adsgram.init({ blockId: "6109" });
 
-        document.getElementById("userId").innerText = `معرف المستخدم: ${userId || 'غير متاح'}`;
-        document.getElementById("firstName").innerText = `الاسم الأول: ${firstName || 'غير متاح'}`;
-        document.getElementById("username").innerText = `اسم المستخدم: ${username || 'غير متاح'}`;
+        async function showAd() {
+            try {
+                // عرض الإعلان الحقيقي
+                await AdController.show();
 
-        document.getElementById('quranButton').addEventListener('click', function() {
-            window.location.href = 'https://samkhalid1.github.io/Qatmez/Miningbot.html';
-        });
+                // مكافأة 10 نقاط بعد مشاهدة الإعلان بالكامل
+                userPoints += 10;
+                document.getElementById('points').innerText = userPoints;
 
-        document.getElementById('sunnahButton').addEventListener('click', function() {
-            window.location.href = 'https://samkhalid1.github.io/Qatmez/year.html';
-        });
+                alert("شكرًا لمشاهدة الإعلان!");
 
-        document.getElementById('infoButton').addEventListener('click', function() {
-            window.location.href = 'https://samkhalid1.github.io/Qatmez/comment.html';
-        });
-
-        document.getElementById('sendButton').addEventListener('click', function() {
-            const message = document.getElementById('message').value;
-            const botToken = '7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE';
-            const chatId = '5420595930';
-            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-
-            if (message) {
-                fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: chatId, text: message })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.ok) {
-                        swal({ title: "تم الإرسال!", text: "رسالتك أُرسلت بنجاح.", type: "success", timer: 3000, showConfirmButton: false });
-                        document.getElementById('message').value = '';
-                    } else {
-                        swal({ title: "خطأ!", text: "حدث خطأ أثناء إرسال الرسالة.", type: "error", timer: 3000, showConfirmButton: false });
-                    }
-                })
-                .catch(error => swal({ title: "خطأ!", text: "حدث خطأ أثناء إرسال الرسالة.", type: "error", timer: 3000, showConfirmButton: false }));
-            } else {
-                swal({ title: "تحذير!", text: "يرجى كتابة رسالة قبل الإرسال.", type: "warning", timer: 3000, showConfirmButton: false });
+            } catch (error) {
+                console.error("تم تخطي الإعلان.");
+                alert("تم تخطي الإعلان.");
             }
-        });
-
-        function openModal() { document.getElementById("modal").style.display = "flex"; }
-        function closeModal() { document.getElementById("modal").style.display = "none"; }
-        function closeSuccessModal() { document.getElementById("successModal").style.display = "none"; }
+        }
     </script>
+
 </body>
 </html>
