@@ -3,147 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متجر الشحن</title>
+    <title>إرسال طلب PUBG</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f7f7f7;
-            text-align: center;
+            font-family: Arial, sans-serif;
             direction: rtl;
+            text-align: right;
+            margin: 20px;
         }
-        .container {
+        form {
             max-width: 500px;
-            margin: 20px auto;
-            background: #ffffff;
+            margin: auto;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #333;
-            font-size: 24px;
-        }
-        .category {
-            margin: 15px 0;
             border: 1px solid #ddd;
-            padding: 10px;
             border-radius: 5px;
-            cursor: pointer;
-            background: #f9f9f9;
-        }
-        .category:hover {
-            background: #f1f1f1;
-        }
-        .details {
-            display: none;
-            margin-top: 15px;
-            border-top: 1px solid #ddd;
-            padding-top: 10px;
+            background-color: #f9f9f9;
         }
         input, button {
-            margin: 10px 0;
+            width: 100%;
             padding: 10px;
-            width: calc(100% - 20px);
+            margin: 10px 0;
             border: 1px solid #ddd;
             border-radius: 5px;
-            font-size: 14px;
         }
         button {
-            background: #4caf50;
+            background-color: #4CAF50;
             color: white;
             cursor: pointer;
         }
         button:hover {
-            background: #45a049;
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>متجر الشحن</h1>
-        <div class="category" onclick="showDetails('pubg')">ببجي موبايل</div>
-        <div id="pubg" class="details">
-            <select id="pubgOption">
-                <option value="60 UC">60 UC - 3$</option>
-                <option value="325 UC">325 UC - 15$</option>
-                <option value="660 UC">660 UC - 30$</option>
-                <option value="1800 UC">1800 UC - 60$</option>
-            </select>
-            <input type="text" id="pubgId" placeholder="أدخل ID الخاص بك">
-            <button onclick="sendOrder('pubg')">تسديد</button>
-        </div>
-        <div class="category" onclick="showDetails('stars')">نجوم تيليجرام</div>
-        <div id="stars" class="details">
-            <select id="starsOption">
-                <option value="50 نجمة">50 نجمة - 5$</option>
-                <option value="100 نجمة">100 نجمة - 10$</option>
-                <option value="150 نجمة">150 نجمة - 15$</option>
-                <option value="200 نجمة">200 نجمة - 20$</option>
-            </select>
-            <input type="text" id="starsId" placeholder="أدخل معرف تيليجرام الخاص بك">
-            <button onclick="sendOrder('stars')">تسديد</button>
-        </div>
-        <div class="category" onclick="showDetails('subscription')">اشتراكات تلجرام</div>
-        <div id="subscription" class="details">
-            <select id="subscriptionOption">
-                <option value="3 أشهر">3 أشهر - 10$</option>
-                <option value="6 أشهر">6 أشهر - 18$</option>
-                <option value="12 شهر">12 شهر - 30$</option>
-            </select>
-            <input type="text" id="subscriptionId" placeholder="أدخل معرف تيليجرام الخاص بك">
-            <button onclick="sendOrder('subscription')">تسديد</button>
-        </div>
-    </div>
+    <h1>إرسال طلب PUBG</h1>
+    <form id="pubgRequestForm">
+        <label for="pubgId">المعرف/ID:</label>
+        <input type="text" id="pubgId" name="pubgId" placeholder="أدخل المعرف الخاص بك" required>
+
+        <label for="amount">الطلب (UC):</label>
+        <input type="number" id="amount" name="amount" placeholder="أدخل كمية UC" required>
+
+        <button type="submit">إرسال الطلب</button>
+    </form>
 
     <script>
-        function showDetails(category) {
-            document.querySelectorAll('.details').forEach(detail => detail.style.display = 'none');
-            document.getElementById(category).style.display = 'block';
-        }
+        // إعداد التوكين ومعرف المشرف
+        const BOT_TOKEN = "7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE";
+        const ADMIN_ID = 1058616316; // معرف المشرف الرقمي
 
-        function sendOrder(category) {
-            let option, id;
-            if (category === 'pubg') {
-                option = document.getElementById('pubgOption').value;
-                id = document.getElementById('pubgId').value;
-            } else if (category === 'stars') {
-                option = document.getElementById('starsOption').value;
-                id = document.getElementById('starsId').value;
-            } else if (category === 'subscription') {
-                option = document.getElementById('subscriptionOption').value;
-                id = document.getElementById('subscriptionId').value;
-            }
+        // الاستماع إلى الإرسال
+        document.getElementById("pubgRequestForm").addEventListener("submit", async function(e) {
+            e.preventDefault(); // منع التحديث التلقائي للصفحة
+            
+            // جلب البيانات المدخلة
+            const pubgId = document.getElementById("pubgId").value;
+            const amount = document.getElementById("amount").value;
 
-            if (!id) {
-                alert('يرجى إدخال جميع البيانات المطلوبة!');
-                return;
-            }
+            // الرسالة التي سيتم إرسالها
+            const message = `
+طلب جديد:
+القسم: PUBG
+الطلب: ${amount} UC
+المعرف/ID: ${pubgId}
+يرجى تحويل المبلغ إلى المحفظة المخصصة وإرسال السند إلى المشرف.
+            `;
 
-            const adminId = 1058616316;
-            const message = `طلب جديد:
-            القسم: ${category}
-            الطلب: ${option}
-            المعرف/ID: ${id}
-            يرجى تحويل المبلغ إلى المحفظة المخصصة وإرسال السند إلى المشرف: @samalzariqi`;
+            // رابط API للإرسال
+            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
 
-            const botToken = '7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE';
-            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+            try {
+                // إرسال الطلب باستخدام fetch
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        chat_id: ADMIN_ID, // معرف المشرف الرقمي
+                        text: message
+                    })
+                });
 
-            fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: adminId, text: message })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.ok) {
-                    alert('تم إرسال طلبك بنجاح. يرجى متابعة المشرف.');
+                // التأكد من نجاح الإرسال
+                if (response.ok) {
+                    alert("تم إرسال الطلب بنجاح!");
+                    document.getElementById("pubgRequestForm").reset();
                 } else {
-                    alert('حدث خطأ أثناء إرسال الطلب.');
+                    alert("حدث خطأ أثناء الإرسال. الرجاء المحاولة لاحقًا.");
                 }
-            })
-            .catch(error => alert('تعذر إرسال الطلب.'));
-        }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("فشل الاتصال بالسيرفر.");
+            }
+        });
     </script>
 </body>
 </html>
