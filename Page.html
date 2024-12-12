@@ -5,61 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>متجر شدات ونظام تيليجرام</title>
 
-    <!-- تضمين SweetAlert -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+    
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: #121212;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom right, #f0f4f8, #e8f7fa);
             display: flex;
             align-items: center;
             justify-content: center;
             height: 100vh;
         }
         .container {
-            background: #1e1e1e;
+            background: #ffffff;
             padding: 30px;
             width: 400px;
             border-radius: 15px;
-            box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
             text-align: center;
         }
-        h2 {
-            color: #FFEB3D;
+        .menu {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .menu-item {
+            cursor: pointer;
+            padding: 10px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .menu-item:hover {
+            background-color: #e0f7fa;
         }
         .section {
             padding: 20px;
-            background: #252525;
-            border-radius: 12px;
+            background: #f1f8ff;
+            border-radius: 10px;
             margin-top: 15px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
         }
         .btn {
-            background-color: #FF5722;
+            background-color: #00796B;
             color: #fff;
-            padding: 12px;
+            padding: 15px;
+            text-align: center;
             display: inline-block;
             width: 100%;
-            text-align: center;
+            text-decoration: none;
+            border-radius: 10px;
             font-weight: bold;
-            border: none;
-            border-radius: 8px;
             cursor: pointer;
-            margin-top: 10px;
-            transition: background 0.3s ease;
+            transition: background-color 0.3s ease;
         }
         .btn:hover {
-            background-color: #E64A19;
+            background-color: #004D40;
         }
-        select, input[type="text"] {
+        input[type="text"], select {
             padding: 12px;
-            margin: 8px;
+            margin: 10px 0;
             width: 100%;
-            border: 1px solid #555;
+            border: 1px solid #ccc;
             border-radius: 8px;
-        }
-        label {
-            font-weight: bold;
         }
     </style>
 </head>
@@ -69,12 +75,19 @@
 <div class="container">
     <h2>متجر تيليجرام</h2>
 
+    <!-- قائمة الأقسام -->
+    <div class="menu">
+        <div class="menu-item" onclick="showSection('section1')">متجر الشدات</div>
+        <div class="menu-item" onclick="showSection('section2')">نجوم تيليجرام</div>
+        <div class="menu-item" onclick="showSection('section3')">اشتراك تيليجرام</div>
+    </div>
+
     <!-- قسم الشدات -->
-    <div class="section" id="section1">
+    <div class="section" id="section1" style="display: none;">
         <h3>متجر الشدات</h3>
-        <label for="gameId1">معرف اللعبة</label>
+        <label for="gameId1">حدد معرف اللعبة</label>
         <input type="text" id="gameId1" placeholder="أدخل معرف اللعبة" required>
-        <label for="quantity1">الكمية</label>
+        <label for="quantity1">حدد الكمية</label>
         <select id="quantity1">
             <option value="1">1</option>
             <option value="5">5</option>
@@ -85,11 +98,11 @@
     </div>
 
     <!-- قسم نجوم تيليجرام -->
-    <div class="section" id="section2">
+    <div class="section" id="section2" style="display: none;">
         <h3>نجوم تيليجرام</h3>
-        <label for="gameId2">معرف اللعبة</label>
+        <label for="gameId2">حدد معرف اللعبة</label>
         <input type="text" id="gameId2" placeholder="أدخل معرف اللعبة" required>
-        <label for="quantity2">الكمية</label>
+        <label for="quantity2">حدد الكمية</label>
         <select id="quantity2">
             <option value="1">1</option>
             <option value="5">5</option>
@@ -100,11 +113,11 @@
     </div>
 
     <!-- قسم اشتراك تيليجرام -->
-    <div class="section" id="section3">
-        <h3>اشتراك تيليجرام</h3>
-        <label for="gameId3">معرف اللعبة</label>
+    <div class="section" id="section3" style="display: none;">
+        <h3>اشتراك تيليجرام مميز</h3>
+        <label for="gameId3">حدد معرف اللعبة</label>
         <input type="text" id="gameId3" placeholder="أدخل معرف اللعبة" required>
-        <label for="quantity3">الكمية</label>
+        <label for="quantity3">حدد الكمية</label>
         <select id="quantity3">
             <option value="1">1</option>
             <option value="5">5</option>
@@ -119,51 +132,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 
 <script>
-    const token = '7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE';
-    const supervisorChatId = '1058616316';
-
-    async function sendData(section) {
-        let gameId, quantity;
-        if (section === '1') {
-            gameId = document.getElementById('gameId1').value;
-            quantity = document.getElementById('quantity1').value;
-        } else if (section === '2') {
-            gameId = document.getElementById('gameId2').value;
-            quantity = document.getElementById('quantity2').value;
-        } else {
-            gameId = document.getElementById('gameId3').value;
-            quantity = document.getElementById('quantity3').value;
+    function showSection(sectionId) {
+        const sections = document.getElementsByClassName('section');
+        for (let section of sections) {
+            section.style.display = "none";
         }
+        document.getElementById(sectionId).style.display = "block";
+    }
 
-        const userId = Telegram.WebApp.initDataUnsafe?.user?.id;
-        const username = Telegram.WebApp.initDataUnsafe?.user?.username;
-
-        const message = `
-طلب جديد:
-معرف المستخدم: ${userId}
-اسم المستخدم: ${username}
-معرف اللعبة: ${gameId}
-الكمية المطلوبة: ${quantity}
-`;
-
-        const url = `https://api.telegram.org/bot${token}/sendMessage`;
-
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: userId, text: message })
-            });
-
-            if (response.ok) {
-                swal({ title: "تم الإرسال!", text: "تم إرسال الطلب بنجاح.", type: "success", timer: 3000 });
-            } else {
-                swal({ title: "فشل!", text: "فشل إرسال الطلب.", type: "error" });
-            }
-        } catch (error) {
-            console.error("خطأ في التواصل مع Telegram:", error);
-            swal({ title: "خطأ!", text: "حدث خطأ في التواصل مع Telegram.", type: "error" });
-        }
+    function sendData(section) {
+        alert(`تم إرسال الطلب من القسم رقم ${section}`);
+        // يمكنك توصيل هذه الدالة مع Telegram API حسب الكود السابق
     }
 </script>
 
