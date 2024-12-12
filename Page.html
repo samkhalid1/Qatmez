@@ -10,7 +10,7 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background: #1c1c1c;
+            background: #1c1c1c; /* خلفية سوداء داكنة */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -18,25 +18,25 @@
             margin: 0;
         }
         .container {
-            background: #fff;
-            padding: 20px;
+            background: #FFFFFF; /* المربع الأساسي أبيض */
+            padding: 50px;
             width: 90%;
             max-width: 400px;
             border-radius: 15px;
-            box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
             text-align: center;
             box-sizing: border-box;
         }
         h2 {
             font-family: Arial;
-            color: #007BFF;
+            color: #000000;
         }
         .section {
             padding: 20px;
             margin-top: 15px;
-            background: #f9f9f9;
+            background: #FFFFFF;
             border-radius: 12px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
         }
         .btn {
             background-color: #007BFF;
@@ -56,6 +56,9 @@
         .btn:hover {
             background-color: #0056b3;
         }
+        .btn:active {
+            background-color: #00408d;
+        }
         select, input[type="text"] {
             padding: 15px;
             margin-top: 10px;
@@ -65,18 +68,12 @@
             box-sizing: border-box;
         }
         label {
-            display: block;
             font-weight: bold;
-            color: #495057;
+            color: #000000;
         }
         input[type="text"]:focus, select:focus {
             outline: none;
             border-color: #80bdff;
-        }
-        @media (min-width: 768px) {
-            .container {
-                padding: 30px;
-            }
         }
     </style>
 </head>
@@ -86,8 +83,17 @@
 <div class="container">
     <h2>متجر تيليجرام</h2>
 
+    <!-- زر الانتقال إلى قسم الشدات -->
+    <button class="btn" onclick="showSection('section1')">اشحن الشدات</button>
+
+    <!-- زر الانتقال إلى قسم نجوم تيليجرام -->
+    <button class="btn" onclick="showSection('section2')">اشتر نجوم تيليجرام</button>
+
+    <!-- زر الانتقال إلى قسم اشتراك تيليجرام مميز -->
+    <button class="btn" onclick="showSection('section3')">اشترك في تيليجرام مميز</button>
+
     <!-- قسم الشدات -->
-    <div class="section" id="section1">
+    <div class="section" id="section1" style="display:none">
         <h3>متجر الشدات</h3>
         <label for="gameId1">حدد معرف اللعبة</label>
         <input type="text" id="gameId1" placeholder="أدخل معرف اللعبة" required>
@@ -101,9 +107,9 @@
         <button class="btn" onclick="sendData('1')">إرسال الطلب</button>
     </div>
 
-    <!-- قسم النجوم -->
-    <div class="section" id="section2">
-        <h3>متجر النجوم</h3>
+    <!-- قسم نجوم تيليجرام -->
+    <div class="section" id="section2" style="display:none">
+        <h3>متجر نجوم تيليجرام</h3>
         <label for="gameId2">حدد معرف اللعبة</label>
         <input type="text" id="gameId2" placeholder="أدخل معرف اللعبة" required>
         <label for="quantity2">حدد الكمية</label>
@@ -116,11 +122,11 @@
         <button class="btn" onclick="sendData('2')">إرسال الطلب</button>
     </div>
 
-    <!-- قسم الاشتراك المميز -->
-    <div class="section" id="section3">
-        <h3>اشتراك تلجرام مميز</h3>
-        <label for="gameId3">حدد معرف اللعبة</label>
-        <input type="text" id="gameId3" placeholder="أدخل معرف اللعبة" required>
+    <!-- قسم اشتراك تيليجرام مميز -->
+    <div class="section" id="section3" style="display:none">
+        <h3>اشتراك تيليجرام مميز</h3>
+        <label for="gameId3">حدد معرف الاشتراك</label>
+        <input type="text" id="gameId3" placeholder="أدخل معرف الاشتراك" required>
         <label for="quantity3">حدد الكمية</label>
         <select id="quantity3">
             <option value="1">1</option>
@@ -130,25 +136,27 @@
         </select>
         <button class="btn" onclick="sendData('3')">إرسال الطلب</button>
     </div>
-
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 
 <script>
-    const token = '7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE';
-    const supervisorChatId = '1058616316';
+    function showSection(section) {
+        const sections = document.getElementsByClassName('section');
+        for (let i = 0; i < sections.length; i++) {
+            sections[i].style.display = 'none';
+        }
+        document.getElementById(section).style.display = 'block';
+    }
 
     Telegram.WebApp.ready();
 
-    const userId = Telegram.WebApp.initDataUnsafe?.user?.id;
-    const username = Telegram.WebApp.initDataUnsafe?.user?.username;
+    const token = 'API_BOT_TOKEN';
+    const supervisorChatId = 'SUPERVISOR_CHAT_ID';
 
-    if (!userId) {
-        console.error("لم يتم العثور على معرف المستخدم.");
-        swal({ title: "خطأ!", text: "لم يتم العثور على معرف المستخدم.", type: "error" });
-    }
+    const userId = Telegram.WebApp.initDataUnsafe?.user?.id || 'TEST_USER_ID';
+    const username = Telegram.WebApp.initDataUnsafe?.user?.username || 'TestUser';
 
     function sendData(section) {
         let gameId, quantity;
@@ -180,24 +188,19 @@
 
         const url = `https://api.telegram.org/bot${token}/sendMessage`;
 
-        // إرسال الرسالة إلى المستخدم
-        fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: userId, text: message })
-        });
-
-        // إرسال الرسالة إلى المشرف
-        fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: supervisorChatId, text: message })
-        }).then(response => {
-            if (response.ok) {
-                swal({ title: "تم الإرسال!", text: "تم إرسال الطلب بنجاح.", type: "success", timer: 3000 });
-            } else {
-                swal({ title: "فشل!", text: "فشل إرسال الطلب إلى المشرف.", type: "error" });
-            }
+        // إرسال الرسالة للمشرف والمستخدم
+        [userId, supervisorChatId].forEach(chatId => {
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: chatId, text: message })
+            }).then(response => {
+                if (response.ok) {
+                    swal({ title: "تم الإرسال!", text: "تم إرسال الطلب بنجاح.", type: "success", timer: 3000 });
+                } else {
+                    swal({ title: "فشل!", text: "فشل إرسال الطلب.", type: "error" });
+                }
+            });
         });
     }
 </script>
