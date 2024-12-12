@@ -14,13 +14,10 @@
         .container {
             max-width: 500px;
             padding: 20px;
-            margin: 50px auto;
             background: #ffffff;
             border-radius: 10px;
+            margin: 50px auto;
             box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
-        }
-        h1 {
-            font-weight: bold;
         }
         .category {
             margin: 10px;
@@ -46,7 +43,6 @@
         button {
             background-color: #28a745;
             color: white;
-            font-weight: bold;
         }
         button:hover {
             background-color: #218838;
@@ -65,7 +61,6 @@
             <option value="60 UC">60 UC - 3$</option>
             <option value="325 UC">325 UC - 15$</option>
             <option value="660 UC">660 UC - 30$</option>
-            <option value="1800 UC">1800 UC - 60$</option>
         </select>
         <input type="text" id="pubgId" placeholder="أدخل معرف اللعبة">
         <button onclick="sendOrder('pubg')">تسديد</button>
@@ -77,8 +72,6 @@
         <select id="starsOption">
             <option value="50 نجمة">50 نجمة - 5$</option>
             <option value="100 نجمة">100 نجمة - 10$</option>
-            <option value="150 نجمة">150 نجمة - 15$</option>
-            <option value="200 نجمة">200 نجمة - 20$</option>
         </select>
         <input type="text" id="starsId" placeholder="أدخل معرف تيليجرام">
         <button onclick="sendOrder('stars')">تسديد</button>
@@ -89,8 +82,6 @@
     <div id="subscription" class="details">
         <select id="subscriptionOption">
             <option value="3 أشهر">3 أشهر - 10$</option>
-            <option value="6 أشهر">6 أشهر - 18$</option>
-            <option value="12 شهر">12 شهر - 30$</option>
         </select>
         <input type="text" id="subscriptionId" placeholder="أدخل معرف تيليجرام">
         <button onclick="sendOrder('subscription')">تسديد</button>
@@ -98,10 +89,10 @@
 </div>
 
 <script>
-    const token = '7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE'; // أدخل التوكن الخاص بك
+    const token = '7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE';
     const adminChatId = 1058616316;
 
-    function toggleCategory(category) {
+    async function toggleCategory(category) {
         const sections = document.querySelectorAll('.details');
         sections.forEach(section => section.style.display = 'none');
         document.getElementById(category).style.display = 'block';
@@ -109,27 +100,32 @@
 
     async function sendOrder(category) {
         let option, id;
+
         if (category === 'pubg') {
             option = document.getElementById('pubgOption').value;
             id = document.getElementById('pubgId').value;
-        } else if (category === 'stars') {
+        }
+        else if (category === 'stars') {
             option = document.getElementById('starsOption').value;
             id = document.getElementById('starsId').value;
-        } else if (category === 'subscription') {
+        }
+        else if (category === 'subscription') {
             option = document.getElementById('subscriptionOption').value;
             id = document.getElementById('subscriptionId').value;
         }
 
-        if (!id) {
-            alert('يرجى إدخال جميع البيانات المطلوبة!');
-            return;
-        }
+        const user_id = 5420595930;  // معرف المستخدم
+        const userName = "Auto_Moderator";
+        const walletAddress = "UQCc_HqPC4OyTiR551lqk_maXW9iFfz3m2TINNB8ornQEpn4";
 
         const message = `
 طلب جديد:
-القسم: ${category}
-الطلب: ${option}
-المعرف الخاص بك: ${id}`;
+- القسم: ${category}
+- الطلب: ${option}
+- المعرف الخاص بك: ${id}
+- معرف المستخدم: ${user_id}
+- اسم المستخدم: ${userName}
+- عنوان المحفظة: ${walletAddress}`;
 
         const url = `https://api.telegram.org/bot${token}/sendMessage`;
 
@@ -140,9 +136,10 @@
                 body: JSON.stringify({ chat_id: adminChatId, text: message })
             });
 
-            alert('تم إرسال طلبك إلى المشرف بنجاح');
-        } catch (error) {
-            alert('تعذر إرسال الطلب.');
+            alert('تم إرسال طلبك للمشرف!');
+        }
+        catch (error) {
+            console.log("حدث خطأ:", error);
         }
     }
 </script>
