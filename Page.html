@@ -83,24 +83,31 @@
 <div class="container">
     <h2>متجر تيليجرام</h2>
 
+    <!-- زر الانتقال إلى قسم الشدات -->
     <button class="btn" onclick="showSection('section1')">اشحن الشدات</button>
+
+    <!-- زر الانتقال إلى قسم نجوم تيليجرام -->
     <button class="btn" onclick="showSection('section2')">اشتر نجوم تيليجرام</button>
+
+    <!-- زر الانتقال إلى قسم اشتراك تيليجرام مميز -->
     <button class="btn" onclick="showSection('section3')">اشترك في تيليجرام مميز</button>
 
+    <!-- قسم الشدات -->
     <div class="section" id="section1" style="display:none">
         <h3>متجر الشدات</h3>
         <label for="gameId1">حدد معرف اللعبة</label>
-        <input type="text" id="gameId1" placeholder="ادخل معرف اللعبة" required>
+        <input type="text" id="gameId1" placeholder="ادخل ايدي اللعبة" required>
         <label for="quantity1">حدد الكمية</label>
         <select id="quantity1">
             <option value="uc 60">uc 60 - $1.25</option>
             <option value="uc 300 + 25">uc 300 + 25 - $5.15</option>
             <option value="uc 600 + 60">uc 600 + 60 - $10.15</option>
-            <option value="uc 1500 + 300">uc 1500 + 300 - $25.15</option>
+            <option value="uc 1500 + 300">uc 1500 + 300 -$25.15</option>
         </select>
         <button class="btn" onclick="sendData('1')">إرسال الطلب</button>
     </div>
 
+    <!-- قسم نجوم تيليجرام -->
     <div class="section" id="section2" style="display:none">
         <h3>متجر نجوم تيليجرام</h3>
         <label for="gameId2">حدد معرف تلجرام</label>
@@ -115,6 +122,7 @@
         <button class="btn" onclick="sendData('2')">إرسال الطلب</button>
     </div>
 
+    <!-- قسم اشتراك تيليجرام مميز -->
     <div class="section" id="section3" style="display:none">
         <h3>اشتراك تيليجرام مميز</h3>
         <label for="gameId3">حدد معرف تلجرام</label>
@@ -143,6 +151,7 @@
 
     Telegram.WebApp.ready();
 
+    // توكين البوت ومعرف المشرف
     const token = '7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE';
     const supervisorChatId = '1058616316';
 
@@ -174,15 +183,13 @@
 - اسم المستخدم: ${username}
 - القسم: ${section === '1' ? 'شدات' : section === '2' ? 'نجوم' : 'اشتراك مميز'}
 - معرف اللعبة: ${gameId}
-
 - الكمية المطلوبة: ${quantity}
-
 - قم بايداع المبلغ للعنوان التالي
 - العنوان التالي لعملة USDT-TRC20 فقط
 - ارسالك لعملات أخرى قد يتسبب في فقدانها
 
-*عنوان المحفظة USDT (TRC20):*
-\`TNaRwkfeBsmTy1oVF4PTPKX2UBpVrRTpyZ\`
+عنوان المحفظة USDT (TRC20):
+TNaRwkfeBsmTy1oVF4PTPKX2UBpVrRTpyZ
 `;
 
         const url = `https://api.telegram.org/bot${token}/sendMessage`;
@@ -191,11 +198,7 @@
             fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: chatId,
-                    text: message,
-                    parse_mode: "Markdown"
-                })
+                body: JSON.stringify({ chat_id: chatId, text: message })
             }).then(response => {
                 if (response.ok) {
                     swal({ title: "تم الإرسال!", text: "تم إرسال الطلب بنجاح.", type: "success", timer: 3000 });
