@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-scale, initial-scale=1.0">
     <title>متجر تيليجرام</title>
 
+    <!-- رابط SweetAlert -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
     <style>
         body {
@@ -40,16 +41,6 @@
             background: #333;
         }
 
-        .btn {
-            background: linear-gradient(90deg, #ff5722, #e64a19);
-            color: white;
-            font-weight: bold;
-        }
-
-        .btn:hover {
-            background: #ff7043;
-        }
-
         .section-content {
             display: none;
             padding: 20px;
@@ -67,6 +58,16 @@
             border: none;
             border-radius: 10px;
         }
+
+        .btn {
+            background: linear-gradient(90deg, #ff5722, #e64a19);
+            color: white;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: #ff7043;
+        }
     </style>
 </head>
 
@@ -75,6 +76,7 @@
 <div id="mainContainer" class="container">
     <h2 style="color: #ffffff">متجر تيليجرام</h2>
 
+    <!-- أقسام الاختيار -->
     <div id="sections">
         <div class="btn-section" onclick="navigateToSection('pubg')">شدات PUBG</div>
         <div class="btn-section" onclick="navigateToSection('telegramStars')">نجوم تيليجرام</div>
@@ -119,6 +121,7 @@
         </select>
         <button class="btn" onclick="sendRequest('3')">إرسال الطلب</button>
     </div>
+
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
@@ -126,8 +129,8 @@
 <script>
     const token = '7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE';
     const supervisorChatId = '1058616316';
-    const userId = Telegram?.WebApp?.initDataUnsafe?.user?.id;
-    const username = Telegram?.WebApp?.initDataUnsafe?.user?.username;
+    const userId = Telegram.WebApp?.initDataUnsafe?.user?.id;
+    const username = Telegram.WebApp?.initDataUnsafe?.user?.username;
 
     function navigateToSection(section) {
         const sections = document.getElementsByClassName('section-content');
@@ -139,7 +142,6 @@
 
     async function sendRequest(section) {
         let gameId, quantity;
-
         if (section === '1') {
             gameId = document.getElementById('gameId1').value;
             quantity = document.getElementById('quantity1').value;
@@ -162,27 +164,25 @@
             اسم المستخدم: ${username}
             معرف اللعبة: ${gameId}
             الكمية المطلوبة: ${quantity}
-            عنوان المحفظة: UQCc_HqPC4OyTiR551lqk_maXW9iFfz3m2TINNB8ornQEpn4
         `;
 
         const url = `https://api.telegram.org/bot${token}/sendMessage`;
 
-        try {
-            await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: userId, text: message }),
-            });
-            
-            await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: supervisorChatId, text: message }),
-            });
+        await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: userId, text: message })
+        });
 
-            swal("تم الإرسال!", "تم إرسال الطلب بنجاح.", "success");
-        } catch (error) {
-            swal("خطأ!", "حدث خطأ أثناء إرسال الطلب.", "error");
-        }
+        await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: supervisorChatId, text: message })
+        });
+
+        swal("تم الإرسال!", "تم إرسال الطلب بنجاح.", "success");
     }
 </script>
+
+</body>
+</html>
