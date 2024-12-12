@@ -10,62 +10,67 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(to bottom right, #f0f4f8, #e8f7fa);
+            background: #e9ecef;
             display: flex;
             align-items: center;
             justify-content: center;
             height: 100vh;
         }
         .container {
-            background: #ffffff;
+            background: #fff;
             padding: 30px;
-            width: 400px;
+            width: 350px;
             border-radius: 15px;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
             text-align: center;
         }
-        .menu {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-        .menu-item {
-            cursor: pointer;
-            padding: 10px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-        .menu-item:hover {
-            background-color: #e0f7fa;
+        h2 {
+            font-family: Arial;
+            color: #007BFF;
         }
         .section {
             padding: 20px;
-            background: #f1f8ff;
-            border-radius: 10px;
             margin-top: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        .section h3 {
+            font-weight: bold;
+            color: #495057;
         }
         .btn {
-            background-color: #00796B;
+            background-color: #007BFF;
             color: #fff;
-            padding: 15px;
+            padding: 12px;
             text-align: center;
             display: inline-block;
             width: 100%;
             text-decoration: none;
-            border-radius: 10px;
+            border-radius: 8px;
             font-weight: bold;
+            margin-top: 10px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
         }
         .btn:hover {
-            background-color: #004D40;
+            background-color: #0056b3;
         }
-        input[type="text"], select {
+        select, input[type="text"] {
             padding: 12px;
-            margin: 10px 0;
+            margin: 8px;
             width: 100%;
-            border: 1px solid #ccc;
+            border: 1px solid #ced4da;
             border-radius: 8px;
+        }
+        select {
+            background: #f8f9fa;
+        }
+        input[type="text"] {
+            box-sizing: border-box;
+        }
+        label {
+            display: block;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -75,15 +80,8 @@
 <div class="container">
     <h2>متجر تيليجرام</h2>
 
-    <!-- قائمة الأقسام -->
-    <div class="menu">
-        <div class="menu-item" onclick="showSection('section1')">متجر الشدات</div>
-        <div class="menu-item" onclick="showSection('section2')">نجوم تيليجرام</div>
-        <div class="menu-item" onclick="showSection('section3')">اشتراك تيليجرام</div>
-    </div>
-
     <!-- قسم الشدات -->
-    <div class="section" id="section1" style="display: none;">
+    <div class="section" id="section1">
         <h3>متجر الشدات</h3>
         <label for="gameId1">حدد معرف اللعبة</label>
         <input type="text" id="gameId1" placeholder="أدخل معرف اللعبة" required>
@@ -98,7 +96,7 @@
     </div>
 
     <!-- قسم نجوم تيليجرام -->
-    <div class="section" id="section2" style="display: none;">
+    <div class="section" id="section2">
         <h3>نجوم تيليجرام</h3>
         <label for="gameId2">حدد معرف اللعبة</label>
         <input type="text" id="gameId2" placeholder="أدخل معرف اللعبة" required>
@@ -112,8 +110,8 @@
         <button class="btn" onclick="sendData('2')">إرسال الطلب</button>
     </div>
 
-    <!-- قسم اشتراك تيليجرام -->
-    <div class="section" id="section3" style="display: none;">
+    <!-- قسم اشتراك تيليجرام مميز -->
+    <div class="section" id="section3">
         <h3>اشتراك تيليجرام مميز</h3>
         <label for="gameId3">حدد معرف اللعبة</label>
         <input type="text" id="gameId3" placeholder="أدخل معرف اللعبة" required>
@@ -129,20 +127,68 @@
 
 </div>
 
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 
 <script>
-    function showSection(sectionId) {
-        const sections = document.getElementsByClassName('section');
-        for (let section of sections) {
-            section.style.display = "none";
-        }
-        document.getElementById(sectionId).style.display = "block";
+    const token = '7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE';
+    const supervisorChatId = '1058616316';
+
+    Telegram.WebApp.ready();
+
+    const userId = Telegram.WebApp.initDataUnsafe?.user?.id;
+    const username = Telegram.WebApp.initDataUnsafe?.user?.username;
+
+    if (!userId) {
+        console.error("لم يتم العثور على معرف المستخدم.");
+        swal({ title: "خطأ!", text: "لم يتم العثور على معرف المستخدم.", type: "error" });
     }
 
     function sendData(section) {
-        alert(`تم إرسال الطلب من القسم رقم ${section}`);
-        // يمكنك توصيل هذه الدالة مع Telegram API حسب الكود السابق
+        let gameId, quantity;
+
+        if (section === '1') {
+            gameId = document.getElementById('gameId1').value;
+            quantity = document.getElementById('quantity1').value;
+        } else if (section === '2') {
+            gameId = document.getElementById('gameId2').value;
+            quantity = document.getElementById('quantity2').value;
+        } else {
+            gameId = document.getElementById('gameId3').value;
+            quantity = document.getElementById('quantity3').value;
+        }
+
+        const message = 
+            الطلب الجديد:
+            معرف المستخدم: ${userId}
+            اسم المستخدم: ${username}
+            معرف اللعبة: ${gameId}
+            الكمية المطلوبة: ${quantity}
+            عنوان المحفظة: UQCc_HqPC4OyTiR551lqk_maXW9iFfz3m2TINNB8ornQEpn4
+        ;
+
+        const url = https://api.telegram.org/bot${token}/sendMessage;
+
+        fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: userId, text: message })
+        }).then(response => {
+            if (response.ok) {
+                swal({ title: "تم الإرسال!", text: "تم إرسال الطلب بنجاح.", type: "success", timer: 3000 });
+            } else {
+                swal({ title: "فشل!", text: "فشل إرسال الطلب.", type: "error" });
+            }
+        }).catch(error => {
+            console.error("خطأ في إرسال البيانات:", error);
+            swal({ title: "خطأ!", text: "حدث خطأ في التواصل مع Telegram.", type: "error" });
+        });
+
+        fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: supervisorChatId, text: message })
+        });
     }
 </script>
 
