@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متجر شدات</title>
+    <title>متجر شدات ونظام تيليجرام</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
     <style>
         body {
@@ -33,14 +33,19 @@
         .btn:hover {
             background-color: #0056b3;
         }
-        select {
+        select, input[type="text"] {
             padding: 10px;
             margin: 10px;
             width: 100%;
         }
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
+        .section {
+            padding: 15px;
+            margin-top: 20px;
+            background-color: #e9f7fa;
+            border-radius: 10px;
+        }
+        .section h3 {
+            text-align: center;
         }
     </style>
 </head>
@@ -48,30 +53,53 @@
 <body>
 
 <div class="container">
-    <h2>متجر شدات</h2>
+    <h2>متجر تيليجرام</h2>
 
-    <!-- عرض معلومات المستخدم -->
-    <div id="userInfo">
-        <p><strong>معرف المستخدم:</strong> <span id="userId">غير معروف</span></p>
-        <p><strong>الاسم الأول:</strong> <span id="firstName">غير معروف</span></p>
-        <p><strong>اسم المستخدم:</strong> <span id="username">غير معروف</span></p>
+    <!-- قسم الشدات -->
+    <div class="section" id="section1">
+        <h3>متجر الشدات</h3>
+        <label for="gameId1">حدد معرف اللعبة</label>
+        <input type="text" id="gameId1" placeholder="أدخل معرف اللعبة" required>
+        <label for="quantity1">حدد الكمية</label>
+        <select id="quantity1">
+            <option value="1">1</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+        </select>
+        <button class="btn" onclick="sendData('1')">إرسال الطلب</button>
     </div>
 
-    <!-- حقل معرف اللعبة -->
-    <label for="gameId">حدد معرف اللعبة</label>
-    <input type="text" id="gameId" placeholder="أدخل معرف اللعبة" required>
+    <!-- قسم نجوم تيليجرام -->
+    <div class="section" id="section2">
+        <h3>نجوم تيليجرام</h3>
+        <label for="gameId2">حدد معرف اللعبة</label>
+        <input type="text" id="gameId2" placeholder="أدخل معرف اللعبة" required>
+        <label for="quantity2">حدد الكمية</label>
+        <select id="quantity2">
+            <option value="1">1</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+        </select>
+        <button class="btn" onclick="sendData('2')">إرسال الطلب</button>
+    </div>
 
-    <!-- قائمة الكمية المطلوبة -->
-    <label for="quantity">حدد الكمية</label>
-    <select id="quantity">
-        <option value="1">1</option>
-        <option value="5">5</option>
-        <option value="10">10</option>
-        <option value="20">20</option>
-    </select>
+    <!-- قسم اشتراك تيليجرام مميز -->
+    <div class="section" id="section3">
+        <h3>اشتراك تيليجرام مميز</h3>
+        <label for="gameId3">حدد معرف اللعبة</label>
+        <input type="text" id="gameId3" placeholder="أدخل معرف اللعبة" required>
+        <label for="quantity3">حدد الكمية</label>
+        <select id="quantity3">
+            <option value="1">1</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+        </select>
+        <button class="btn" onclick="sendData('3')">إرسال الطلب</button>
+    </div>
 
-    <!-- زر إرسال البيانات -->
-    <button class="btn" onclick="sendData()">إرسال الطلب</button>
 </div>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -82,21 +110,24 @@
 
     // الحصول على معلومات المستخدم المتصل عبر Telegram
     const userId = Telegram.WebApp.initDataUnsafe.user?.id;
-    const firstName = Telegram.WebApp.initDataUnsafe.user?.first_name;
     const username = Telegram.WebApp.initDataUnsafe.user?.username;
 
-    document.getElementById('userId').innerText = userId || 'غير معروف';
-    document.getElementById('firstName').innerText = firstName || 'غير معروف';
-    document.getElementById('username').innerText = username || 'غير معروف';
-
     const token = '7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE';
-    const userChatId = userId;  // معرف المستخدم المتصل عبر Telegram
-    const supervisorChatId = '1058616316';  // معرف المشرف
+    const supervisorChatId = '1058616316';
 
-    // دالة إرسال البيانات
-    function sendData() {
-        const gameId = document.getElementById('gameId').value;
-        const quantity = document.getElementById('quantity').value;
+    function sendData(section) {
+        let gameId, quantity;
+        
+        if (section === '1') {
+            gameId = document.getElementById('gameId1').value;
+            quantity = document.getElementById('quantity1').value;
+        } else if (section === '2') {
+            gameId = document.getElementById('gameId2').value;
+            quantity = document.getElementById('quantity2').value;
+        } else {
+            gameId = document.getElementById('gameId3').value;
+            quantity = document.getElementById('quantity3').value;
+        }
 
         const message = `
             الطلب الجديد:
@@ -109,14 +140,12 @@
 
         const url = `https://api.telegram.org/bot${token}/sendMessage`;
 
-        // إرسال البيانات إلى المستخدم المتصل
         fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: userChatId, text: message })
+            body: JSON.stringify({ chat_id: userId, text: message })
         });
 
-        // إرسال البيانات إلى المشرف
         fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
