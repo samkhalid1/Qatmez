@@ -10,7 +10,7 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background: #1c1c1c; /* خلفية سوداء داكنة */
+            background: #1c1c1c;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -18,7 +18,7 @@
             margin: 0;
         }
         .container {
-            background: #FFFFFF; /* المربع الأساسي أبيض */
+            background: #FFFFFF;
             padding: 50px;
             width: 90%;
             max-width: 400px;
@@ -152,6 +152,7 @@
 
     Telegram.WebApp.ready();
 
+    // توكين البوت ومعرف المشرف
     const token = '7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE';
     const supervisorChatId = '1058616316';
 
@@ -178,17 +179,16 @@
         }
 
         const message = `
-            الطلب الجديد:
-            معرف المستخدم: ${userId}
-            اسم المستخدم: ${username}
-            القسم: ${section === '1' ? 'شدات' : section === '2' ? 'نجوم' : 'اشتراك مميز'}
-            معرف اللعبة: ${gameId}
-            الكمية المطلوبة: ${quantity}
+طلب جديد:
+- معرف المستخدم: ${userId}
+- اسم المستخدم: ${username}
+- القسم: ${section === '1' ? 'شدات' : section === '2' ? 'نجوم' : 'اشتراك مميز'}
+- معرف اللعبة: ${gameId}
+- الكمية المطلوبة: ${quantity}
         `;
 
         const url = `https://api.telegram.org/bot${token}/sendMessage`;
 
-        // إرسال الرسالة للمشرف والمستخدم
         [userId, supervisorChatId].forEach(chatId => {
             fetch(url, {
                 method: 'POST',
