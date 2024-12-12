@@ -158,16 +158,16 @@
             quantity = document.getElementById('quantity3').value;
         }
 
-        const message = 
+        const message = `
             الطلب الجديد:
             معرف المستخدم: ${userId}
             اسم المستخدم: ${username}
             معرف اللعبة: ${gameId}
             الكمية المطلوبة: ${quantity}
             عنوان المحفظة: UQCc_HqPC4OyTiR551lqk_maXW9iFfz3m2TINNB8ornQEpn4
-        ;
+        `;
 
-        const url = https://api.telegram.org/bot${token}/sendMessage;
+        const url = `https://api.telegram.org/bot${token}/sendMessage`;
 
         fetch(url, {
             method: 'POST',
