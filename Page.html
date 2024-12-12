@@ -96,13 +96,13 @@
     <div class="section" id="section1" style="display:none">
         <h3>متجر الشدات</h3>
         <label for="gameId1">حدد معرف اللعبة</label>
-        <input type="text" id="gameId1" placeholder="أدخل معرف اللعبة" required>
+        <input type="text" id="gameId1" placeholder="ادخل ايدي اللعبة" required>
         <label for="quantity1">حدد الكمية</label>
         <select id="quantity1">
-            <option value="1">1</option>
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
+            <option value="uc 60">$1.25</option>
+            <option value="uc 300 + 25">$5.15</option>
+            <option value="uc 600 + 60">$10.15</option>
+            <option value="uc 1500 + 300">$25.15</option>
         </select>
         <button class="btn" onclick="sendData('1')">إرسال الطلب</button>
     </div>
@@ -110,14 +110,14 @@
     <!-- قسم نجوم تيليجرام -->
     <div class="section" id="section2" style="display:none">
         <h3>متجر نجوم تيليجرام</h3>
-        <label for="gameId2">حدد معرف اللعبة</label>
-        <input type="text" id="gameId2" placeholder="أدخل معرف اللعبة" required>
+        <label for="gameId2">حدد معرف تلجرام</label>
+        <input type="text" id="gameId2" placeholder="ادخل معرف حسابك" required>
         <label for="quantity2">حدد الكمية</label>
         <select id="quantity2">
-            <option value="1">1</option>
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
+            <option value="50">$1.55</option>
+            <option value="100">$2.50</option>
+            <option value="150">$2.99</option>
+            <option value="200">$3.99</option>
         </select>
         <button class="btn" onclick="sendData('2')">إرسال الطلب</button>
     </div>
@@ -125,14 +125,13 @@
     <!-- قسم اشتراك تيليجرام مميز -->
     <div class="section" id="section3" style="display:none">
         <h3>اشتراك تيليجرام مميز</h3>
-        <label for="gameId3">حدد معرف الاشتراك</label>
-        <input type="text" id="gameId3" placeholder="أدخل معرف الاشتراك" required>
+        <label for="gameId3">حدد معرف تلجرام</label>
+        <input type="text" id="gameId3" placeholder="ادخل المعرف الخاص بك" required>
         <label for="quantity3">حدد الكمية</label>
         <select id="quantity3">
-            <option value="1">1</option>
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
+            <option value="3">$13.99</option>
+            <option value="6">$17.99</option>
+            <option value="12">$30.99</option>
         </select>
         <button class="btn" onclick="sendData('3')">إرسال الطلب</button>
     </div>
@@ -187,13 +186,11 @@
 - الكمية المطلوبة: ${quantity}
 - قم بايداع المبلغ للعنوان التالي
 - العنوان التالي لعملة USDT-TRC20 فقط
-- ارسالك لعملات اخرى قد يتسبب في فقدانها
-- اقل مبلغ يمكن ايداعه هو 3 USDT
+- ارسالك لعملات أخرى قد يتسبب في فقدانها
 
-- عنوان المحفظة USDT TRC20
-
-`TNaRwkfeBsmTy1oVF4PTPKX2UBpVrRTpyZ`
-        `;
+عنوان المحفظة USDT (TRC20):
+TNaRwkfeBsmTy1oVF4PTPKX2UBpVrRTpyZ
+`;
 
         const url = `https://api.telegram.org/bot${token}/sendMessage`;
 
