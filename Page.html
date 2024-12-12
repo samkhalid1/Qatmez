@@ -19,7 +19,7 @@
         }
         .container {
             background: #fff;
-            padding: 40px;
+            padding: 20px;
             width: 90%;
             max-width: 400px;
             border-radius: 15px;
@@ -51,6 +51,7 @@
             font-weight: bold;
             cursor: pointer;
             transition: background-color 0.3s;
+            margin-top: 10px;
         }
         .btn:hover {
             background-color: #0056b3;
@@ -74,7 +75,7 @@
         }
         @media (min-width: 768px) {
             .container {
-                padding: 50px;
+                padding: 30px;
             }
         }
     </style>
@@ -184,14 +185,6 @@
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ chat_id: userId, text: message })
-        }).then(response => {
-            if (response.ok) {
-                console.log("تم إرسال الطلب إلى المستخدم.");
-            } else {
-                console.error("فشل إرسال الطلب إلى المستخدم.");
-            }
-        }).catch(error => {
-            console.error("خطأ في إرسال البيانات للمستخدم:", error);
         });
 
         // إرسال الرسالة إلى المشرف
@@ -205,8 +198,6 @@
             } else {
                 swal({ title: "فشل!", text: "فشل إرسال الطلب إلى المشرف.", type: "error" });
             }
-        }).catch(error => {
-            console.error("خطأ في إرسال البيانات للمشرف:", error);
         });
     }
 </script>
