@@ -6,167 +6,96 @@
     <title>متجر الشحن</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
             background-color: #f7f7f7;
             text-align: center;
-            direction: rtl;
         }
         .container {
-            max-width: 500px;
-            margin: 20px auto;
-            background: #ffffff;
             padding: 20px;
+            background: #fff;
+            margin: 50px auto;
+            max-width: 500px;
             border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #333;
-            font-size: 24px;
-        }
-        .category {
-            margin: 15px 0;
-            border: 1px solid #ddd;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            background: #f9f9f9;
-        }
-        .category:hover {
-            background: #f1f1f1;
-        }
-        .details {
-            display: none;
-            margin-top: 15px;
-            border-top: 1px solid #ddd;
-            padding-top: 10px;
-        }
-        input, button {
-            margin: 10px 0;
-            padding: 10px;
-            width: calc(100% - 20px);
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
+            box-shadow: 0px 0px 15px rgba(0,0,0,0.3);
         }
         button {
-            background: #4caf50;
+            background: #4CAF50;
             color: white;
-            cursor: pointer;
+            padding: 10px;
+            font-weight: bold;
         }
         button:hover {
             background: #45a049;
         }
+        input[type="text"], select {
+            padding: 10px;
+            width: 100%;
+            margin: 10px 0;
+        }
     </style>
 </head>
+
 <body>
 
-    <div class="container">
-        <h1>متجر الشحن</h1>
+<div class="container">
+    <h1>متجر الشحن</h1>
 
-        <!-- قسم ببجي -->
-        <div class="category" onclick="showDetails('pubg')">ببجي موبايل</div>
-        <div id="pubg" class="details">
-            <select id="pubgOption">
-                <option value="60 UC">60 UC - 3$</option>
-                <option value="325 UC">325 UC - 15$</option>
-                <option value="660 UC">660 UC - 30$</option>
-                <option value="1800 UC">1800 UC - 60$</option>
-            </select>
-            <input type="text" id="pubgId" placeholder="أدخل ID الخاص بك">
-            <button onclick="sendOrder('pubg')">تسديد</button>
-        </div>
+    <!-- قسم ببجي -->
+    <label for="pubgOption">ببجي موبايل</label>
+    <select id="pubgOption">
+        <option value="60 UC">60 UC - 3$</option>
+        <option value="325 UC">325 UC - 15$</option>
+        <option value="660 UC">660 UC - 30$</option>
+        <option value="1800 UC">1800 UC - 60$</option>
+    </select>
+    <input type="text" id="pubgId" placeholder="أدخل معرف اللعبة الخاص بك">
+    <button onclick="sendOrder('pubg')">تسديد</button>
 
-        <!-- قسم نجوم تيليجرام -->
-        <div class="category" onclick="showDetails('stars')">نجوم تيليجرام</div>
-        <div id="stars" class="details">
-            <select id="starsOption">
-                <option value="50 نجمة">50 نجمة - 5$</option>
-                <option value="100 نجمة">100 نجمة - 10$</option>
-                <option value="150 نجمة">150 نجمة - 15$</option>
-                <option value="200 نجمة">200 نجمة - 20$</option>
-            </select>
-            <input type="text" id="starsId" placeholder="أدخل معرف تيليجرام الخاص بك">
-            <button onclick="sendOrder('stars')">تسديد</button>
-        </div>
+</div>
 
-        <!-- قسم اشتراكات تيليجرام -->
-        <div class="category" onclick="showDetails('subscription')">اشتراكات تلجرام</div>
-        <div id="subscription" class="details">
-            <select id="subscriptionOption">
-                <option value="3 أشهر">3 أشهر - 10$</option>
-                <option value="6 أشهر">6 أشهر - 18$</option>
-                <option value="12 شهر">12 شهر - 30$</option>
-            </select>
-            <input type="text" id="subscriptionId" placeholder="أدخل معرف تيليجرام الخاص بك">
-            <button onclick="sendOrder('subscription')">تسديد</button>
-        </div>
+<script>
+    const token = 'YOUR_BOT_TOKEN';
+    const adminChatId = 1058616316;
 
-    </div>
-
-    <script>
-        const token = '7472127748:AAHW7rqmAhmBCghPkIHQWYHIzKaeDc4GYEE';  // قم بوضع توكن البوت الخاص بك هنا
-        const adminChatId = 1058616316;       // معرف المشرف
-
-        function showDetails(category) {
-            document.querySelectorAll('.details').forEach(detail => detail.style.display = 'none');
-            document.getElementById(category).style.display = 'block';
+    async function sendOrder(category) {
+        let option, id;
+        
+        if (category === 'pubg') {
+            option = document.getElementById('pubgOption').value;
+            id = document.getElementById('pubgId').value;
+        }
+        if (!id) {
+            alert("يرجى إدخال معرف لعبة صحيح");
+            return;
         }
 
-        async function sendOrder(category) {
-            let option, id;
-
-            if (category === 'pubg') {
-                option = document.getElementById('pubgOption').value;
-                id = document.getElementById('pubgId').value;
-            } else if (category === 'stars') {
-                option = document.getElementById('starsOption').value;
-                id = document.getElementById('starsId').value;
-            } else if (category === 'subscription') {
-                option = document.getElementById('subscriptionOption').value;
-                id = document.getElementById('subscriptionId').value;
-            }
-
-            if (!id) {
-                alert('يرجى إدخال جميع البيانات المطلوبة!');
-                return;
-            }
-
-            const userId = 5420595930;
-            const userName = "Auto_Moderator";
-            const walletAddress = "UQCc_HqPC4OyTiR551lqk_maXW9iFfz3m2TINNB8ornQEpn4";
-
-            const message = `
+        const message = `
 طلب جديد:
 - القسم: ${category}
-- الطلب: ${option}
-- المعرف الخاص بك: ${id}
-- معرف المستخدم: ${userId}
-- اسم المستخدم: ${userName}
-- عنوان المحفظة: ${walletAddress}`;
+- الطلب المطلوب: ${option}
+- المعرف: ${id}
+`;
 
-            const url = `https://api.telegram.org/bot${token}/sendMessage`;
+        const url = `https://api.telegram.org/bot${token}/sendMessage`;
 
-            try {
-                // إرسال الرسالة إلى المشرف
-                await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: adminChatId, text: message })
-                });
+        try {
+            await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    chat_id: adminChatId,
+                    text: message
+                })
+            });
+            alert('طلبك تم إرساله!');
 
-                // إرسال الرسالة أيضًا إلى المستخدم الذي قدم الطلب
-                await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: id, text: message })
-                });
-
-                alert('تم إرسال الطلب إلى المشرف والمستخدم!');
-            } catch (error) {
-                console.log("حدث خطأ:", error);
-                alert('تعذر إرسال الطلب.');
-            }
+        } catch (error) {
+  console.error(error);
+  alert(`حدث خطأ، يرجى المحاولة لاحقًا`);
         }
-    </script>
+    }
+ 
+</script>
+
 </body>
 </html>
