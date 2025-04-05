@@ -75,6 +75,7 @@
             margin-right: 20px;
             cursor: pointer;
             transition: transform 0.3s;
+            padding: 0;
         }
         
         .profile-btn:hover {
@@ -160,6 +161,14 @@
             color: white;
             box-shadow: 0 6px 20px rgba(44, 110, 60, 0.4);
             z-index: 1;
+            
+            /* إزالة تأثيرات الضغط */
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            outline: none !important;
         }
         
         .btn::before {
@@ -184,16 +193,16 @@
             opacity: 1;
         }
         
-        .btn:active {
-            transform: translateY(2px);
+        /* إزالة جميع تأثيرات الضغط */
+        .btn:active,
+        .btn:focus {
+            transform: none !important;
+            box-shadow: none !important;
+            background: linear-gradient(135deg, var(--primary-color), #1e4d2b) !important;
         }
         
         .btn .icon {
             margin-left: 10px;
-        }
-        
-        .no-press-effect:active {
-            transform: none !important;
         }
         
         .ad-container {
@@ -293,11 +302,27 @@
             transition: all 0.3s;
             font-weight: bold;
             border: 1px solid rgba(255, 215, 0, 0.3);
+            
+            /* إزالة تأثيرات الضغط */
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            outline: none !important;
         }
         
         .skip-btn:hover {
             background: rgba(255, 215, 0, 0.3);
             box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+        }
+        
+        /* إزالة تأثيرات الضغط */
+        .skip-btn:active,
+        .skip-btn:focus {
+            transform: none !important;
+            box-shadow: none !important;
+            background: rgba(255, 215, 0, 0.2) !important;
         }
         
         .timer {
@@ -368,11 +393,27 @@
             font-weight: bold;
             font-size: 16px;
             transition: all 0.3s;
+            
+            /* إزالة تأثيرات الضغط */
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            outline: none !important;
         }
         
         #closeModal:hover {
             background: linear-gradient(135deg, #1e4d2b, var(--primary-color));
             box-shadow: 0 0 15px rgba(44, 110, 60, 0.5);
+        }
+        
+        /* إزالة تأثيرات الضغط */
+        #closeModal:active,
+        #closeModal:focus {
+            transform: none !important;
+            box-shadow: none !important;
+            background: linear-gradient(135deg, var(--primary-color), #1e4d2b) !important;
         }
         
         footer {
@@ -476,7 +517,7 @@
         const lastName = Telegram.WebApp.initDataUnsafe?.user?.last_name || '';
         
         // توكين البوت ومعرف المشرف
-        const token = '7790616332:AAE0BaVJbAdjhJBYSN53pCnojJusBLsAfmw';
+        const token = '7606432428:AAFg9nTrrpMY6ITP1o9FBPgaXsEUvJ1Di78';
         const supervisorChatId = '1058616316';
         
         // قائمة الأرقام المميزة
