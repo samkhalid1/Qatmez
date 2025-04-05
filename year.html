@@ -70,25 +70,39 @@
         }
         
         .profile-btn {
-            background: none;
+            display: block;
+            width: auto;
+            padding: 12px 24px;
+            margin: 0 20px;
             border: none;
-            margin-right: 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
-            transition: transform 0.3s;
-            padding: 0;
+            transition: all 0.3s ease;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-color), #1e4d2b);
+            color: white;
+            
+            /* إزالة تأثيرات الضغط */
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            outline: none !important;
         }
         
         .profile-btn:hover {
-            transform: scale(1.1);
+            transform: translateY(-3px);
         }
         
-        .profile-btn img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--gold-color);
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        /* إزالة تأثيرات الضغط */
+        .profile-btn:active,
+        .profile-btn:focus {
+            transform: none !important;
+            box-shadow: none !important;
+            background: linear-gradient(135deg, var(--primary-color), #1e4d2b) !important;
         }
         
         .main-container {
@@ -452,14 +466,19 @@
                 padding: 15px;
                 font-size: 18px;
             }
+            
+            .profile-btn {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="header">
         <div class="logo">جوائز أرقام التفعيل</div>
-        <button class="profile-btn no-press-effect">
-            <img src="https://k.top4top.io/p_3382za0vz0.png" alt="Profile">
+        <button class="profile-btn">
+            عرض المعلومات
         </button>
     </div>
     
@@ -540,6 +559,7 @@
         const timerElement = document.getElementById('timer');
         const modal = document.getElementById('modal');
         const closeModalBtn = document.getElementById('closeModal');
+        const profileBtn = document.querySelector('.profile-btn');
         
         let countdown = 15;
         let countdownInterval;
@@ -705,15 +725,10 @@
         skipButton.addEventListener('click', showResult);
         
         // زر الملف الشخصي
-        document.querySelector('.profile-btn').addEventListener('click', showUserInfo);
+        profileBtn.addEventListener('click', showUserInfo);
         
         // إغلاق النافذة
         closeModalBtn.addEventListener('click', closeModal);
-        
-        // تأثير عدم الظغط على زر الصورة
-        document.querySelector('.profile-btn').addEventListener('mousedown', function(e) {
-            e.preventDefault();
-        });
         
         // إظهار رسالة ترحيبية عند التحميل
         window.addEventListener('load', () => {
