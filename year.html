@@ -1,112 +1,223 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الحصول على رقم</title>
+    <title>متجر تفعيل الأرقام</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
     <style>
+        :root {
+            --primary-color: #2c6e3c;
+            --secondary-color: #25D366;
+            --telegram-color: #0088cc;
+            --dark-color: #1a1a1a;
+            --light-color: #f8f9fa;
+        }
+        
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #1c2526, #2d545e);
+            font-family: 'Tajawal', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            color: #fff;
             margin: 0;
+            padding: 0;
             min-height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
         }
+        
+        .header {
+            width: 100%;
+            background-color: var(--primary-color);
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-left: 20px;
+            color: white;
+        }
+        
+        .profile-btn {
+            background: none;
+            border: none;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+        
+        .profile-btn img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
         .container {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
             width: 90%;
-            max-width: 400px;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            max-width: 500px;
+            margin-top: 100px;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 30px;
+            font-size: 28px;
+            position: relative;
+        }
+        
+        h1::after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 10px auto;
+            border-radius: 3px;
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 15px 0;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
             text-align: center;
             position: relative;
             overflow: hidden;
+            background: linear-gradient(135deg, var(--secondary-color), #128C7E);
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
         }
-        .container::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent);
-            animation: glow 10s infinite;
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
         }
-        @keyframes glow {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
+        
+        .btn:active {
+            transform: translateY(1px);
         }
-        .top-bar {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 20px;
-        }
+        
         .no-press-effect {
             padding: 10px 20px;
-            background: url('https://k.top4top.io/p_3382za0vz0.png') no-repeat center;
-            background-size: cover;
+            background-color: var(--primary-color);
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             outline: none !important;
             user-select: none;
-            width: 50px;
-            height: 50px;
-            transition: transform 0.2s;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
-        .no-press-effect:hover {
-            transform: scale(1.05);
-        }
+        
         .no-press-effect:active {
             box-shadow: none !important;
-            background: url('https://k.top4top.io/p_3382za0vz0.png') no-repeat center !important;
-            background-size: cover !important;
+            background: none !important;
         }
-        h2 {
-            color: #2c6e3c;
-            font-size: 28px;
-            margin-bottom: 20px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .btn {
-            background: linear-gradient(45deg, #007BFF, #00c4cc);
-            color: #fff;
-            padding: 15px;
-            width: 100%;
-            border: none;
-            border-radius: 10px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
-        }
-        #result {
-            font-size: 20px;
-            color: #2c6e3c;
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        #adSection {
-            display: none;
+        
+        .ad-container {
             margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            text-align: center;
         }
-        #skipButton {
-            display: none;
+        
+        .result-container {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .result-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .result-content {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        
+        .contact-info {
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(44, 110, 60, 0.2);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .skip-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
             margin-top: 10px;
-            background: #e74c3c;
+            cursor: pointer;
+            transition: all 0.3s;
         }
+        
+        .skip-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .timer {
+            font-size: 14px;
+            color: #ccc;
+            margin-top: 5px;
+        }
+        
         #modal {
             display: none;
             position: fixed;
@@ -114,140 +225,258 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
             justify-content: center;
             align-items: center;
         }
+        
         #modalContent {
-            background: white;
+            background-color: #2d2d2d;
             padding: 20px;
-            border-radius: 15px;
+            border-radius: 10px;
             width: 80%;
-            max-width: 350px;
-            text-align: center;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-            animation: fadeIn 0.3s ease;
+            max-width: 400px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
         }
+        
         #modalContent h2 {
-            font-size: 22px;
-            margin: 10px 0;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 15px;
         }
+        
         #modalContent p {
-            font-size: 16px;
             margin: 10px 0;
-            color: #333;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
         }
+        
         #closeModal {
-            background: #e74c3c;
+            background-color: var(--primary-color);
             color: white;
-            padding: 10px 20px;
             border: none;
-            border-radius: 8px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 15px;
             cursor: pointer;
-            transition: background 0.3s;
+            width: 100%;
         }
-        #closeModal:hover {
-            background: #c0392b;
+        
+        footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+            color: #aaa;
+            width: 100%;
         }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <div class="top-bar">
-        <button class="no-press-effect" onclick="showUserInfo()"></button>
+    <div class="header">
+        <div class="logo">متجر التفعيلات</div>
+        <button class="profile-btn no-press-effect">
+            <img src="https://k.top4top.io/p_3382za0vz0.png" alt="Profile">
+        </button>
     </div>
-    <h2>جرب حظك!</h2>
-    <button class="btn" onclick="startNumberSearch()">الحصول على رقم</button>
-    <div id="adSection">
-        <div class="openADJsSDKBanner" zoneId="414" publisherId="485"></div>
-        <button id="skipButton" class="btn">تخطي الإعلان</button>
+    
+    <div class="container">
+        <h1>احصل على رقم تفعيل</h1>
+        
+        <button id="getNumberBtn" class="btn">
+            الحصول على رقم
+        </button>
+        
+        <div id="adSection" class="ad-container" style="display: none;">
+            <h3>شاهد الإعلان للحصول على الرقم</h3>
+            <div class="openADJsSDKBanner" zoneId="414" publisherId="485"></div>
+            <div class="timer" id="timer">الانتظار: 15 ثانية</div>
+            <button id="skipButton" class="skip-btn" style="display: none;">تخطي الإعلان</button>
+        </div>
+        
+        <div id="resultContainer" class="result-container" style="display: none;">
+            <div class="result-title" id="resultTitle"></div>
+            <div class="result-content" id="resultContent"></div>
+            <div class="contact-info">
+                <strong>للتواصل:</strong> @Sam_AlZariqi<br>
+                <strong>ملاحظة:</strong> خذ لقطة شاشة لهذه الصفحة وأرسلها للمسؤول
+            </div>
+        </div>
     </div>
-    <div id="result"></div>
-</div>
-
-<div id="modal">
-    <div id="modalContent">
-        <h2>معلومات المستخدم</h2>
-        <p id="userId">معرف المستخدم: جاري التحميل...</p>
-        <p id="firstName">الاسم الأول: جاري التحميل...</p>
-        <p id="username">اسم المستخدم: جاري التحميل...</p>
-        <h2>النسخة التجربية للبوت</h2>
-        <button id="closeModal" onclick="closeModal()">إغلاق</button>
+    
+    <!-- نافذة المعلومات -->
+    <div id="modal">
+        <div id="modalContent">
+            <h2>معلومات المستخدم</h2>
+            <p id="userId">معرف المستخدم: جاري التحميل...</p>
+            <p id="firstName">الاسم الأول: جاري التحميل...</p>
+            <p id="username">اسم المستخدم: جاري التحميل...</p>
+            <h2>النسخة التجربية للبوت</h2>
+            <button id="closeModal">إغلاق</button>
+        </div>
     </div>
-</div>
+    
+    <footer>
+        جميع الحقوق محفوظة &copy; 2023 | متجر التفعيلات
+    </footer>
 
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/openad-js-sdk@latest/dist/index.global.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/openad-js-sdk@latest/dist/index.global.min.js"></script>
 
-<script>
-    Telegram.WebApp.ready();
-    const token = '7790616332:AAE0BaVJbAdjhJBYSN53pCnojJusBLsAfmw';
-    const supervisorChatId = '1058616316';
-    const userId = Telegram.WebApp.initDataUnsafe?.user?.id || 'TEST_USER_ID';
-    const firstName = Telegram.WebApp.initDataUnsafe?.user?.first_name || 'غير متوفر';
-    const username = Telegram.WebApp.initDataUnsafe?.user?.username || 'TestUser';
-
-    function showUserInfo() {
-        document.getElementById('userId').textContent = `معرف المستخدم: ${userId}`;
-        document.getElementById('firstName').textContent = `الاسم الأول: ${firstName}`;
-        document.getElementById('username').textContent = `اسم المستخدم: ${username}`;
-        document.getElementById('modal').style.display = 'flex';
-    }
-
-    function closeModal() {
-        document.getElementById('modal').style.display = 'none';
-    }
-
-    function loadAd() {
-        const adParams = { version: '', TG: true };
-        const adInfo = { zoneId: 414, publisherId: 485, eventId: 0 };
-        const userInfo = { userId: '', firstName: '', lastName: '', userName: '', walletType: '', walletAddress: '' };
-        window.openADJsSDK.bridge.init({ adParams, adInfo, userInfo });
-    }
-
-    function startNumberSearch() {
+    <script>
+        // بيانات المستخدم من تيليجرام
+        Telegram.WebApp.ready();
+        const userId = Telegram.WebApp.initDataUnsafe?.user?.id || 'TEST_USER_ID';
+        const username = Telegram.WebApp.initDataUnsafe?.user?.username || 'TestUser';
+        const firstName = Telegram.WebApp.initDataUnsafe?.user?.first_name || 'مستخدم';
+        const lastName = Telegram.WebApp.initDataUnsafe?.user?.last_name || '';
+        
+        // توكين البوت ومعرف المشرف
+        const token = '7790616332:AAE0BaVJbAdjhJBYSN53pCnojJusBLsAfmw';
+        const supervisorChatId = '1058616316';
+        
+        // متغيرات الصفحة
+        const getNumberBtn = document.getElementById('getNumberBtn');
         const adSection = document.getElementById('adSection');
         const skipButton = document.getElementById('skipButton');
-        const result = document.getElementById('result');
+        const resultContainer = document.getElementById('resultContainer');
+        const resultTitle = document.getElementById('resultTitle');
+        const resultContent = document.getElementById('resultContent');
+        const timerElement = document.getElementById('timer');
+        const modal = document.getElementById('modal');
+        const closeModalBtn = document.getElementById('closeModal');
         
-        adSection.style.display = 'block';
-        skipButton.style.display = 'none';
-        result.textContent = '';
-        loadAd();
-
-        setTimeout(() => {
-            skipButton.style.display = 'block';
-        }, 15000);
-
-        skipButton.onclick = () => {
+        let countdown = 15;
+        let countdownInterval;
+        
+        // تحميل الإعلان
+        function loadAd() {
+            const adParams = {
+                version: '',
+                TG: true
+            };
+            const adInfo = {
+                zoneId: 414,
+                publisherId: 485,
+                eventId: 0
+            };
+            const userInfo = {
+                userId: userId,
+                firstName: firstName,
+                lastName: lastName,
+                userName: username,
+                walletType: '',
+                walletAddress: ''
+            };
+            window.openADJsSDK.bridge.init({ adParams, adInfo, userInfo });
+        }
+        
+        // بدء العد التنازلي
+        function startCountdown() {
+            countdown = 15;
+            timerElement.textContent = `الانتظار: ${countdown} ثانية`;
+            
+            countdownInterval = setInterval(() => {
+                countdown--;
+                timerElement.textContent = `الانتظار: ${countdown} ثانية`;
+                
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    skipButton.style.display = 'inline-block';
+                }
+            }, 1000);
+        }
+        
+        // إظهار النتيجة بناء على الحظ
+        function showResult() {
             adSection.style.display = 'none';
-            const chance = Math.random();
-            let message = '';
-            if (chance < 0.00001) {
-                message = `مبروك حصولك على رقم تيليجرام!\nخذ لقطة شاشة وتواصل مع @Sam_AlZariqi لاستلام الرقم وكود التفعيل`;
-                sendWinNotification('تيليجرام');
-            } else if (chance < 0.001) {
-                message = `مبروك حصولك على رقم واتساب!\nخذ لقطة شاشة وتواصل مع @Sam_AlZariqi لاستلام الرقم وكود التفعيل`;
-                sendWinNotification('واتساب');
-            } else {
-                message = 'حظاً أوفر! حاول مجدداً.';
+            clearInterval(countdownInterval);
+            
+            const random = Math.random();
+            let title, content, isWinner = false;
+            
+            if (random < 0.00001) { // 0.001% فرصة للفوز برقم
+                title = "مبروك! فزت برقم تفعيل";
+                content = "لقد حصلت على رقم جاهز للتفعيل!";
+                isWinner = true;
+            } 
+            else {
+                title = "لم تربح هذه المرة";
+                content = "للأسف لم تربح برقم هذه المرة، حاول مرة أخرى!";
             }
-            result.textContent = message;
-        };
-    }
+            
+            resultTitle.textContent = title;
+            resultContent.textContent = content;
+            resultContainer.style.display = 'block';
+            
+            // إرسال البيانات إلى المسؤول إذا كان فائزًا
+            if (isWinner) {
+                const message = `
+طلب جديد:
+- معرف المستخدم: ${userId}
+- اسم المستخدم: @${username}
+- الاسم: ${firstName} ${lastName}
+- النتيجة: فاز برقم تفعيل
+- الوقت: ${new Date().toLocaleString()}
 
-    function sendWinNotification(type) {
-        const message = `فائز جديد:\n- معرف المستخدم: ${userId}\n- الاسم الأول: ${firstName}\n- اسم المستخدم: ${username}\n- الجائزة: رقم ${type}`;
-        const url = `https://api.telegram.org/bot${token}/sendMessage`;
-        fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: supervisorChatId, text: message })
+يرجى التواصل معه على @${username} أو عبر المعرف @Sam_AlZariqi
+                `;
+                
+                sendToTelegram(message);
+            }
+        }
+        
+        // إرسال رسالة إلى تليجرام
+        function sendToTelegram(message) {
+            const url = `https://api.telegram.org/bot${token}/sendMessage`;
+            
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    chat_id: supervisorChatId, 
+                    text: message 
+                })
+            });
+        }
+        
+        // عرض معلومات المستخدم
+        function showUserInfo() {
+            document.getElementById('userId').textContent = `معرف المستخدم: ${userId}`;
+            document.getElementById('firstName').textContent = `الاسم الأول: ${firstName}`;
+            document.getElementById('username').textContent = `اسم المستخدم: @${username}`;
+            modal.style.display = 'flex';
+        }
+        
+        // إغلاق النافذة
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+        
+        // أحداث الأزرار
+        getNumberBtn.addEventListener('click', () => {
+            adSection.style.display = 'block';
+            resultContainer.style.display = 'none';
+            skipButton.style.display = 'none';
+            loadAd();
+            startCountdown();
         });
-    }
-</script>
-
+        
+        skipButton.addEventListener('click', showResult);
+        
+        // زر الملف الشخصي
+        document.querySelector('.profile-btn').addEventListener('click', showUserInfo);
+        
+        // إغلاق النافذة
+        closeModalBtn.addEventListener('click', closeModal);
+        
+        // تأثير عدم الظغط على زر الصورة
+        document.querySelector('.profile-btn').addEventListener('mousedown', function(e) {
+            e.preventDefault();
+        });
+    </script>
 </body>
 </html>
