@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متجر تفعيل الأرقام</title>
+    <title>جوائز أرقام التفعيل</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-color: #2c6e3c;
@@ -12,31 +13,52 @@
             --telegram-color: #0088cc;
             --dark-color: #1a1a1a;
             --light-color: #f8f9fa;
+            --gold-color: #FFD700;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
         
         body {
-            font-family: 'Tajawal', Arial, sans-serif;
-            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
             color: #fff;
-            margin: 0;
-            padding: 0;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://transparenttextures.com/patterns/dark-stripes.png');
+            opacity: 0.1;
+            z-index: -1;
         }
         
         .header {
             width: 100%;
-            background-color: var(--primary-color);
+            background: rgba(0, 0, 0, 0.7);
             padding: 15px 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             position: fixed;
             top: 0;
             z-index: 1000;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
         }
         
         .logo {
@@ -44,6 +66,7 @@
             font-weight: bold;
             margin-left: 20px;
             color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
         
         .profile-btn {
@@ -51,6 +74,11 @@
             border: none;
             margin-right: 20px;
             cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .profile-btn:hover {
+            transform: scale(1.1);
         }
         
         .profile-btn img {
@@ -58,139 +86,196 @@
             height: 40px;
             border-radius: 50%;
             object-fit: cover;
+            border: 2px solid var(--gold-color);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
         
-        .container {
-            width: 90%;
+        .main-container {
+            width: 100%;
             max-width: 500px;
-            margin-top: 100px;
-            margin-bottom: 40px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
+            margin: 80px auto 40px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.1);
             text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+        
+        .main-container::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, rgba(255,215,0,0) 70%);
+            animation: rotate 20s linear infinite;
+            z-index: -1;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
         h1 {
             text-align: center;
-            color: #fff;
-            margin-bottom: 30px;
-            font-size: 28px;
+            color: var(--gold-color);
+            margin-bottom: 25px;
+            font-size: 32px;
             position: relative;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
         
         h1::after {
             content: "";
             display: block;
-            width: 80px;
-            height: 3px;
-            background: var(--primary-color);
-            margin: 10px auto;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--gold-color), transparent);
+            margin: 15px auto;
             border-radius: 3px;
         }
         
         .btn {
             display: block;
             width: 100%;
-            padding: 15px;
-            margin: 15px 0;
+            padding: 18px;
+            margin: 25px 0;
             border: none;
-            border-radius: 10px;
-            font-size: 18px;
+            border-radius: 12px;
+            font-size: 20px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: center;
             position: relative;
             overflow: hidden;
-            background: linear-gradient(135deg, var(--secondary-color), #128C7E);
+            background: linear-gradient(135deg, var(--primary-color), #1e4d2b);
             color: white;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+            box-shadow: 0 6px 20px rgba(44, 110, 60, 0.4);
+            z-index: 1;
+        }
+        
+        .btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1e4d2b, var(--primary-color));
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: -1;
         }
         
         .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(44, 110, 60, 0.5);
+        }
+        
+        .btn:hover::before {
+            opacity: 1;
         }
         
         .btn:active {
-            transform: translateY(1px);
+            transform: translateY(2px);
         }
         
-        .no-press-effect {
-            padding: 10px 20px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            outline: none !important;
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            -webkit-tap-highlight-color: transparent;
+        .btn .icon {
+            margin-left: 10px;
         }
         
         .no-press-effect:active {
-            box-shadow: none !important;
-            background: none !important;
+            transform: none !important;
         }
         
         .ad-container {
-            margin: 20px 0;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
             text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .result-container {
-            margin-top: 20px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+            margin-top: 25px;
+            padding: 25px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
             text-align: center;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
             animation: fadeIn 0.5s ease;
         }
         
         .result-title {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: bold;
-            margin-bottom: 15px;
-            color: var(--primary-color);
+            margin-bottom: 20px;
+            color: var(--gold-color);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
         
         .result-content {
-            font-size: 18px;
-            margin-bottom: 15px;
+            font-size: 20px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .winner-number {
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--gold-color);
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 8px;
+            border: 1px dashed var(--gold-color);
+            direction: ltr;
         }
         
         .contact-info {
-            margin-top: 15px;
-            padding: 10px;
-            background: rgba(44, 110, 60, 0.2);
-            border-radius: 8px;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(44, 110, 60, 0.3);
+            border-radius: 10px;
             border-left: 4px solid var(--primary-color);
+            font-size: 16px;
+        }
+        
+        .contact-info strong {
+            color: var(--gold-color);
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
         
         .loading {
             display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
+            width: 24px;
+            height: 24px;
+            border: 4px solid rgba(255,255,255,.3);
             border-radius: 50%;
-            border-top-color: #fff;
+            border-top-color: var(--gold-color);
             animation: spin 1s ease-in-out infinite;
             margin-right: 10px;
+            vertical-align: middle;
         }
         
         @keyframes spin {
@@ -198,26 +283,31 @@
         }
         
         .skip-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
+            background: rgba(255, 215, 0, 0.2);
+            color: var(--gold-color);
             border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            margin-top: 10px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-top: 15px;
             cursor: pointer;
             transition: all 0.3s;
+            font-weight: bold;
+            border: 1px solid rgba(255, 215, 0, 0.3);
         }
         
         .skip-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
         }
         
         .timer {
-            font-size: 14px;
-            color: #ccc;
-            margin-top: 5px;
+            font-size: 16px;
+            color: var(--gold-color);
+            margin-top: 10px;
+            font-weight: bold;
         }
         
+        /* نافذة المعلومات */
         #modal {
             display: none;
             position: fixed;
@@ -225,79 +315,131 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.8);
             z-index: 2000;
             justify-content: center;
             align-items: center;
+            backdrop-filter: blur(5px);
         }
         
         #modalContent {
-            background-color: #2d2d2d;
-            padding: 20px;
-            border-radius: 10px;
-            width: 80%;
-            max-width: 400px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            position: relative;
+            animation: modalFadeIn 0.4s ease;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
         
         #modalContent h2 {
-            color: var(--primary-color);
+            color: var(--gold-color);
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            font-size: 26px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
         
         #modalContent p {
-            margin: 10px 0;
-            padding: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
+            margin: 15px 0;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            font-size: 16px;
+            border-left: 3px solid var(--primary-color);
         }
         
         #closeModal {
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color), #1e4d2b);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            margin-top: 15px;
+            padding: 12px 25px;
+            border-radius: 8px;
+            margin-top: 20px;
             cursor: pointer;
             width: 100%;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        #closeModal:hover {
+            background: linear-gradient(135deg, #1e4d2b, var(--primary-color));
+            box-shadow: 0 0 15px rgba(44, 110, 60, 0.5);
         }
         
         footer {
             text-align: center;
-            padding: 15px;
+            padding: 20px;
             font-size: 14px;
-            color: #aaa;
+            color: rgba(255, 255, 255, 0.6);
             width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+        }
+        
+        /* تأثيرات للجوائز */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--gold-color);
+            opacity: 0;
+            z-index: 10;
+        }
+        
+        /* للشاشات الصغيرة */
+        @media (max-width: 600px) {
+            .main-container {
+                padding: 20px;
+                margin: 70px auto 30px;
+                width: 95%;
+            }
+            
+            h1 {
+                font-size: 28px;
+            }
+            
+            .btn {
+                padding: 15px;
+                font-size: 18px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <div class="logo">متجر التفعيلات</div>
+        <div class="logo">جوائز أرقام التفعيل</div>
         <button class="profile-btn no-press-effect">
             <img src="https://k.top4top.io/p_3382za0vz0.png" alt="Profile">
         </button>
     </div>
     
-    <div class="container">
-        <h1>احصل على رقم تفعيل</h1>
+    <div class="main-container">
+        <h1>🎉 احصل على رقم مميز 🎉</h1>
         
         <button id="getNumberBtn" class="btn">
-            الحصول على رقم
+            <i class="icon">🎁</i> احصل على رقم تفعيل
         </button>
         
         <div id="adSection" class="ad-container" style="display: none;">
-            <h3>شاهد الإعلان للحصول على الرقم</h3>
+            <h3>شاهد الإعلان للحصول على فرصتك</h3>
             <div class="openADJsSDKBanner" zoneId="414" publisherId="485"></div>
-            <div class="timer" id="timer">الانتظار: 15 ثانية</div>
-            <button id="skipButton" class="skip-btn" style="display: none;">تخطي الإعلان</button>
+            <div class="timer" id="timer">⏳ الانتظار: 15 ثانية</div>
+            <button id="skipButton" class="skip-btn" style="display: none;">⏩ تخطي الإعلان</button>
         </div>
         
         <div id="resultContainer" class="result-container" style="display: none;">
             <div class="result-title" id="resultTitle"></div>
             <div class="result-content" id="resultContent"></div>
+            <div id="winnerNumber" class="winner-number" style="display: none;"></div>
             <div class="contact-info">
                 <strong>للتواصل:</strong> @Sam_AlZariqi<br>
                 <strong>ملاحظة:</strong> خذ لقطة شاشة لهذه الصفحة وأرسلها للمسؤول
@@ -312,17 +454,16 @@
             <p id="userId">معرف المستخدم: جاري التحميل...</p>
             <p id="firstName">الاسم الأول: جاري التحميل...</p>
             <p id="username">اسم المستخدم: جاري التحميل...</p>
-            <h2>النسخة التجربية للبوت</h2>
+            <h2>النسخة التجريبية للبوت</h2>
             <button id="closeModal">إغلاق</button>
         </div>
     </div>
     
     <footer>
-        جميع الحقوق محفوظة &copy; 2023 | متجر التفعيلات
+        جميع الحقوق محفوظة &copy; 2025 | متجر تفعيل الأرقام المميزة
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/openad-js-sdk@latest/dist/index.global.min.js"></script>
 
@@ -338,6 +479,15 @@
         const token = '7790616332:AAE0BaVJbAdjhJBYSN53pCnojJusBLsAfmw';
         const supervisorChatId = '1058616316';
         
+        // قائمة الأرقام المميزة
+        const premiumNumbers = [
+            "+994 40 123 45 67",
+            "+994 50 987 65 43",
+            "+994 70 456 78 90",
+            "+994 55 321 12 34",
+            "+994 10 654 32 10"
+        ];
+        
         // متغيرات الصفحة
         const getNumberBtn = document.getElementById('getNumberBtn');
         const adSection = document.getElementById('adSection');
@@ -345,6 +495,7 @@
         const resultContainer = document.getElementById('resultContainer');
         const resultTitle = document.getElementById('resultTitle');
         const resultContent = document.getElementById('resultContent');
+        const winnerNumber = document.getElementById('winnerNumber');
         const timerElement = document.getElementById('timer');
         const modal = document.getElementById('modal');
         const closeModalBtn = document.getElementById('closeModal');
@@ -377,49 +528,94 @@
         // بدء العد التنازلي
         function startCountdown() {
             countdown = 15;
-            timerElement.textContent = `الانتظار: ${countdown} ثانية`;
+            timerElement.textContent = `⏳ الانتظار: ${countdown} ثانية`;
             
             countdownInterval = setInterval(() => {
                 countdown--;
-                timerElement.textContent = `الانتظار: ${countdown} ثانية`;
+                timerElement.textContent = `⏳ الانتظار: ${countdown} ثانية`;
                 
                 if (countdown <= 0) {
                     clearInterval(countdownInterval);
                     skipButton.style.display = 'inline-block';
+                    timerElement.textContent = "يمكنك الآن تخطي الإعلان";
                 }
             }, 1000);
+        }
+        
+        // إنشاء تأثير الكونفيتي
+        function createConfetti() {
+            const colors = ['#FFD700', '#FFA500', '#FF6347', '#FF69B4', '#9370DB', '#00FFFF'];
+            
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = -10 + 'px';
+                confetti.style.opacity = Math.random();
+                confetti.style.width = Math.random() * 10 + 5 + 'px';
+                confetti.style.height = Math.random() * 10 + 5 + 'px';
+                
+                document.body.appendChild(confetti);
+                
+                const animationDuration = Math.random() * 3 + 2;
+                
+                confetti.animate([
+                    { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 },
+                    { transform: `translate(${Math.random() * 200 - 100}px, ${window.innerHeight}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+                ], {
+                    duration: animationDuration * 1000,
+                    easing: 'cubic-bezier(0.1, 0.8, 0.9, 1)',
+                    fill: 'forwards'
+                });
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, animationDuration * 1000);
+            }
         }
         
         // إظهار النتيجة بناء على الحظ
         function showResult() {
             adSection.style.display = 'none';
             clearInterval(countdownInterval);
+            winnerNumber.style.display = 'none';
             
             const random = Math.random();
             let title, content, isWinner = false;
+            let selectedNumber = '';
             
             if (random < 0.00001) { // 0.001% فرصة للفوز برقم
-                title = "مبروك! فزت برقم تفعيل";
-                content = "لقد حصلت على رقم جاهز للتفعيل!";
+                title = "🎉 مبروك! لقد فزت 🎉";
+                content = "لقد حصلت على رقم تفعيل مميز!";
                 isWinner = true;
+                selectedNumber = premiumNumbers[Math.floor(Math.random() * premiumNumbers.length)];
+                createConfetti();
             } 
             else {
-                title = "لم تربح هذه المرة";
+                title = "😔 لم تربح هذه المرة";
                 content = "للأسف لم تربح برقم هذه المرة، حاول مرة أخرى!";
             }
             
             resultTitle.textContent = title;
             resultContent.textContent = content;
+            
+            if (isWinner) {
+                winnerNumber.textContent = selectedNumber;
+                winnerNumber.style.display = 'block';
+            }
+            
             resultContainer.style.display = 'block';
             
             // إرسال البيانات إلى المسؤول إذا كان فائزًا
             if (isWinner) {
                 const message = `
-طلب جديد:
+🎉 فوز جديد في السحب 🎉
+
 - معرف المستخدم: ${userId}
 - اسم المستخدم: @${username}
 - الاسم: ${firstName} ${lastName}
-- النتيجة: فاز برقم تفعيل
+- الرقم الفائز: ${selectedNumber}
 - الوقت: ${new Date().toLocaleString()}
 
 يرجى التواصل معه على @${username} أو عبر المعرف @Sam_AlZariqi
@@ -429,7 +625,7 @@
             }
         }
         
-        // إرسال رسالة إلى تليجرام
+        // إرسال رسالة إلى تيليجرام
         function sendToTelegram(message) {
             const url = `https://api.telegram.org/bot${token}/sendMessage`;
             
@@ -476,6 +672,18 @@
         // تأثير عدم الظغط على زر الصورة
         document.querySelector('.profile-btn').addEventListener('mousedown', function(e) {
             e.preventDefault();
+        });
+        
+        // إظهار رسالة ترحيبية عند التحميل
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                swal({
+                    title: "مرحباً بك!",
+                    text: "احصل على رقم تفعيل مميز بكل سهولة!",
+                    icon: "info",
+                    button: "حسناً"
+                });
+            }, 1000);
         });
     </script>
 </body>
