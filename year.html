@@ -3,743 +3,1296 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>جوائز أرقام التفعيل</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>جوائز أرقام التفعيل المميزة</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
     <style>
         :root {
             --primary-color: #2c6e3c;
-            --secondary-color: #25D366;
+            --primary-light: #4CAF50;
+            --primary-dark: #1b5e20;
+            --secondary-color: #FFD700;
+            --secondary-light: #FFEB3B;
+            --secondary-dark: #FFC107;
+            --dark-color: #121212;
+            --dark-surface: #1e1e1e;
+            --dark-card: #2d2d2d;
+            --light-color: #ffffff;
+            --light-surface: #f5f5f5;
+            --light-card: #ffffff;
+            --text-on-dark: #e0e0e0;
+            --text-on-light: #333333;
+            --transition-speed: 0.4s;
             --telegram-color: #0088cc;
-            --dark-color: #1a1a1a;
-            --light-color: #f8f9fa;
-            --gold-color: #FFD700;
         }
-        
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        
+
         body {
             font-family: 'Tajawal', sans-serif;
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            color: #fff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            transition: background-color var(--transition-speed), color var(--transition-speed);
             overflow-x: hidden;
-            position: relative;
+            min-height: 100vh;
         }
-        
-        body::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
+
+        body.light-mode {
+            color: var(--text-on-light);
+            background-color: var(--light-surface);
+        }
+
+        body.dark-mode {
+            color: var(--text-on-dark);
+            background-color: var(--dark-color);
+        }
+
+        /* Particles background */
+        #particles-js {
+            position: fixed;
             width: 100%;
             height: 100%;
-            background: url('https://transparenttextures.com/patterns/dark-stripes.png');
-            opacity: 0.1;
-            z-index: -1;
+            top: 0;
+            left: 0;
+            z-index: -10;
+            opacity: 0.7;
         }
-        
+
         .header {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 15px 0;
             position: fixed;
             top: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            right: 0;
+            left: 0;
+            z-index: 50;
             backdrop-filter: blur(10px);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            -webkit-backdrop-filter: blur(10px);
+            transition: background-color var(--transition-speed);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
-        
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            margin-left: 20px;
-            color: white;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+
+        .dark-mode .header {
+            background-color: rgba(29, 29, 29, 0.85);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
-        
-        .profile-btn {
-            display: block;
-            width: auto;
-            padding: 12px 24px;
-            margin: 0 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
+
+        .light-mode .header {
+            background-color: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Card styles */
+        .premium-card {
             transition: all 0.3s ease;
-            text-align: center;
-            background: linear-gradient(135deg, var(--primary-color), #1e4d2b);
-            color: white;
-            
-            /* إزالة تأثيرات الضغط */
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            outline: none !important;
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
-        
-        .profile-btn:hover {
-            transform: translateY(-3px);
+
+        .premium-card:hover {
+            transform: translateY(-10px) rotateY(5deg);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
         }
-        
-        /* إزالة تأثيرات الضغط */
-        .profile-btn:active,
-        .profile-btn:focus {
-            transform: none !important;
-            box-shadow: none !important;
-            background: linear-gradient(135deg, var(--primary-color), #1e4d2b) !important;
+
+        .dark-mode .premium-card {
+            background: linear-gradient(135deg, var(--dark-card) 0%, #222222 100%);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid #444;
         }
-        
+
+        .light-mode .premium-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f3f3f3 100%);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid #eaeaea;
+        }
+
+        /* Main container */
         .main-container {
-            width: 100%;
-            max-width: 500px;
-            margin: 80px auto 40px;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
+            max-width: 800px;
+            margin: 100px auto 40px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        /* Glow effects */
+        .glow-effect {
             position: relative;
             overflow: hidden;
-            transition: all 0.5s ease;
         }
-        
-        .main-container::after {
-            content: "";
+
+        .glow-effect::before {
+            content: '';
             position: absolute;
             top: -50%;
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, rgba(255,215,0,0) 70%);
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0) 70%);
+            transform: rotate(0deg);
             animation: rotate 20s linear infinite;
             z-index: -1;
+            pointer-events: none;
         }
-        
+
         @keyframes rotate {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
-        h1 {
-            text-align: center;
-            color: var(--gold-color);
-            margin-bottom: 25px;
-            font-size: 32px;
+
+        /* Gold text */
+        .gold-text {
+            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
             position: relative;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
-        
-        h1::after {
+
+        .gold-text::after {
             content: "";
             display: block;
-            width: 100px;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, var(--gold-color), transparent);
-            margin: 15px auto;
-            border-radius: 3px;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            margin: 10px auto;
+            border-radius: 2px;
         }
-        
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 18px;
-            margin: 25px 0;
-            border: none;
-            border-radius: 12px;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
+
+        /* Button styles */
+        .gradient-btn {
             position: relative;
             overflow: hidden;
-            background: linear-gradient(135deg, var(--primary-color), #1e4d2b);
-            color: white;
-            box-shadow: 0 6px 20px rgba(44, 110, 60, 0.4);
-            z-index: 1;
-            
-            /* إزالة تأثيرات الضغط */
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            outline: none !important;
+            transition: all 0.3s ease;
+            background-size: 200% auto;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
-        
-        .btn::before {
-            content: "";
+
+        .dark-mode .gradient-btn {
+            background-image: linear-gradient(45deg, var(--primary-dark) 0%, var(--primary-color) 50%, var(--primary-dark) 100%);
+        }
+
+        .light-mode .gradient-btn {
+            background-image: linear-gradient(45deg, var(--primary-color) 0%, var(--primary-light) 50%, var(--primary-color) 100%);
+        }
+
+        .gradient-btn:hover {
+            background-position: right center;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .gradient-btn::before {
+            content: '';
             position: absolute;
             top: 0;
-            left: 0;
-            width: 100%;
+            width: 30px;
             height: 100%;
-            background: linear-gradient(135deg, #1e4d2b, var(--primary-color));
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: -1;
+            background: rgba(255, 255, 255, 0.3);
+            transform: skewX(-30deg);
+            animation: shine 3s infinite;
+            filter: blur(5px);
         }
-        
-        .btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 25px rgba(44, 110, 60, 0.5);
+
+        @keyframes shine {
+            0% { left: -100px; opacity: 0; }
+            20% { opacity: 0.5; }
+            100% { left: 300px; opacity: 0; }
         }
-        
-        .btn:hover::before {
-            opacity: 1;
-        }
-        
-        /* إزالة جميع تأثيرات الضغط */
-        .btn:active,
-        .btn:focus {
-            transform: none !important;
-            box-shadow: none !important;
-            background: linear-gradient(135deg, var(--primary-color), #1e4d2b) !important;
-        }
-        
-        .btn .icon {
-            margin-left: 10px;
-        }
-        
-        .ad-container {
-            margin: 25px 0;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .result-container {
-            margin-top: 25px;
-            padding: 25px;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 15px;
-            text-align: center;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
-            animation: fadeIn 0.5s ease;
-        }
-        
-        .result-title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: var(--gold-color);
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-        }
-        
-        .result-content {
-            font-size: 20px;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-        
-        .winner-number {
-            font-size: 22px;
-            font-weight: bold;
-            color: var(--gold-color);
-            margin: 15px 0;
-            padding: 10px;
-            background: rgba(255, 215, 0, 0.1);
-            border-radius: 8px;
-            border: 1px dashed var(--gold-color);
-            direction: ltr;
-        }
-        
-        .contact-info {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(44, 110, 60, 0.3);
-            border-radius: 10px;
-            border-left: 4px solid var(--primary-color);
-            font-size: 16px;
-        }
-        
-        .contact-info strong {
-            color: var(--gold-color);
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        .loading {
-            display: inline-block;
-            width: 24px;
-            height: 24px;
-            border: 4px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: var(--gold-color);
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 10px;
-            vertical-align: middle;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .skip-btn {
-            background: rgba(255, 215, 0, 0.2);
-            color: var(--gold-color);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            margin-top: 15px;
+
+        /* Toggle switch */
+        .theme-toggle {
+            width: 50px;
+            height: 25px;
+            background-color: #2d2d2d;
+            border-radius: 25px;
+            position: relative;
             cursor: pointer;
             transition: all 0.3s;
-            font-weight: bold;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            
-            /* إزالة تأثيرات الضغط */
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            outline: none !important;
+            display: flex;
+            align-items: center;
+            padding: 0 4px;
+        }
+
+        .light-mode .theme-toggle {
+            background-color: #f0f0f0;
+        }
+
+        .toggle-handle {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 10px;
+        }
+
+        .dark-mode .toggle-handle {
+            transform: translateX(25px);
+        }
+
+        .light-mode .toggle-handle {
+            transform: translateX(0);
+        }
+
+        /* Cool number display */
+        .number-display {
+            position: relative;
+            padding: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            text-align: left;
+            direction: ltr;
+            letter-spacing: 2px;
+        }
+
+        .dark-mode .number-display {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px dashed var(--secondary-color);
+            color: var(--secondary-color);
+        }
+
+        .light-mode .number-display {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px dashed var(--primary-color);
+            color: var(--primary-dark);
+        }
+
+        .number-display::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            z-index: -1;
+            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color), var(--secondary-color));
+            background-size: 400%;
+            animation: glowBorder 3s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s;
+            border-radius: inherit;
+        }
+
+        .premium-card:hover .number-display::before {
+            opacity: 1;
+        }
+
+        @keyframes glowBorder {
+            0% { background-position: 0 0; }
+            50% { background-position: 400% 0; }
+            100% { background-position: 0 0; }
+        }
+
+        /* Features list */
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            position: relative;
+            padding-right: 24px;
+            transition: all 0.3s ease;
         }
         
-        .skip-btn:hover {
-            background: rgba(255, 215, 0, 0.3);
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+        .feature-item::before {
+            content: "\f058";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            position: absolute;
+            right: 0;
+            color: var(--primary-color);
         }
-        
-        /* إزالة تأثيرات الضغط */
-        .skip-btn:active,
-        .skip-btn:focus {
-            transform: none !important;
-            box-shadow: none !important;
-            background: rgba(255, 215, 0, 0.2) !important;
+
+        .features-container {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            transition: all 0.3s;
         }
-        
-        .timer {
-            font-size: 16px;
-            color: var(--gold-color);
-            margin-top: 10px;
-            font-weight: bold;
+
+        .dark-mode .features-container {
+            background: rgba(25, 25, 25, 0.6);
+            border-left: 3px solid var(--primary-dark);
         }
-        
-        /* نافذة المعلومات */
-        #modal {
-            display: none;
+
+        .light-mode .features-container {
+            background: rgba(240, 240, 240, 0.6);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        /* Confetti animation */
+        @keyframes fall {
+            0% { transform: translateY(-100px); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: var(--secondary-color);
+            opacity: 0;
+            z-index: 50;
+            pointer-events: none;
+            animation: fall linear;
+        }
+
+        /* User modal */
+        .user-modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.8);
-            z-index: 2000;
+            z-index: 100;
+            display: none;
             justify-content: center;
             align-items: center;
             backdrop-filter: blur(5px);
         }
-        
-        #modalContent {
-            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
-            padding: 30px;
-            border-radius: 15px;
-            width: 90%;
+
+        .modal-content {
             max-width: 450px;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 215, 0, 0.2);
+            width: 90%;
+            border-radius: 15px;
             position: relative;
             animation: modalFadeIn 0.4s ease;
+            transition: all 0.3s ease;
         }
-        
+
+        .dark-mode .modal-content {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .light-mode .modal-content {
+            background: linear-gradient(135deg, #f9f9f9, #ffffff);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
         @keyframes modalFadeIn {
             from { opacity: 0; transform: scale(0.9); }
             to { opacity: 1; transform: scale(1); }
         }
-        
-        #modalContent h2 {
-            color: var(--gold-color);
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 26px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-        }
-        
-        #modalContent p {
-            margin: 15px 0;
+
+        /* User info items */
+        .user-info-item {
+            margin: 10px 0;
             padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .user-info-item {
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            font-size: 16px;
-            border-left: 3px solid var(--primary-color);
+            border-right: 3px solid var(--primary-color);
         }
-        
-        #closeModal {
-            background: linear-gradient(135deg, var(--primary-color), #1e4d2b);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            margin-top: 20px;
-            cursor: pointer;
-            width: 100%;
-            font-weight: bold;
-            font-size: 16px;
-            transition: all 0.3s;
-            
-            /* إزالة تأثيرات الضغط */
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            outline: none !important;
+
+        .light-mode .user-info-item {
+            background: rgba(0, 0, 0, 0.05);
+            border-right: 3px solid var(--primary-color);
         }
-        
-        #closeModal:hover {
-            background: linear-gradient(135deg, #1e4d2b, var(--primary-color));
-            box-shadow: 0 0 15px rgba(44, 110, 60, 0.5);
-        }
-        
-        /* إزالة تأثيرات الضغط */
-        #closeModal:active,
-        #closeModal:focus {
-            transform: none !important;
-            box-shadow: none !important;
-            background: linear-gradient(135deg, var(--primary-color), #1e4d2b) !important;
-        }
-        
-        footer {
-            text-align: center;
+
+        /* Ad section */
+        .ad-section {
             padding: 20px;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.6);
-            width: 100%;
+            margin: 20px 0;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .ad-section {
             background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
-        /* تأثيرات للجوائز */
-        .confetti {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: var(--gold-color);
+
+        .light-mode .ad-section {
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        /* Skip button */
+        .skip-button {
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .dark-mode .skip-button {
+            background: rgba(255, 215, 0, 0.2);
+            color: var(--secondary-color);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .dark-mode .skip-button:hover {
+            background: rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+        }
+
+        .light-mode .skip-button {
+            background: rgba(44, 110, 60, 0.1);
+            color: var(--primary-dark);
+            border: 1px solid rgba(44, 110, 60, 0.2);
+        }
+
+        .light-mode .skip-button:hover {
+            background: rgba(44, 110, 60, 0.2);
+            box-shadow: 0 0 10px rgba(44, 110, 60, 0.1);
+        }
+
+        /* Footer styles */
+        .footer {
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .dark-mode .footer {
+            background: rgba(0, 0, 0, 0.3);
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .light-mode .footer {
+            background: rgba(0, 0, 0, 0.05);
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        /* Preloader */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .preloader.fade-out {
             opacity: 0;
-            z-index: 10;
+            visibility: hidden;
         }
-        
-        /* للشاشات الصغيرة */
-        @media (max-width: 600px) {
-            .main-container {
-                padding: 20px;
-                margin: 70px auto 30px;
-                width: 95%;
+
+        .preloader .spinner {
+            width: 70px;
+            text-align: center;
+        }
+
+        .preloader .spinner > div {
+            width: 18px;
+            height: 18px;
+            background-color: var(--secondary-color);
+            border-radius: 100%;
+            display: inline-block;
+            animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+            margin: 0 3px;
+        }
+
+        .preloader .spinner .bounce1 {
+            animation-delay: -0.32s;
+        }
+
+        .preloader .spinner .bounce2 {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes sk-bouncedelay {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1.0); }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .dark-mode::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        .dark-mode::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 5px;
+        }
+
+        .dark-mode::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .light-mode::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .light-mode::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 5px;
+        }
+
+        .light-mode::-webkit-scrollbar-thumb:hover {
+            background: #aaa;
+        }
+
+        /* Result container */
+        .result-container {
+            margin-top: 25px;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .dark-mode .result-container {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+        }
+
+        .light-mode .result-container {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(44, 110, 60, 0.3);
+            box-shadow: 0 0 20px rgba(44, 110, 60, 0.1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Stats counter */
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+
+        .stat-box {
+            width: 130px;
+            padding: 15px 10px;
+            margin: 10px;
+            text-align: center;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .stat-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .light-mode .stat-box {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-title {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        /* Responsive styling */
+        @media (max-width: 640px) {
+            .stat-box {
+                width: 100px;
+                padding: 10px;
             }
             
-            h1 {
-                font-size: 28px;
+            .stat-value {
+                font-size: 24px;
             }
             
-            .btn {
-                padding: 15px;
-                font-size: 18px;
+            .stat-title {
+                font-size: 12px;
             }
-            
-            .profile-btn {
-                padding: 10px 15px;
-                font-size: 14px;
+
+            .premium-card {
+                margin-left: 0;
+                margin-right: 0;
             }
+        }
+
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 4px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: var(--secondary-color);
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Timer styling */
+        .timer {
+            margin-top: 10px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .dark-mode .timer {
+            color: var(--secondary-color);
+        }
+
+        .light-mode .timer {
+            color: var(--primary-dark);
+        }
+
+        /* Contact info box */
+        .contact-info {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .contact-info {
+            background: rgba(44, 110, 60, 0.3);
+            border-right: 4px solid var(--primary-color);
+        }
+
+        .light-mode .contact-info {
+            background: rgba(44, 110, 60, 0.1);
+            border-right: 4px solid var(--primary-color);
+        }
+
+        .contact-info strong {
+            color: var(--secondary-color);
+        }
+
+        /* Floating animated balls */
+        .floating-ball {
+            position: fixed;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -5;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .ball-1 {
+            background-color: rgba(44, 110, 60, 0.6);
+            top: 20%;
+            right: 10%;
+            animation: float 15s ease-in-out infinite;
+        }
+
+        .ball-2 {
+            background-color: rgba(255, 215, 0, 0.4);
+            bottom: 20%;
+            left: 10%;
+            animation: float 20s ease-in-out infinite reverse;
+        }
+
+        .ball-3 {
+            background-color: rgba(0, 136, 204, 0.3);
+            top: 70%;
+            right: 20%;
+            animation: float 18s ease-in-out infinite 2s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(-30px, 50px) rotate(90deg); }
+            50% { transform: translate(20px, -20px) rotate(180deg); }
+            75% { transform: translate(40px, 30px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
         }
     </style>
 </head>
-<body>
-    <div class="header">
-        <div class="logo">جوائز أرقام التفعيل</div>
-        <button class="profile-btn">
-            عرض المعلومات
-        </button>
-    </div>
-    
-    <div class="main-container">
-        <h1>🎉 احصل على رقم مميز 🎉</h1>
-        
-        <button id="getNumberBtn" class="btn">
-            <i class="icon">🎁</i> احصل على رقم تفعيل
-        </button>
-        
-        <div id="adSection" class="ad-container" style="display: none;">
-            <h3>شاهد الإعلان للحصول على فرصتك</h3>
-            <div class="openADJsSDKBanner" zoneId="414" publisherId="485"></div>
-            <div class="timer" id="timer">⏳ الانتظار: 15 ثانية</div>
-            <button id="skipButton" class="skip-btn" style="display: none;">⏩ تخطي الإعلان</button>
+<body class="dark-mode">
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
         </div>
-        
-        <div id="resultContainer" class="result-container" style="display: none;">
-            <div class="result-title" id="resultTitle"></div>
-            <div class="result-content" id="resultContent"></div>
-            <div id="winnerNumber" class="winner-number" style="display: none;"></div>
-            <div class="contact-info">
-                <strong>للتواصل:</strong> @Sam_AlZariqi<br>
-                <strong>ملاحظة:</strong> خذ لقطة شاشة لهذه الصفحة وأرسلها للمسؤول
+    </div>
+
+    <!-- Floating decorative elements -->
+    <div class="floating-ball ball-1"></div>
+    <div class="floating-ball ball-2"></div>
+    <div class="floating-ball ball-3"></div>
+
+    <!-- Background particles -->
+    <div id="particles-js"></div>
+
+    <!-- Header -->
+    <header class="header py-4 px-4 flex justify-between items-center">
+        <div class="flex items-center">
+            <div class="logo text-2xl font-bold">
+                <i class="fas fa-gem mr-2 text-yellow-400"></i>
+                <span class="gold-text">جوائز أرقام التفعيل</span>
             </div>
         </div>
-    </div>
-    
-    <!-- نافذة المعلومات -->
-    <div id="modal">
-        <div id="modalContent">
-            <h2>معلومات المستخدم</h2>
-            <p id="userId">معرف المستخدم: جاري التحميل...</p>
-            <p id="firstName">الاسم الأول: جاري التحميل...</p>
-            <p id="username">اسم المستخدم: جاري التحميل...</p>
-            <h2>النسخة التجريبية للبوت</h2>
-            <button id="closeModal">إغلاق</button>
+        <div class="flex items-center space-x-4">
+            <div class="theme-toggle mx-2" id="themeToggle">
+                <div class="toggle-handle">
+                    <i class="fas fa-sun"></i>
+                </div>
+            </div>
+            <button class="profile-btn bg-gradient-to-r from-green-700 to-green-900 hover:from-green-800 hover:to-green-950 text-white py-2 px-4 rounded-lg font-bold transition-all duration-300 shadow-lg">
+                <i class="fas fa-user-circle ml-1"></i> عرض المعلومات
+            </button>
+        </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="main-container px-4">
+        <!-- Stats section -->
+        <div class="stats-container animate__animated animate__fadeIn">
+            <div class="stat-box rounded-lg">
+                <div class="stat-value" id="totalNumbersCount">235</div>
+                <div class="stat-title">إجمالي الأرقام</div>
+            </div>
+            <div class="stat-box rounded-lg">
+                <div class="stat-value" id="activeUsers">129</div>
+                <div class="stat-title">مستخدم نشط</div>
+            </div>
+            <div class="stat-box rounded-lg">
+                <div class="stat-value" id="premiumNumbersCount">48</div>
+                <div class="stat-title">رقم مميز</div>
+            </div>
+        </div>
+
+        <!-- Main card -->
+        <div class="glow-effect rounded-2xl overflow-hidden shadow-xl animate__animated animate__fadeInUp">
+            <div class="text-center py-8 px-6">
+                <h1 class="text-4xl font-bold gold-text mb-6">
+                    <i class="fas fa-award ml-2"></i>احصل على رقم مميز
+                </h1>
+
+                <div class="features-container">
+                    <h3 class="text-xl font-bold mb-4">
+                        <i class="fas fa-star ml-2 text-yellow-500"></i>
+                        مميزات الأرقام الخاصة
+                    </h3>
+                    <div class="feature-item">تفعيل جميع خدمات واتساب وتيليجرام</div>
+                    <div class="feature-item">أرقام خليجية وعربية متنوعة</div>
+                    <div class="feature-item">ضمان الاستمرارية والدعم الفني</div>
+                    <div class="feature-item">خصوصية وأمان كامل للمستخدم</div>
+                </div>
+
+                <!-- Get number button -->
+                <button id="getNumberBtn" class="gradient-btn w-full mt-8 mb-6 py-4 px-6 rounded-xl text-white font-bold text-xl focus:outline-none">
+                    <i class="fas fa-gift ml-2"></i> احصل على رقم تفعيل
+                </button>
+
+                <!-- Ad section -->
+                <div id="adSection" class="ad-section animate__animated animate__fadeIn" style="display: none;">
+                    <h3 class="text-xl font-bold mb-4">
+                        <i class="fas fa-ad ml-2 text-yellow-400"></i>
+                        شاهد الإعلان للحصول على فرصتك
+                    </h3>
+                    <div class="openADJsSDKBanner" zoneId="414" publisherId="485"></div>
+                    <div class="timer" id="timer">⏳ الانتظار: <span id="countdown">15</span> ثانية</div>
+                    <button id="skipButton" class="skip-button py-2 px-4 mt-4">
+                        <i class="fas fa-forward ml-1"></i> تخطي الإعلان
+                    </button>
+                </div>
+
+                <!-- Results container -->
+                <div id="resultContainer" class="result-container animate__animated animate__fadeIn">
+                    <div class="result-title text-2xl font-bold mb-4 gold-text" id="resultTitle"></div>
+                    <div class="result-content text-lg mb-4" id="resultContent"></div>
+                    
+                    <!-- Premium number cards -->
+                    <div id="premiumNumbersContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6" style="display: none;">
+                        <!-- Premium number cards will be inserted here -->
+                    </div>
+                    
+                    <div id="winnerNumber" class="number-display text-xl font-bold my-4 rounded-lg" style="display: none;"></div>
+                    
+                    <div class="contact-info text-right">
+                        <div><strong>للتواصل:</strong> @Sam_AlZariqi</div>
+                        <div><strong>ملاحظة:</strong> خذ لقطة شاشة لهذه الصفحة وأرسلها للمسؤول</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- User info modal -->
+    <div id="userModal" class="user-modal">
+        <div class="modal-content p-8">
+            <h2 class="text-2xl font-bold mb-6 text-center gold-text">
+                <i class="fas fa-user-circle ml-2"></i>
+                معلومات المستخدم
+            </h2>
+            
+            <div class="user-info-item" id="userId">
+                <i class="fas fa-id-card ml-2"></i>
+                معرف المستخدم: جاري التحميل...
+            </div>
+            
+            <div class="user-info-item" id="firstName">
+                <i class="fas fa-user ml-2"></i>
+                الاسم الأول: جاري التحميل...
+            </div>
+            
+            <div class="user-info-item" id="username">
+                <i class="fas fa-at ml-2"></i>
+                اسم المستخدم: جاري التحميل...
+            </div>
+
+            <div class="text-center my-4">
+                <h3 class="text-xl font-bold gold-text">النسخة التجريبية للبوت</h3>
+            </div>
+            
+            <button id="closeModal" class="gradient-btn w-full py-3 px-4 rounded-lg text-white font-bold mt-6 focus:outline-none">
+                <i class="fas fa-times-circle ml-2"></i>
+                إغلاق
+            </button>
         </div>
     </div>
-    
-    <footer>
-        جميع الحقوق محفوظة &copy; 2025 | متجر تفعيل الأرقام المميزة
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div>
+            <span class="gold-text font-bold">جميع الحقوق محفوظة &copy; 2025</span>
+            <span class="mx-2">|</span>
+            <span>متجر تفعيل الأرقام المميزة</span>
+        </div>
+        <div class="mt-2 text-sm opacity-70">
+            <i class="fas fa-shield-alt ml-1"></i>
+            تم التطوير بواسطة فريق التقنية المتخصص
+        </div>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/openad-js-sdk@latest/dist/index.global.min.js"></script>
 
     <script>
-        // بيانات المستخدم من تيليجرام
-        Telegram.WebApp.ready();
-        const userId = Telegram.WebApp.initDataUnsafe?.user?.id || 'TEST_USER_ID';
-        const username = Telegram.WebApp.initDataUnsafe?.user?.username || 'TestUser';
-        const firstName = Telegram.WebApp.initDataUnsafe?.user?.first_name || 'مستخدم';
-        const lastName = Telegram.WebApp.initDataUnsafe?.user?.last_name || '';
-        
-        // توكين البوت ومعرف المشرف
-        const token = '7606432428:AAFg9nTrrpMY6ITP1o9FBPgaXsEUvJ1Di78';
-        const supervisorChatId = '1058616316';
-        
-        // قائمة الأرقام المميزة
-        const premiumNumbers = [
-            "+994 40 123 45 67",
-            "+994 50 987 65 43",
-            "+994 70 456 78 90",
-            "+994 55 321 12 34",
-            "+994 10 654 32 10"
-        ];
-        
-        // متغيرات الصفحة
-        const getNumberBtn = document.getElementById('getNumberBtn');
-        const adSection = document.getElementById('adSection');
-        const skipButton = document.getElementById('skipButton');
-        const resultContainer = document.getElementById('resultContainer');
-        const resultTitle = document.getElementById('resultTitle');
-        const resultContent = document.getElementById('resultContent');
-        const winnerNumber = document.getElementById('winnerNumber');
-        const timerElement = document.getElementById('timer');
-        const modal = document.getElementById('modal');
-        const closeModalBtn = document.getElementById('closeModal');
-        const profileBtn = document.querySelector('.profile-btn');
-        
-        let countdown = 15;
-        let countdownInterval;
-        
-        // تحميل الإعلان
-        function loadAd() {
-            const adParams = {
-                version: '',
-                TG: true
-            };
-            const adInfo = {
-                zoneId: 414,
-                publisherId: 485,
-                eventId: 0
-            };
-            const userInfo = {
-                userId: userId,
-                firstName: firstName,
-                lastName: lastName,
-                userName: username,
-                walletType: '',
-                walletAddress: ''
-            };
-            window.openADJsSDK.bridge.init({ adParams, adInfo, userInfo });
-        }
-        
-        // بدء العد التنازلي
-        function startCountdown() {
-            countdown = 15;
-            timerElement.textContent = `⏳ الانتظار: ${countdown} ثانية`;
-            
-            countdownInterval = setInterval(() => {
-                countdown--;
-                timerElement.textContent = `⏳ الانتظار: ${countdown} ثانية`;
-                
-                if (countdown <= 0) {
-                    clearInterval(countdownInterval);
-                    skipButton.style.display = 'inline-block';
-                    timerElement.textContent = "يمكنك الآن تخطي الإعلان";
-                }
-            }, 1000);
-        }
-        
-        // إنشاء تأثير الكونفيتي
-        function createConfetti() {
-            const colors = ['#FFD700', '#FFA500', '#FF6347', '#FF69B4', '#9370DB', '#00FFFF'];
-            
-            for (let i = 0; i < 100; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.left = Math.random() * 100 + 'vw';
-                confetti.style.top = -10 + 'px';
-                confetti.style.opacity = Math.random();
-                confetti.style.width = Math.random() * 10 + 5 + 'px';
-                confetti.style.height = Math.random() * 10 + 5 + 'px';
-                
-                document.body.appendChild(confetti);
-                
-                const animationDuration = Math.random() * 3 + 2;
-                
-                confetti.animate([
-                    { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 },
-                    { transform: `translate(${Math.random() * 200 - 100}px, ${window.innerHeight}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
-                ], {
-                    duration: animationDuration * 1000,
-                    easing: 'cubic-bezier(0.1, 0.8, 0.9, 1)',
-                    fill: 'forwards'
-                });
-                
-                setTimeout(() => {
-                    confetti.remove();
-                }, animationDuration * 1000);
-            }
-        }
-        
-        // إظهار النتيجة بناء على الحظ
-        function showResult() {
-            adSection.style.display = 'none';
-            clearInterval(countdownInterval);
-            winnerNumber.style.display = 'none';
-            
-            const random = Math.random();
-            let title, content, isWinner = false;
-            let selectedNumber = '';
-            
-            if (random < 0.00001) { // 0.001% فرصة للفوز برقم
-                title = "🎉 مبروك! لقد فزت 🎉";
-                content = "لقد حصلت على رقم تفعيل مميز!";
-                isWinner = true;
-                selectedNumber = premiumNumbers[Math.floor(Math.random() * premiumNumbers.length)];
-                createConfetti();
-            } 
-            else {
-                title = "😔 لم تربح هذه المرة";
-                content = "للأسف لم تربح برقم هذه المرة، حاول مرة أخرى!";
-            }
-            
-            resultTitle.textContent = title;
-            resultContent.textContent = content;
-            
-            if (isWinner) {
-                winnerNumber.textContent = selectedNumber;
-                winnerNumber.style.display = 'block';
-            }
-            
-            resultContainer.style.display = 'block';
-            
-            // إرسال البيانات إلى المسؤول إذا كان فائزًا
-            if (isWinner) {
-                const message = `
-🎉 فوز جديد في السحب 🎉
-
-- معرف المستخدم: ${userId}
-- اسم المستخدم: @${username}
-- الاسم: ${firstName} ${lastName}
-- الرقم الفائز: ${selectedNumber}
-- الوقت: ${new Date().toLocaleString()}
-
-يرجى التواصل معه على @${username} أو عبر المعرف @Sam_AlZariqi
-                `;
-                
-                sendToTelegram(message);
-            }
-        }
-        
-        // إرسال رسالة إلى تيليجرام
-        function sendToTelegram(message) {
-            const url = `https://api.telegram.org/bot${token}/sendMessage`;
-            
-            fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    chat_id: supervisorChatId, 
-                    text: message 
-                })
-            });
-        }
-        
-        // عرض معلومات المستخدم
-        function showUserInfo() {
-            document.getElementById('userId').textContent = `معرف المستخدم: ${userId}`;
-            document.getElementById('firstName').textContent = `الاسم الأول: ${firstName}`;
-            document.getElementById('username').textContent = `اسم المستخدم: @${username}`;
-            modal.style.display = 'flex';
-        }
-        
-        // إغلاق النافذة
-        function closeModal() {
-            modal.style.display = 'none';
-        }
-        
-        // أحداث الأزرار
-        getNumberBtn.addEventListener('click', () => {
-            adSection.style.display = 'block';
-            resultContainer.style.display = 'none';
-            skipButton.style.display = 'none';
-            loadAd();
-            startCountdown();
+        // Preloader
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.querySelector('.preloader').classList.add('fade-out');
+            }, 500);
         });
-        
-        skipButton.addEventListener('click', showResult);
-        
-        // زر الملف الشخصي
-        profileBtn.addEventListener('click', showUserInfo);
-        
-        // إغلاق النافذة
-        closeModalBtn.addEventListener('click', closeModal);
-        
-        // إظهار رسالة ترحيبية عند التحميل
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                swal({
-                    title: "مرحباً بك!",
-                    text: "احصل على رقم تفعيل مميز بكل سهولة!",
-                    icon: "info",
-                    button: "حسناً"
+
+        // Initialize particles
+        document.addEventListener('DOMContentLoaded', function() {
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 100,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#ffffff"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.2,
+                        "random": true,
+                        "anim": {
+                            "enable": true,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": true,
+                            "speed": 2,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#ffffff",
+                        "opacity": 0.1,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 1,
+                        "direction": "none",
+                        "random": true,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 0.3
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+        });
+
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            document.body.classList.toggle('light-mode');
+            
+            // Update particles color based on theme
+            if (document.body.classList.contains('light-mode')) {
+                pJSDom[0].pJS.particles.color.value = '#333333';
+                pJSDom[0].pJS.particles.line_linked.color = '#333333';
+                pJSDom[0].pJS.fn.particlesRefresh();
+            } else {
+                pJSDom[0].pJS.particles.color.value = '#ffffff';
+                pJSDom[0].pJS.particles.line_linked.color = '#ffffff';
+                pJSDom[0].pJS.fn.particlesRefresh();
+            }
+        });
+
+        // Main functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Telegram data
+            Telegram.WebApp.ready();
+            const userId = Telegram.WebApp.initDataUnsafe?.user?.id || 'TEST_USER_ID';
+            const username = Telegram.WebApp.initDataUnsafe?.user?.username || 'TestUser';
+            const firstName = Telegram.WebApp.initDataUnsafe?.user?.first_name || 'مستخدم';
+            const lastName = Telegram.WebApp.initDataUnsafe?.user?.last_name || '';
+            
+            // Update user information in modal
+            document.getElementById('userId').innerHTML = `<i class="fas fa-id-card ml-2"></i> معرف المستخدم: ${userId}`;
+            document.getElementById('firstName').innerHTML = `<i class="fas fa-user ml-2"></i> الاسم الأول: ${firstName}`;
+            document.getElementById('username').innerHTML = `<i class="fas fa-at ml-2"></i> اسم المستخدم: ${username || 'غير محدد'}`;
+            
+            // Token and supervisor info
+            const token = '7606432428:AAFg9nTrrpMY6ITP1o9FBPgaXsEUvJ1Di78';
+            const supervisorChatId = '1058616316';
+            
+            // Premium numbers list
+            const premiumNumbers = [
+                {number: "+994 40 123 45 67", type: "ذهبي", provider: "أذربيجان"},
+                {number: "+994 50 987 65 43", type: "فضي", provider: "أذربيجان"},
+                {number: "+994 70 456 78 90", type: "ذهبي", provider: "أذربيجان"},
+                {number: "+994 55 321 12 34", type: "ماسي", provider: "أذربيجان"},
+                {number: "+994 10 654 32 10", type: "ذهبي", provider: "أذربيجان"},
+                {number: "+994 77 777 77 77", type: "ماسي VIP", provider: "أذربيجان"},
+                {number: "+994 99 999 99 99", type: "ماسي VIP", provider: "أذربيجان"},
+                {number: "+994 88 123 45 67", type: "ذهبي", provider: "أذربيجان"}
+            ];
+            
+            // Elements
+            const getNumberBtn = document.getElementById('getNumberBtn');
+            const adSection = document.getElementById('adSection');
+            const skipButton = document.getElementById('skipButton');
+            const resultContainer = document.getElementById('resultContainer');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultContent = document.getElementById('resultContent');
+            const winnerNumber = document.getElementById('winnerNumber');
+            const premiumNumbersContainer = document.getElementById('premiumNumbersContainer');
+            const userModal = document.getElementById('userModal');
+            const closeModalBtn = document.getElementById('closeModal');
+            const profileBtn = document.querySelector('.profile-btn');
+            
+            // Variables
+            let countdown = 15;
+            let countdownInterval;
+            let currentWinnerNumber = null;
+            
+            // Create confetti effect
+            function createConfetti() {
+                const colors = ['#FFD700', '#FFA500', '#FF6347', '#FF69B4', '#9370DB', '#00FFFF'];
+                
+                for (let i = 0; i < 100; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.top = -10 + 'px';
+                    confetti.style.opacity = Math.random();
+                    confetti.style.width = Math.random() * 10 + 5 + 'px';
+                    confetti.style.height = Math.random() * 10 + 5 + 'px';
+                    confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
+                    
+                    document.body.appendChild(confetti);
+                    
+                    // Remove after animation
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 5000);
+                }
+            }
+            
+            // Show premium numbers
+            function showPremiumNumbers() {
+                premiumNumbersContainer.innerHTML = '';
+                
+                // Display only 4 random premium numbers
+                const shuffled = [...premiumNumbers].sort(() => 0.5 - Math.random());
+                const selected = shuffled.slice(0, 4);
+                
+                selected.forEach(numData => {
+                    const card = document.createElement('div');
+                    card.className = 'premium-card rounded-lg p-4 my-2 transition-all duration-300';
+                    
+                    // Create badge for number type
+                    let badgeClass = 'text-xs px-2 py-1 rounded-full inline-block mb-2 ';
+                    if (numData.type.includes('ماسي')) {
+                        badgeClass += 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
+                    } else if (numData.type.includes('ذهبي')) {
+                        badgeClass += 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
+                    } else {
+                        badgeClass += 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200';
+                    }
+                    
+                    card.innerHTML = `
+                        <div class="${badgeClass}">${numData.type}</div>
+                        <div class="flex items-center justify-between">
+                            <div class="number-display text-lg rounded-lg w-full">
+                                <i class="fas fa-sim-card ml-2"></i>
+                                ${numData.number}
+                            </div>
+                        </div>
+                        <div class="mt-2 text-sm opacity-70 text-right">
+                            <i class="fas fa-map-marker-alt ml-1"></i> ${numData.provider}
+                        </div>
+                    `;
+                    
+                    premiumNumbersContainer.appendChild(card);
                 });
-            }, 1000);
+                
+                premiumNumbersContainer.style.display = 'grid';
+            }
+            
+            // Load ad
+            function loadAd() {
+                const adParams = {
+                    version: '',
+                    TG: true
+                };
+                const adInfo = {
+                    zoneId: 414,
+                    publisherId: 485,
+                    eventId: 0
+                };
+                const userInfo = {
+                    userId: userId,
+                    firstName: firstName,
+                    lastName: lastName,
+                    userName: username,
+                    walletType: '',
+                    walletAddress: ''
+                };
+                window.openADJsSDK.bridge.init({ adParams, adInfo, userInfo });
+            }
+            
+            // Start countdown
+            function startCountdown() {
+                countdown = 15;
+                document.getElementById('countdown').textContent = countdown;
+                
+                countdownInterval = setInterval(() => {
+                    countdown--;
+                    document.getElementById('countdown').textContent = countdown;
+                    
+                    if (countdown <= 0) {
+                        clearInterval(countdownInterval);
+                        skipButton.style.display = 'inline-block';
+                        document.getElementById('timer').textContent = "يمكنك الآن تخطي الإعلان";
+                    }
+                }, 1000);
+            }
+            
+            // Get random premium number
+            function getRandomPremiumNumber() {
+                const randomIndex = Math.floor(Math.random() * premiumNumbers.length);
+                return premiumNumbers[randomIndex].number;
+            }
+            
+            // Display winner number
+            function displayWinnerNumber() {
+                createConfetti(); // Create confetti effect
+                
+                adSection.style.display = 'none';
+                
+                // Show the result container with animation
+                resultContainer.classList.remove('animate__fadeIn');
+                void resultContainer.offsetWidth; // Trigger reflow
+                resultContainer.classList.add('animate__fadeIn');
+                
+                resultTitle.innerHTML = `<i class="fas fa-trophy ml-2"></i>تهانينا! لقد فزت برقم مميز`;
+                resultContent.innerHTML = `لقد تم اختيار رقم مميز لك. يرجى التواصل مع المسؤول باستخدام معرف المستخدم الخاص بك <strong>${userId}</strong> للحصول على الرقم.`;
+                
+                // Display the random premium number
+                currentWinnerNumber = getRandomPremiumNumber();
+                winnerNumber.textContent = currentWinnerNumber;
+                winnerNumber.style.display = 'block';
+                
+                // Show premium numbers selection
+                showPremiumNumbers();
+                
+                resultContainer.style.display = 'block';
+                
+                // Send notification to Telegram bot
+                sendTelegramNotification();
+            }
+            
+            // Send notification to Telegram bot
+            function sendTelegramNotification() {
+                const message = `🎉 مستخدم جديد حصل على رقم مميز!\n\n👤 المعرف: ${userId}\n👤 الاسم: ${firstName} ${lastName}\n👤 اسم المستخدم: @${username || 'غير محدد'}\n📱 الرقم المختار: ${currentWinnerNumber}`;
+                
+                fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chat_id: supervisorChatId,
+                        text: message,
+                        parse_mode: 'HTML'
+                    })
+                }).catch(error => console.log('Error sending notification:', error));
+            }
+            
+            // Event Listeners
+            getNumberBtn.addEventListener('click', function() {
+                getNumberBtn.style.display = 'none';
+                adSection.style.display = 'block';
+                loadAd();
+                startCountdown();
+            });
+            
+            skipButton.addEventListener('click', function() {
+                clearInterval(countdownInterval);
+                displayWinnerNumber();
+            });
+            
+            profileBtn.addEventListener('click', function() {
+                userModal.style.display = 'flex';
+            });
+            
+            closeModalBtn.addEventListener('click', function() {
+                userModal.style.display = 'none';
+            });
+            
+            // Close modal on outside click
+            userModal.addEventListener('click', function(e) {
+                if (e.target === userModal) {
+                    userModal.style.display = 'none';
+                }
+            });
+            
+            // Update stats with animation
+            function animateStats() {
+                const totalNumbersCount = document.getElementById('totalNumbersCount');
+                const activeUsers = document.getElementById('activeUsers');
+                const premiumNumbersCount = document.getElementById('premiumNumbersCount');
+                
+                const animateValue = (obj, start, end, duration) => {
+                    let startTimestamp = null;
+                    const step = (timestamp) => {
+                        if (!startTimestamp) startTimestamp = timestamp;
+                        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                        obj.innerHTML = Math.floor(progress * (end - start) + start);
+                        if (progress < 1) {
+                            window.requestAnimationFrame(step);
+                        }
+                    };
+                    window.requestAnimationFrame(step);
+                };
+                
+                setTimeout(() => animateValue(totalNumbersCount, 0, 235, 2000), 100);
+                setTimeout(() => animateValue(activeUsers, 0, 129, 2000), 400);
+                setTimeout(() => animateValue(premiumNumbersCount, 0, 48, 2000), 700);
+            }
+            
+            // Call the stats animation on page load
+            animateStats();
         });
     </script>
 </body>
