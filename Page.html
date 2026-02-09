@@ -1,272 +1,417 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متجر تيليجرام</title>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
-    
+    <title>التحقق - Verification</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
-            background: #1c1c1c;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background: #FFFFFF;
-            padding: 50px;
-            width: 90%;
-            max-width: 400px;
-            border-radius: 15px;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
-            text-align: center;
-            box-sizing: border-box;
-        }
-        h2 {
-            font-family: Arial;
-            color: #000000;
-        }
-        .section {
             padding: 20px;
-            margin-top: 15px;
-            background: #FFFFFF;
-            border-radius: 12px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
         }
-        .btn {
-            background-color: #007BFF;
-            color: #fff;
-            padding: 15px;
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             text-align: center;
-            display: inline-block;
-            width: 100%;
-            text-decoration: none;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            margin-top: 10px;
         }
-        .btn:hover {
-            background-color: #0056b3;
+
+        /* مرحلة الإعلان */
+        #ad-stage {
+            display: block;
         }
-        .btn:active {
-            background-color: #00408d;
+
+        #ad-stage h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 24px;
         }
-        select, input[type="text"] {
+
+        #ad-stage p {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .ad-container {
+            min-height: 200px;
+            background: #f5f5f5;
+            border-radius: 10px;
             padding: 15px;
-            margin-top: 10px;
-            width: 100%;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-sizing: border-box;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
         }
-        label {
+
+        .loading {
+            color: #667eea;
+            font-size: 14px;
+        }
+
+        #ad-timer {
+            margin-top: 15px;
+            color: #764ba2;
             font-weight: bold;
-            color: #000000;
+            font-size: 18px;
         }
-        input[type="text"]:focus, select:focus {
-            outline: none;
-            border-color: #80bdff;
+
+        /* مرحلة التحقق */
+        #verification-stage {
+            display: none;
+        }
+
+        #verification-stage h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        #verification-stage p {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .slider-container {
+            position: relative;
+            width: 100%;
+            height: 60px;
+            background: #f0f0f0;
+            border-radius: 30px;
+            margin: 30px 0;
+            overflow: hidden;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .slider-track {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.1s ease;
+            border-radius: 30px;
+        }
+
+        .slider-button {
+            position: absolute;
+            left: 5px;
+            top: 5px;
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            cursor: grab;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: all 0.2s ease;
+            z-index: 10;
+            user-select: none;
+        }
+
+        .slider-button:active {
+            cursor: grabbing;
+            transform: scale(1.1);
+        }
+
+        .slider-text {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: #999;
+            font-weight: bold;
+            font-size: 16px;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* مرحلة النجاح */
+        #success-stage {
+            display: none;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: #4CAF50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            color: white;
+            animation: scaleIn 0.5s ease;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        #success-stage h2 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        #success-stage p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .countdown {
+            margin-top: 20px;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        /* رسالة خطأ */
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 15px 0;
+            display: none;
+        }
+
+        /* تحسينات للموبايل */
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+
+            h2 {
+                font-size: 20px !important;
+            }
+
+            p {
+                font-size: 14px !important;
+            }
         }
     </style>
 </head>
-
 <body>
 
 <div class="container">
-    <h2>متجر قطميز</h2>
-
-    <!-- زر الانتقال إلى قسم الشدات -->
-    <button class="btn" onclick="showSection('section1')">اشحن الشدات</button>
-
-    <!-- زر الانتقال إلى قسم نجوم تيليجرام -->
-    <button class="btn" onclick="showSection('section2')">اشتر نجوم تيليجرام</button>
-
-    <!-- زر الانتقال إلى قسم اشتراك تيليجرام مميز -->
-    <button class="btn" onclick="showSection('section3')">اشترك في تيليجرام مميز</button>
-
-    <!-- قسم الشدات -->
-    <div class="section" id="section1" style="display:none">
-        <h3>متجر الشدات</h3>
-        <label for="gameId1">حدد معرف اللعبة</label>
-        <input type="text" id="gameId1" placeholder="ادخل ايدي اللعبة" required>
-        <label for="quantity1">حدد الكمية</label>
-        <select id="quantity1">
-            <option value="uc 60">uc 60 - $1.25</option>
-            <option value="uc 300 + 25">uc 300 + 25 - $5.15</option>
-            <option value="uc 600 + 60">uc 600 + 60 - $10.15</option>
-            <option value="uc 1500 + 300">uc 1500 + 300 -$25.15</option>
-        </select>
-        <button class="btn" onclick="sendData('1')">إرسال الطلب</button>
+    <!-- المرحلة 1: عرض الإعلان -->
+    <div id="ad-stage">
+        <h2>⏳ انتظر قليلاً</h2>
+        <p>يرجى مشاهدة الإعلان لمدة قصيرة للمتابعة</p>
+        
+        <div class="ad-container" id="ad-container">
+            <div class="loading">جاري تحميل الإعلان...</div>
+        </div>
+        
+        <div id="ad-timer"></div>
     </div>
 
-    <!-- قسم نجوم تيليجرام -->
-    <div class="section" id="section2" style="display:none">
-        <h3>متجر نجوم تيليجرام</h3>
-        <label for="gameId2">حدد معرف تلجرام</label>
-        <input type="text" id="gameId2" placeholder="ادخل معرف حسابك" required>
-        <label for="quantity2">حدد الكمية</label>
-        <select id="quantity2">
-            <option value="50">50 - $1.55</option>
-            <option value="100">100 - $2.50</option>
-            <option value="150">150 - $2.99</option>
-            <option value="200">200 - $3.99</option>
-        </select>
-        <button class="btn" onclick="sendData('2')">إرسال الطلب</button>
+    <!-- المرحلة 2: التحقق -->
+    <div id="verification-stage">
+        <h2>🔒 التحقق الأمني</h2>
+        <p>اسحب الزر إلى اليسار للتحقق من أنك لست روبوت</p>
+        
+        <div class="slider-container" id="sliderContainer">
+            <div class="slider-track" id="sliderTrack"></div>
+            <div class="slider-button" id="sliderButton">
+                ➡️
+            </div>
+            <div class="slider-text" id="sliderText">اسحب للتحقق</div>
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            ❌ يرجى سحب الزر حتى النهاية
+        </div>
     </div>
 
-    <!-- قسم اشتراك تيليجرام مميز -->
-    <div class="section" id="section3" style="display:none">
-        <h3>اشتراك تيليجرام مميز</h3>
-        <label for="gameId3">حدد معرف تلجرام</label>
-        <input type="text" id="gameId3" placeholder="ادخل المعرف الخاص بك" required>
-        <label for="quantity3">حدد الكمية</label>
-        <select id="quantity3">
-            <option value="3">3 شهر - $13.99</option>
-            <option value="6">6 شهر - $17.99</option>
-            <option value="12">12 شهر - $30.99</option>
-        </select>
-        <button class="btn" onclick="sendData('3')">إرسال الطلب</button>
+    <!-- المرحلة 3: النجاح -->
+    <div id="success-stage">
+        <div class="success-icon">✓</div>
+        <h2>✅ تم التحقق بنجاح!</h2>
+        <p>جاري فتح البوت...</p>
+        <div class="countdown" id="countdown">3</div>
     </div>
 </div>
 
+<!-- سكريبت الإعلان -->
+<script src='//libtl.com/sdk.js' data-zone='10587729' data-sdk='show_10587729'></script>
+
+<!-- سكريبت تلجرام -->
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 
 <script>
-    function showSection(section) {
-        const sections = document.getElementsByClassName('section');
-        for (let i = 0; i < sections.length; i++) {
-            sections[i].style.display = 'none';
-        }
-        document.getElementById(section).style.display = 'block';
+    // تهيئة Telegram WebApp
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+
+    // المراحل
+    const adStage = document.getElementById('ad-stage');
+    const verificationStage = document.getElementById('verification-stage');
+    const successStage = document.getElementById('success-stage');
+    const adTimer = document.getElementById('ad-timer');
+
+    // مؤقت الإعلان (15 ثانية)
+    let adTime = 15;
+    let adInterval;
+
+    // بدء عداد الإعلان بعد تحميل الصفحة
+    window.addEventListener('load', function() {
+        // إخفاء رسالة التحميل
+        setTimeout(() => {
+            document.querySelector('.loading').style.display = 'none';
+        }, 1000);
+
+        // بدء العد التنازلي
+        adInterval = setInterval(() => {
+            adTime--;
+            adTimer.textContent = `الرجاء الانتظار ${adTime} ثانية...`;
+            
+            if (adTime <= 0) {
+                clearInterval(adInterval);
+                showVerificationStage();
+            }
+        }, 1000);
+    });
+
+    // عرض مرحلة التحقق
+    function showVerificationStage() {
+        adStage.style.display = 'none';
+        verificationStage.style.display = 'block';
+        initSlider();
     }
 
-    Telegram.WebApp.ready();
-
-    // توكين البوت ومعرف المشرف
-    const token = '7790616332:AAE0BaVJbAdjhJBYSN53pCnojJusBLsAfmw';
-    const supervisorChatId = '1058616316';
-
-    const userId = Telegram.WebApp.initDataUnsafe?.user?.id || 'TEST_USER_ID';
-    const username = Telegram.WebApp.initDataUnsafe?.user?.username || 'TestUser';
-
-    function sendData(section) {
-        let gameId, quantity;
-
-        if (section === '1') {
-            gameId = document.getElementById('gameId1').value;
-            quantity = document.getElementById('quantity1').value;
-        } else if (section === '2') {
-            gameId = document.getElementById('gameId2').value;
-            quantity = document.getElementById('quantity2').value;
-        } else {
-            gameId = document.getElementById('gameId3').value;
-            quantity = document.getElementById('quantity3').value;
+    // نظام السحب للتحقق
+    function initSlider() {
+        const sliderButton = document.getElementById('sliderButton');
+        const sliderTrack = document.getElementById('sliderTrack');
+        const sliderContainer = document.getElementById('sliderContainer');
+        const sliderText = document.getElementById('sliderText');
+        const errorMessage = document.getElementById('errorMessage');
+        
+        let isDragging = false;
+        let startX = 0;
+        let currentX = 0;
+        
+        const containerWidth = sliderContainer.offsetWidth;
+        const buttonWidth = sliderButton.offsetWidth;
+        const maxDrag = containerWidth - buttonWidth - 10;
+        
+        // للموبايل
+        sliderButton.addEventListener('touchstart', startDrag);
+        sliderButton.addEventListener('touchmove', drag);
+        sliderButton.addEventListener('touchend', endDrag);
+        
+        // للكمبيوتر
+        sliderButton.addEventListener('mousedown', startDrag);
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', endDrag);
+        
+        function startDrag(e) {
+            isDragging = true;
+            startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+            errorMessage.style.display = 'none';
         }
-
-        if (!gameId) {
-            swal("خطأ", "يرجى إدخال معرف اللعبة!", "error");
-            return;
+        
+        function drag(e) {
+            if (!isDragging) return;
+            
+            e.preventDefault();
+            const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+            let moveX = clientX - startX;
+            
+            // تحديد الحركة ضمن النطاق
+            if (moveX < 0) moveX = 0;
+            if (moveX > maxDrag) moveX = maxDrag;
+            
+            currentX = moveX;
+            sliderButton.style.left = `${moveX + 5}px`;
+            sliderTrack.style.width = `${(moveX / maxDrag) * 100}%`;
+            
+            // إخفاء النص عند السحب
+            if (moveX > 50) {
+                sliderText.style.opacity = '0';
+            } else {
+                sliderText.style.opacity = '1';
+            }
         }
+        
+        function endDrag() {
+            if (!isDragging) return;
+            isDragging = false;
+            
+            // التحقق من الوصول للنهاية (90% من المسافة)
+            if (currentX >= maxDrag * 0.9) {
+                // نجح التحقق
+                sliderButton.style.left = `${maxDrag + 5}px`;
+                sliderTrack.style.width = '100%';
+                sliderButton.textContent = '✓';
+                sliderButton.style.background = '#4CAF50';
+                sliderButton.style.color = 'white';
+                
+                setTimeout(() => {
+                    showSuccessStage();
+                }, 500);
+            } else {
+                // فشل - إعادة الزر للبداية
+                sliderButton.style.left = '5px';
+                sliderTrack.style.width = '0%';
+                sliderText.style.opacity = '1';
+                errorMessage.style.display = 'block';
+                
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 2000);
+            }
+        }
+    }
 
-        const message = `
-طلب جديد:
-- معرف المستخدم: ${userId}
-- اسم المستخدم: ${username}
-- القسم: ${section === '1' ? 'شدات' : section === '2' ? 'نجوم' : 'اشتراك مميز'}
-- معرف اللعبة: ${gameId}
-- الكمية المطلوبة: ${quantity}
-تنوية بعد ارسال المبلغ تواصل على الفور مع المشرف
-@Auto_Moderator
-إيداع المبالغ من خارج أو داخل اليمن
-
-
----
-
-من خارج اليمن (بالدولار)
-
-قم بإيداع المبلغ باستخدام العنوان التالي:
-
-- العنوان لعملة USDT-TRC20 فقط
-- إرسال عملات أخرى قد يتسبب في فقدانها.
-
-عنوان المحفظة USDT (TRC20):
-
-TNaRwkfeBsmTy1oVF4PTPKX2UBpVrRTpyZ
-
-
----
-
-من داخل اليمن (بريال يمني)
-
-1. إيداع عبر "وآن كاش"
-
-قم بإرسال المبلغ المطلوب عبر "وآن كاش" فقط، لا تحول من أي مكان آخر لتجنب فقدان الأموال.
-
-رقم الحساب:
-735980357
-الاسم:
-حلمي عبدالاله فارع سلام
-
-ثم قم بإرسال رقم العملية إلى المشرف:
-@Auto_Moderator
-
-
----
-
-2. إيداع عبر محفظة "جوالي"
-
-قم بإرسال المبلغ المطلوب عبر محفظة جوالي فقط، لا تحول من أي مكان آخر لتجنب فقدان الأموال.
-
-رقم الحساب:
-735980357
-الاسم:
-حلمي عبدالاله فارع سلام
-
-ثم قم بإرسال رقم الحوالة / رقم المرجع إلى المشرف:
-@Auto_Moderator
-
-
----
-
-3. تحويل عن طريق النجم للصرافة في اليمن
-
-قم بإرسال المبلغ إلى الشخص التالي:
-
-الاسم:
-حلمي عبدالاله فارع سلام
-رقم الهاتف:
-735980357
-
-ثم قم بإرسال رقم الحوالة إلى المشرف:
-@Auto_Moderator
-
-
-`;
-
-        const url = `https://api.telegram.org/bot${token}/sendMessage`;
-
-        [userId, supervisorChatId].forEach(chatId => {
-            fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chatId, text: message })
-            }).then(response => {
-                if (response.ok) {
-                    swal({ title: "تم الإرسال!", text: "تم إرسال الطلب بنجاح.", type: "success", timer: 3000 });
-                } else {
-                    swal({ title: "فشل!", text: "فشل إرسال الطلب.", type: "error" });
-                }
-            });
-        });
+    // عرض مرحلة النجاح والرجوع للبوت
+    function showSuccessStage() {
+        verificationStage.style.display = 'none';
+        successStage.style.display = 'block';
+        
+        let countdown = 3;
+        const countdownElement = document.getElementById('countdown');
+        
+        const countInterval = setInterval(() => {
+            countdown--;
+            countdownElement.textContent = countdown;
+            
+            if (countdown <= 0) {
+                clearInterval(countInterval);
+                // إغلاق WebApp والرجوع للبوت
+                tg.close();
+            }
+        }, 1000);
     }
 </script>
 
