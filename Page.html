@@ -59,7 +59,7 @@
             line-height: 1.6;
         }
 
-        /* مرحلة الإعلان الأول */
+        /* مرحلة الإعلان */
         .ad-container {
             min-height: 250px;
             background: #f5f5f5;
@@ -110,63 +110,39 @@
             margin-top: 10px;
         }
 
-        /* سحب التحقق */
-        .slider-container {
-            position: relative;
-            width: 100%;
-            height: 60px;
-            background: #f0f0f0;
+        /* أزرار */
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
             border-radius: 30px;
-            margin: 30px 0;
-            overflow: hidden;
-            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .slider-track {
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            width: 0%;
-            transition: width 0.1s ease;
-            border-radius: 30px;
-        }
-
-        .slider-button {
-            position: absolute;
-            left: 5px;
-            top: 5px;
-            width: 50px;
-            height: 50px;
-            background: white;
-            border-radius: 50%;
-            cursor: grab;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            transition: all 0.2s ease;
-            z-index: 10;
-            user-select: none;
-        }
-
-        .slider-button:active {
-            cursor: grabbing;
-            transform: scale(1.1);
-        }
-
-        .slider-text {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            color: #999;
+            font-size: 18px;
             font-weight: bold;
-            font-size: 16px;
-            pointer-events: none;
-            z-index: 5;
+            cursor: pointer;
+            margin: 10px;
+            transition: transform 0.2s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
         }
 
         /* النجاح */
@@ -193,15 +169,6 @@
             color: #4CAF50;
         }
 
-        .error-message {
-            background: #ffebee;
-            color: #c62828;
-            padding: 10px;
-            border-radius: 10px;
-            margin: 15px 0;
-            display: none;
-        }
-
         .ad-count {
             background: #667eea;
             color: white;
@@ -210,6 +177,19 @@
             display: inline-block;
             margin: 10px 0;
             font-weight: bold;
+        }
+
+        .channel-box {
+            background: #f8f9ff;
+            border: 2px solid #667eea;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .channel-box h3 {
+            color: #667eea;
+            margin-bottom: 10px;
         }
 
         @media (max-width: 480px) {
@@ -258,27 +238,36 @@
         <div class="timer-text" id="timer2">جاري التحميل...</div>
     </div>
 
-    <!-- المرحلة 3: سحب التحقق -->
-    <div id="verification-stage" class="stage">
-        <h2>🔒 التحقق الأمني</h2>
-        <p>اسحب الزر إلى اليسار للتأكد من أنك لست روبوت</p>
+    <!-- المرحلة 3: الاشتراك في القناة النهائية -->
+    <div id="channel-stage" class="stage">
+        <h2>📢 خطوة أخيرة!</h2>
+        <p>يرجى الاشتراك في القناة الرسمية للبوت</p>
         
-        <div class="slider-container">
-            <div class="slider-track" id="sliderTrack"></div>
-            <div class="slider-button" id="sliderButton">➡️</div>
-            <div class="slider-text" id="sliderText">اسحب للتحقق</div>
+        <div class="channel-box">
+            <h3>🎯 قناة البوت الرسمية</h3>
+            <p style="font-size: 14px; color: #888; margin: 10px 0;">
+                للحصول على التحديثات والمزايا الحصرية
+            </p>
         </div>
 
-        <div class="error-message" id="errorMessage">
-            ❌ يرجى سحب الزر حتى النهاية
-        </div>
+        <button class="btn" id="subscribeBtn" onclick="openChannel()">
+            📢 اشترك في القناة
+        </button>
+        
+        <button class="btn btn-success" id="verifyBtn" onclick="verifyAndOpen()" disabled>
+            ✅ تحققت - افتح البوت
+        </button>
+        
+        <p style="font-size: 12px; color: #999; margin-top: 15px;">
+            💡 اضغط "اشترك" ثم ارجع واضغط "تحققت"
+        </p>
     </div>
 
     <!-- المرحلة 4: النجاح -->
     <div id="success-stage" class="stage success-stage">
         <div class="success-icon">✓</div>
         <h2>✅ تم التحقق بنجاح!</h2>
-        <p>تم التأكد من أنك لست روبوت</p>
+        <p>شكراً لاشتراكك!</p>
         <p style="color: #4CAF50; font-weight: bold;">جاري فتح البوت...</p>
     </div>
 </div>
@@ -294,15 +283,20 @@
         tg.expand();
     }
 
+    // البيانات
+    const BOT_USERNAME = 'WhatIOwnQBot';
+    const CHANNEL_USERNAME = 'whatIOwnQB';
+    
     // المراحل
     const stages = {
         ad1: document.getElementById('ad1-stage'),
         ad2: document.getElementById('ad2-stage'),
-        verification: document.getElementById('verification-stage'),
+        channel: document.getElementById('channel-stage'),
         success: document.getElementById('success-stage')
     };
 
     let currentStage = 'ad1';
+    let verifyEnabled = false;
 
     // الانتقال بين المراحل
     function switchStage(newStage) {
@@ -319,7 +313,6 @@
         
         timer1.textContent = 'جاري عرض الإعلان الأول...';
         
-        // محاولة عرض Rewarded Interstitial
         if (typeof show_10587729 !== 'undefined') {
             show_10587729()
                 .then(() => {
@@ -356,7 +349,6 @@
         
         timer2.textContent = 'جاري عرض الإعلان الثاني...';
         
-        // محاولة عرض In-App Interstitial
         if (typeof show_10587729 !== 'undefined') {
             try {
                 show_10587729({
@@ -370,29 +362,28 @@
                     }
                 });
                 
-                // محاكاة انتظار 15 ثانية
                 simulateAd(15, timer2, progress2, () => {
                     console.log('✅ تم إكمال الإعلان الثاني');
-                    switchStage('verification');
-                    initSlider();
+                    switchStage('channel');
+                    enableVerifyAfterDelay();
                 });
             } catch(error) {
                 console.error('❌ خطأ في الإعلان الثاني:', error);
                 simulateAd(15, timer2, progress2, () => {
-                    switchStage('verification');
-                    initSlider();
+                    switchStage('channel');
+                    enableVerifyAfterDelay();
                 });
             }
         } else {
             console.warn('⚠️ دالة الإعلان غير متوفرة - محاكاة');
             simulateAd(15, timer2, progress2, () => {
-                switchStage('verification');
-                initSlider();
+                switchStage('channel');
+                enableVerifyAfterDelay();
             });
         }
     }
 
-    // محاكاة الإعلان (في حالة الفشل أو الاختبار)
+    // محاكاة الإعلان
     function simulateAd(duration, timerEl, progressEl, callback) {
         let remaining = duration;
         
@@ -410,101 +401,42 @@
         }, 1000);
     }
 
-    // ===== سحب التحقق =====
-    function initSlider() {
-        const sliderButton = document.getElementById('sliderButton');
-        const sliderTrack = document.getElementById('sliderTrack');
-        const sliderContainer = document.querySelector('.slider-container');
-        const sliderText = document.getElementById('sliderText');
-        const errorMessage = document.getElementById('errorMessage');
-        
-        let isDragging = false;
-        let startX = 0;
-        let currentX = 0;
-        
-        const containerWidth = sliderContainer.offsetWidth;
-        const buttonWidth = sliderButton.offsetWidth;
-        const maxDrag = containerWidth - buttonWidth - 10;
-        
-        // للموبايل
-        sliderButton.addEventListener('touchstart', startDrag);
-        sliderButton.addEventListener('touchmove', drag);
-        sliderButton.addEventListener('touchend', endDrag);
-        
-        // للكمبيوتر
-        sliderButton.addEventListener('mousedown', startDrag);
-        document.addEventListener('mousemove', drag);
-        document.addEventListener('mouseup', endDrag);
-        
-        function startDrag(e) {
-            isDragging = true;
-            startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
-            errorMessage.style.display = 'none';
-        }
-        
-        function drag(e) {
-            if (!isDragging) return;
-            e.preventDefault();
-            
-            const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
-            let moveX = clientX - startX;
-            
-            if (moveX < 0) moveX = 0;
-            if (moveX > maxDrag) moveX = maxDrag;
-            
-            currentX = moveX;
-            sliderButton.style.left = `${moveX + 5}px`;
-            sliderTrack.style.width = `${(moveX / maxDrag) * 100}%`;
-            sliderText.style.opacity = moveX > 50 ? '0' : '1';
-        }
-        
-        function endDrag() {
-            if (!isDragging) return;
-            isDragging = false;
-            
-            if (currentX >= maxDrag * 0.9) {
-                // نجح التحقق
-                sliderButton.style.left = `${maxDrag + 5}px`;
-                sliderTrack.style.width = '100%';
-                sliderButton.textContent = '✓';
-                sliderButton.style.background = '#4CAF50';
-                sliderButton.style.color = 'white';
-                
-                setTimeout(() => {
-                    onVerificationSuccess();
-                }, 500);
-            } else {
-                // فشل
-                sliderButton.style.left = '5px';
-                sliderTrack.style.width = '0%';
-                sliderText.style.opacity = '1';
-                errorMessage.style.display = 'block';
-                
-                setTimeout(() => {
-                    errorMessage.style.display = 'none';
-                }, 2000);
-            }
-        }
+    // تفعيل زر التحقق بعد 3 ثواني
+    function enableVerifyAfterDelay() {
+        setTimeout(() => {
+            verifyEnabled = true;
+            document.getElementById('verifyBtn').disabled = false;
+        }, 3000);
     }
 
-    // ===== النجاح والإغلاق =====
-    function onVerificationSuccess() {
-        console.log('✅ تم التحقق بنجاح!');
-        switchStage('success');
+    // فتح القناة
+    function openChannel() {
+        window.open(`https://t.me/${CHANNEL_USERNAME}`, '_blank');
         
-        // إرسال إشعار للبوت بنجاح التحقق
+        // تفعيل الزر فوراً بعد فتح القناة
+        setTimeout(() => {
+            verifyEnabled = true;
+            document.getElementById('verifyBtn').disabled = false;
+        }, 1000);
+    }
+
+    // التحقق وفتح البوت
+    function verifyAndOpen() {
+        if (!verifyEnabled) {
+            alert('⏳ يرجى الانتظار قليلاً...');
+            return;
+        }
+        
+        // إرسال إشعار للبوت
         if (tg) {
-            // إرسال بيانات للبوت أن المستخدم نجح
             tg.sendData(JSON.stringify({
                 action: 'verification_complete',
                 timestamp: Date.now()
             }));
-            
-            // الإغلاق بعد 2 ثانية
-            setTimeout(() => {
-                tg.close();
-            }, 2000);
         }
+        
+        // فتح البوت مباشرة
+        window.open(`https://t.me/${BOT_USERNAME}?start=s`, '_self');
     }
 
     // ===== بدء التطبيق =====
